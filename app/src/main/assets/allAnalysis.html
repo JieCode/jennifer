@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html>
+<head xmlns:th="http://www.thymeleaf.org">
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>综合分析</title>
+	<link rel="stylesheet" href="css/report.css" />
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+</head>
+<body>
+	<div class="tab-content">
+		<div class="tab-pane le hide">
+			<div class="report-content">
+					{{^resourceLive}}
+					<span class="catalog row"><span class="catalog-content">综述</span></span>
+					<div class="detailed-content">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>{{teacher.username}}</span>老师您好！本次课共有<span>{{courseRecordsCount}}</span>位教师参与,
+						经分析各位听课教师的观察记录得出：您的教学特色是<span class="advantage">{{#advantages}}<span>{{name}}</span>{{/advantages}}{{^advantages}}<span>无，</span>{{/advantages}}</span>
+						有待改进之处是<span class="defect">{{#defects}}<span>{{name}}</span>{{/defects}}{{^defects}}<span>无。</span>{{/defects}}</span>
+					</div>
+					<div class="detailed-content tpack-score">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您的TPACK知识与技能分值是：<span id="myScore1">{{myScore1}}</span>（原<span id="myScore">{{myScore}}</span>），“教研空间”中本节课其他执教教师的TPACK均值是<span id="allScore">{{allScore}}</span>。
+					</div>
+					{{/resourceLive}}
+					<span class="catalog row"><span class="catalog-content">教学名片</span></span>
+					<div class="detailed-content">
+						<div class="row">
+							<div class="col-xs-4">
+								<a>
+								{{#teacher.photoSmall}}
+								<img class="media-object img-circle" src="{{teacher.photoSmall}}">
+								{{/teacher.photoSmall}}
+								{{^teacher.photoSmall}}
+								<img class="media-object img-circle" src="img/default_user.png">
+								{{/teacher.photoSmall}}
+								</a>
+							</div>
+							<div class="col-xs-8">
+								<div>
+									{{#videoClass}}
+										<span>{{teacher.username}}</span>
+									{{/videoClass}}
+									{{^videoClass}}
+										{{#teacher}}
+										<span>{{teacher.username}}</span>
+										{{/teacher}}
+										{{^teacher}}
+										<span>{{resourceLive.teacherName}}</span>
+										{{/teacher}}
+									{{/videoClass}}
+								</div>
+								<div class="times">
+									<span id="times">
+										听课：<span>{{bkTimes}}</span>次
+										&nbsp;&nbsp;备课：<span>{{tkTimes}}</span>次
+									</span>
+								</div>
+								<div class="address">
+									<img src="img/icon-site-gary.png"/>
+									{{#teacher}}
+									<span>{{teacher.city}}{{teacher.county}}  {{teacher.school}}</span>
+									{{/teacher}}
+								</div>
+							</div>
+						</div>
+						<div class="teaching">本课得分： <span>{{score}}分</span></div>
+						<div class="teaching">教学特色： <span class="advantage">{{#advantages}}<span>{{name}}</span>{{/advantages}}</span></div>
+						<div class="teaching">教学不足：<span class="defect">{{#defects}}<span>{{name}}</span>{{/defects}}</span> </div>
+					</div>
+			</div>
+
+		</div>
+	</div>
+	<script type="text/javascript" src="js/mustache.min.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript">
+		var debug = 0;
+		$(function() {
+			debug && render($('#data1').text());
+		});
+		function durationToString(duration) {
+			var min = Math.floor(duration / 60), sec = duration % 60;
+			return min + "'" + sec + '"';
+		}
+		
+		function jsonEscape(str) {
+			//if (debug)
+				return str;
+			//else
+			//	return str.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
+		}
+	
+		function replaceLineBreak(str) {
+			return str && str.replace(/\n/g, '<br/>');
+		}
+		var template = $('.le').html(),advTemplate = $(".advantage").html(),defTemplate = $(".defect").html();
+		var timesTemplate = $('#times').html(),tpackTemplate = $('.tpack-score').html();
+		Mustache.parse(template);
+		$('.le').empty().removeClass('hide').show();
+		function render(data) {
+			if (console.log) console.log("data: " + data);
+			try {
+				if (typeof data === 'string') data = $.parseJSON(jsonEscape(data));
+				if (console.log) console.log("lesson: " + data.lesson);
+				var lesson = data.lesson;
+				var tkTimes = data.tk, bkTimes = data.bk, skTimes = data.sk;
+				
+				(function() {
+					var teacher = lesson.teacher, name = teacher.username;
+					if (teacher) {
+						if (teacher.nickname) {
+							name = teacher.nickname;
+						} else if (teacher.phone) {
+							name = teacher.phone;
+						} else if (teacher.email) {
+							name = teacher.email;
+						}
+						teacher.username = name;
+					}
+				})();
+				
+				var recordCount = 0;
+				//计算参与老师人数
+				var courseRecordsCount = 0;
+				$.each(lesson.courseRecords,function(){
+					courseRecordsCount++;
+				});
+				lesson.courseRecordsCount = courseRecordsCount;
+				console.log("共有：" + lesson.courseRecordsCount + "个老师参与");
+				
+				//教学特色
+				$.each(lesson.advantages,function(i){
+					var advantage = this;
+					if(i < lesson.advantages.length-1)
+						advantage.name = advantage.name + "、";
+					else
+						advantage.name = advantage.name + "，";
+					var advRendered = Mustache.render(advTemplate, advantage);
+					$('.advantage').html(advRendered);
+					console.log(advantage.name);
+				});
+				
+				//待改进点
+				$.each(lesson.defects,function(i){
+					var defect = this;
+					if(i < lesson.defects.length-1)
+						defect.name = defect.name + "、";
+					else
+						defect.name = defect.name + "。";
+					var defRendered = Mustache.render(defTemplate,defect);
+					$(".defect").html(defRendered);
+					console.log(defect.name);
+				});
+				
+				//课程信息
+				var rendered = Mustache.render(template, lesson);
+				$('.le').html(rendered);
+				
+				//教学名片
+				if(lesson.teacher.photoSmall == null)
+					lesson.teacher.photoSmall = 'img/user1.jpg';
+				var times = {"tkTimes":tkTimes,"bkTimes":bkTimes};
+				var timesRender = Mustache.render(timesTemplate,times);
+				$("#times").html(timesRender);
+				
+				//TPACK
+				var tsum = 0,tsum1 = 0;
+				var lessonScore = data.lesson.score;
+				$.each(data.values, function(index, item) {
+					var valueslist = data.values[index];
+					$.each(valueslist, function(index1, item) {
+						tsum += valueslist[index1];
+					})
+				});
+				var itemCount = 0;
+				$.each(data.totalValues, function(index, item) {
+					var totalValueslist = data.totalValues[index];
+					itemCount += totalValueslist.length;
+					$.each(totalValueslist, function(index1, item) {
+						tsum1 += totalValueslist[index1];
+					})
+				});
+				var myScore = '',myScore1 = '',allScore = '';
+				var lessonTotalScore = 0;
+				if (tsum1 != 0 && tsum != 0) {
+					lessonTotalScore = (tsum1*100/(100*tsum/(lessonScore == 0 ? 1 : lessonScore) == 0 ? 1 : 100*tsum/(lessonScore == 0 ? 1 : lessonScore))).toFixed(1);
+				} else if (tsum1 != 0 && tsum == 0) {
+					lessonTotalScore = (tsum1*100 / (itemCount*5)).toFixed(1);
+				}
+				if(tsum == 0)
+					myScore = '无';
+				else
+					myScore = tsum;
+				if(lessonScore == 0)
+					myScore1 = '无';
+				else
+					myScore1 = lessonScore;
+				if(lessonTotalScore == 0.0)
+					allScore = '无';
+				else
+					allScore = lessonTotalScore;
+				
+				var tpackScore = {"myScore":myScore,"myScore1":myScore1,"allScore":allScore};
+				var tpackRendered = Mustache.render(tpackTemplate, tpackScore);
+				$('.tpack-score').html(tpackRendered);
+				
+			} catch (e) {
+				$('.le').html(e);
+
+			}
+		}
+		if (window.AndroidWebView) {
+			window.goEdit = window.AndroidWebView.edit;
+			window.goMedia = window.AndroidWebView.media;
+		} else {
+			function setupWebViewJavascriptBridge(callback) {
+				if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+				if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+				window.WVJBCallbacks = [callback];
+				var WVJBIframe = document.createElement('iframe');
+				WVJBIframe.style.display = 'none';
+				WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+				document.documentElement.appendChild(WVJBIframe);
+				setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+			}
+			
+			setupWebViewJavascriptBridge(function(bridge) {
+				bridge.registerHandler('render', function(data, responseCallback) {
+					render(data);
+				});
+				
+				window.goEdit = function(sectionId, recordId) {
+					bridge.callHandler('edit', { 'section':sectionId, 'record': recordId }, function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				};
+				
+				window.goMedia = function(sectionId, recordId, mediaIndex, type, mediaId) {
+					bridge.callHandler('media', { 'section':sectionId, 'record': recordId, 'media': mediaIndex, 'type':type, 'mediaId': mediaId },
+					function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				};
+			});
+		}
+	</script>
+	<script id="data1" type="text/json">
+{
+  "tk": 20,
+  "sk": 106,
+  "lesson": {
+    "id": "4dc07a06f70841f1b1bcf611fb3c4826",
+    "designId": "a83e2dc7cc34446bacbe5cbccf9ba8d7",
+    "teachingTime": 1510371151000,
+    "teachingAddress": "qq",
+    "videoClass": false,
+    "period": {
+      "id": 10,
+      "name": "小学",
+      "slug": "primary",
+      "category": 1
+    },
+    "subject": {
+      "id": 4001,
+      "name": "语文",
+      "slug": "chinese",
+      "category": 4
+    },
+    "grade": {
+      "id": 2101,
+      "name": "一年级",
+      "slug": "grade1",
+      "category": 2
+    },
+    "publisher": {
+      "id": 5011,
+      "name": "人教版新课标",
+      "slug": "PEP",
+      "category": 5
+    },
+    "semester": {
+      "id": 21011,
+      "name": "一年级上",
+      "slug": "grade1-1",
+      "category": 3
+    },
+    "catalog": {
+      "id": 110101014,
+      "name": "14 一去二三里",
+      "slug": "14li"
+    },
+    "teacher": {
+      "id": "sample_user_admin",
+      "username": "admin",
+      "nickname": "我是admin",
+      "phone": "114",
+      "sex": "Male",
+      "passed": true,
+      "accountNonLocked": false,
+      "website": "www.baidu.com",
+      "description": "个性签名！！！！！！！！！",
+      "province": "北京",
+      "provinceId": 1,
+      "city": "北京市",
+      "cityId": 10000,
+      "county": "海淀区",
+      "countyId": 2800,
+      "school": "北京师范大学朝阳附属小学",
+      "period": "幼儿园",
+      "periodId": 5,
+      "subject": "数学",
+      "subjectId": 4002,
+      "postcode": "12313123",
+      "language": "zh-CN",
+      "publisherId": 72001,
+      "point": 0,
+      "roleId": "ROLE_ADMIN",
+      "roleEnabled": true,
+      "photo": "/public/photo/2018/6/cfe97fc5-4bc1-4977-904e-051f158c6d08.jpg",
+      "photoLarge": "/public/photo/2018/6/120_cfe97fc5-4bc1-4977-904e-051f158c6d08.jpg",
+      "photoMedium": "/public/photo/2018/6/90_cfe97fc5-4bc1-4977-904e-051f158c6d08.jpg",
+      "photoSmall": "/public/photo/2018/6/60_cfe97fc5-4bc1-4977-904e-051f158c6d08.jpg",
+      "photoUrl": "/public/photo/2018/6/cfe97fc5-4bc1-4977-904e-051f158c6d08.jpg",
+      "pending": false
+    },
+    "createTime": 1510371155000,
+    "teachingDesign": {
+      "id": "a83e2dc7cc34446bacbe5cbccf9ba8d7",
+      "courseDesign": {
+        "id": "b6fe968b671b46e8a0653979e3532beb",
+        "createTime": 1510371138000,
+        "updateTime": 1510371138000
+      },
+      "strategy": {
+        "id": "ShiZiKe",
+        "name": "识字课"
+      },
+      "period": {
+        "id": 10,
+        "name": "小学",
+        "slug": "primary",
+        "category": 1
+      },
+      "subject": {
+        "id": 4001,
+        "name": "语文",
+        "slug": "chinese",
+        "category": 4
+      },
+      "grade": {
+        "id": 2101,
+        "name": "一年级",
+        "slug": "grade1",
+        "category": 2
+      },
+      "semester": {
+        "id": 21011,
+        "name": "一年级上",
+        "slug": "grade1-1",
+        "category": 3
+      },
+      "publisher": {
+        "id": 5011,
+        "name": "人教版新课标",
+        "slug": "PEP",
+        "category": 5
+      },
+      "catalog": {
+        "id": 110101014,
+        "name": "14 一去二三里",
+        "slug": "14li"
+      },
+      "basicScore": 0,
+      "favorited": false,
+      "latestRevision": 1,
+      "lessonTime": 1,
+      "currentRevId": 0,
+      "hot": 0,
+      "revisions": [
+        {
+          "description": "",
+          "thumbUpNum": 0,
+          "favoriteNum": 0,
+          "commentNum": 0,
+          "referenceNum": 0,
+          "updated": 1510371138000,
+          "sections": [],
+          "revision": 1
+        }
+      ],
+      "type": "td",
+      "description": "",
+      "title": "14 一去二三里",
+      "referenceCount": 0,
+      "passed": true,
+      "unapproved": false,
+      "updateTime": 1510371138000,
+      "createTime": 1510371138000,
+      "label": "合作探究模式",
+      "summary": "",
+      "released": true,
+      "point": 0,
+      "wkType": "audio",
+      "gistType": 1,
+      "gist": "<ruby>定<rt>dìng</rt>公<rt>gōng</rt>问<rt>wèn</rt>：“<rt> </rt>一<rt>yì</rt>言<rt>yán</rt>而<rt>ér</rt>可<rt>kě</rt>以<rt>yǐ</rt>兴<rt>xìng</rt>邦<rt>bāng</rt>，<rt> </rt>有<rt>yǒu</rt>诸<rt>zhū</rt>？<rt> </rt>”<rt> </rt>孔<rt>kǒng</rt>子<rt>zǐ</rt>对<rt>duì</rt>曰<rt>yuē</rt>：“<rt> </rt>言<rt>yán</rt>不<rt>bù</rt>可<rt>kě</rt>以<rt>yǐ</rt>若<rt>ruò</rt>是<rt>shì</rt>其<rt>qí</rt>几<rt>jī</rt>也<rt>yě</rt>。<rt> </rt>人<rt>rén</rt>之<rt>zhī</rt>言<rt>yán</rt>曰<rt>yuē</rt>：为<rt>wéi</rt>君<rt>jūn</rt>难<rt>nán</rt>，<rt> </rt>为<rt>wéi</rt>臣<rt>chén</rt>不<rt>bú</rt>易<rt>yì</rt>。<rt> </rt>如<rt>rú</rt>知<rt>zhī</rt>为<rt>wéi</rt>君<rt>jūn</rt>之<rt>zhī</rt>难<rt>nán</rt>也<rt>yě</rt>，<rt> </rt>不<rt>bù</rt>几<rt>jī</rt>乎<rt>hū</rt>一<rt>yì</rt>言<rt>yán</rt>而<rt>ér</rt>兴<rt>xìng</rt>邦<rt>bāng</rt>乎<rt>hū</rt>？<rt> </rt>”<rt> </rt>曰<rt>yuē</rt>：“<rt> </rt>一<rt>yī</rt>言<rt>yán</rt>而<rt>ér</rt>丧<rt>sàng</rt>邦<rt>bāng</rt>，<rt> </rt>有<rt>yǒu</rt>诸<rt>zhū</rt>？<rt> </rt>”<rt> </rt>孔<rt>kǒng</rt>子<rt>zǐ</rt>对<rt>duì</rt>曰<rt>yuē</rt>：“<rt> </rt>言<rt>yán</rt>不<rt>bù</rt>可<rt>kě</rt>以<rt>yǐ</rt>若<rt>ruò</rt>是<rt>shì</rt>其<rt>qí</rt>几<rt>jī</rt>也<rt>yě</rt>。<rt> </rt>人<rt>rén</rt>之<rt>zhī</rt>言<rt>yán</rt>曰<rt>yuē</rt>：予<rt>yú</rt>无<rt>wú</rt>乐<rt>lè</rt>乎<rt>hū</rt>为<rt>wéi</rt>君<rt>jūn</rt>，<rt> </rt>唯<rt>wéi</rt>其<rt>qí</rt>言<rt>yán</rt>而<rt>ér</rt>莫<rt>mò</rt>予<rt>yú</rt>违<rt>wé</rt>也<rt>yě</rt>。<rt> </rt>如<rt>rú</rt>其<rt>qí</rt>善<rt>shàn</rt>而<rt>ér</rt>莫<rt>mò</rt>之<rt>zhī</rt>违<rt>wéi</rt>也<rt>yě</rt>，<rt> </rt>不<rt>bú</rt>亦<rt>yì</rt>善<rt>shàn</rt>乎<rt>hū</rt>？<rt> </rt>如<rt>rú</rt>不<rt>bú</rt>善<rt>shàn</rt>而<rt>ér</rt>莫<rt>mò</rt>之<rt>zhī</rt>违<rt>wéi</rt>也<rt>yě</rt>，<rt> </rt>不<rt>bù</rt>几<rt>jī</rt>乎<rt>hū</rt>一<rt>yì</rt>言<rt>yán</rt>而<rt>ér</rt>丧<rt>sàng</rt>邦<rt>bāng</rt>乎<rt>hū</rt>？<rt> </rt>”<rt> </rt></ruby> "
+    },
+    "courseRecords": [
+      {
+        "id": "18db59ee98b54f80bf08a3e113c2c888",
+        "teacherId": "sample_user_admin",
+        "teacher": {
+          "id": "sample_user_admin",
+          "name": "admin",
+          "province": "北京",
+          "provinceId": 1,
+          "city": "北京市",
+          "cityId": 10000,
+          "county": "朝阳区",
+          "countyId": 72,
+          "school": "北京师范大学朝阳附属小学",
+          "schoolId": "bj-cy-bjshifanfuxiao",
+          "period": "小学",
+          "periodId": 10,
+          "subject": "语文",
+          "subjectId": 4001,
+          "grade": "一年级",
+          "gradeId": 2101,
+          "semester": "一年级上",
+          "semesterId": 21011,
+          "publisherId": 5011,
+          "publisher": "人教版新课标"
+        },
+        "period": {
+          "id": 10,
+          "name": "小学",
+          "slug": "primary",
+          "category": 1
+        },
+        "subject": {
+          "id": 4001,
+          "name": "语文",
+          "slug": "chinese",
+          "category": 4
+        },
+        "grade": {
+          "id": 2101,
+          "name": "一年级",
+          "slug": "grade1",
+          "category": 2
+        },
+        "publisher": {
+          "id": 5011,
+          "name": "人教版新课标",
+          "slug": "PEP",
+          "category": 5
+        },
+        "semester": {
+          "id": 21011,
+          "name": "一年级上",
+          "slug": "grade1-1",
+          "category": 3
+        },
+        "catalog": {
+          "id": 110101014,
+          "name": "14 一去二三里",
+          "slug": "14li"
+        },
+        "sections": [
+          {
+            "id": "dd1e33ec20104634bb33b694586416e0",
+            "name": "",
+            "records": [
+              {
+                "id": "47afde5722a043eabd7d1e2d3e7e3b59",
+                "courseRecordId": "18db59ee98b54f80bf08a3e113c2c888",
+                "sectionId": "dd1e33ec20104634bb33b694586416e0",
+                "name": "",
+                "duration": 0,
+                "teacherActivity": "",
+                "studentActivity": "",
+                "interact": "",
+                "rethink": "",
+                "mediaInfo": "",
+                "emotionLabel": 1,
+                "emotionKeyWord": "gaiox1"
+              }
+            ],
+            "favored": false
+          }
+        ],
+        "optionResults": [],
+        "evaluation": {
+          "id": "beeaf382a6a04936be728b6ec4b8baed",
+          "courseRecordId": "18db59ee98b54f80bf08a3e113c2c888",
+          "advantage": "",
+          "discuss": "",
+          "introspection": "",
+          "totalScore": 104,
+          "scaleId": "sys-scale-chinese-1",
+          "scores": [
+            {
+              "scaleItemId": "sys-scale-chinese-01",
+              "sequence": 0,
+              "itemName": "技术知识TK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-011",
+              "sequence": 1,
+              "itemName": "使用恰当的技术工具（如办公类软件Word与PPT、概念图、问卷星等）",
+              "itemParentId": "sys-scale-chinese-01",
+              "itemParentName": "技术知识TK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-012",
+              "sequence": 2,
+              "itemName": "使用搜索引擎（如百度、谷歌）搜集并应用适宜的网络资源",
+              "itemParentId": "sys-scale-chinese-01",
+              "itemParentName": "技术知识TK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-013",
+              "sequence": 3,
+              "itemName": "解决遇到的技术问题（如投影仪无法显示、网络连接失败等）",
+              "itemParentId": "sys-scale-chinese-01",
+              "itemParentName": "技术知识TK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-02",
+              "sequence": 4,
+              "itemName": "学科知识CK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-021",
+              "sequence": 5,
+              "itemName": "拥有扎实的语文学科知识基础",
+              "itemParentId": "sys-scale-chinese-02",
+              "itemParentName": "学科知识CK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-022",
+              "sequence": 6,
+              "itemName": "清晰且准确呈现语文学科知识",
+              "itemParentId": "sys-scale-chinese-02",
+              "itemParentName": "学科知识CK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-03",
+              "sequence": 7,
+              "itemName": "教学法知识PK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-031",
+              "sequence": 8,
+              "itemName": "采用恰当的教学方式促进学生学习（如启发式、探究式等）",
+              "itemParentId": "sys-scale-chinese-03",
+              "itemParentName": "教学法知识PK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-032",
+              "sequence": 9,
+              "itemName": "提出清晰和恰当的教学问题，问题有层次，鼓励学生提问与质疑",
+              "itemParentId": "sys-scale-chinese-03",
+              "itemParentName": "教学法知识PK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-033",
+              "sequence": 10,
+              "itemName": "采用多种评价方式评价学生的学习过程和所学到的知识",
+              "itemParentId": "sys-scale-chinese-03",
+              "itemParentName": "教学法知识PK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-034",
+              "sequence": 11,
+              "itemName": "管理课堂、保持课堂秩序",
+              "itemParentId": "sys-scale-chinese-03",
+              "itemParentName": "教学法知识PK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-04",
+              "sequence": 12,
+              "itemName": "学科教学知识PCK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-041",
+              "sequence": 13,
+              "itemName": "设计清晰、恰当的教学目标并有效实现教学目标",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-042",
+              "sequence": 14,
+              "itemName": "体现以语言运用为中心、教师主导-学生主体的教学理念（时间分配合理）",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-043",
+              "sequence": 15,
+              "itemName": "设计促进学生思维发展的学习活动，将语言学习与思维培养有机结合",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-044",
+              "sequence": 16,
+              "itemName": "精选与教学目标相关的拓展阅读资源，难度适宜、时间分配与反馈恰当",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-045",
+              "sequence": 17,
+              "itemName": "设计的写话题目与生活有机结合，写话导语清晰、时间分配与反馈恰当",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-05",
+              "sequence": 18,
+              "itemName": "技术支持的教学法知识TPK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-051",
+              "sequence": 19,
+              "itemName": "利用技术收集和分析学生学习过程信息，发现问题，提出针对性的改进措施",
+              "itemParentId": "sys-scale-chinese-05",
+              "itemParentName": "技术支持的教学法知识TPK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-052",
+              "sequence": 20,
+              "itemName": "利用技术工具开展测验、练习等工作，提高评价工作效率",
+              "itemParentId": "sys-scale-chinese-05",
+              "itemParentName": "技术支持的教学法知识TPK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-053",
+              "sequence": 21,
+              "itemName": "利用技术工具创设教学情境、呈现学习资源，促进知识与技能的巩固与迁移",
+              "itemParentId": "sys-scale-chinese-05",
+              "itemParentName": "技术支持的教学法知识TPK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-06",
+              "sequence": 22,
+              "itemName": "技术支持的学科知识TCK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-061",
+              "sequence": 23,
+              "itemName": "选择合适的表征技术来呈现语文学科具体的概念，以便学生更好理解概念",
+              "itemParentId": "sys-scale-chinese-06",
+              "itemParentName": "技术支持的学科知识TCK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-062",
+              "sequence": 24,
+              "itemName": "了解用于促进语文学科理解和探究的技术（如电子词典、语文学习网站等）",
+              "itemParentId": "sys-scale-chinese-06",
+              "itemParentName": "技术支持的学科知识TCK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-063",
+              "sequence": 25,
+              "itemName": "选择合适的技术促进学生纠正错误概念",
+              "itemParentId": "sys-scale-chinese-06",
+              "itemParentName": "技术支持的学科知识TCK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-07",
+              "sequence": 26,
+              "itemName": "整合技术的学科教学法知识TPACK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-071",
+              "sequence": 27,
+              "itemName": "制定深度的语文学科讨论主题，促进学生使用合适的工具开展合作学习（如网上论坛、教学互动平台等）",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-072",
+              "sequence": 28,
+              "itemName": "设置与语文学科相关的真实问题，并能够使用电脑表征问题以吸引学生参与",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-073",
+              "sequence": 29,
+              "itemName": "使用适当的技术促进学生建构语文知识（如概念图工具、Wiki百科等）",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-074",
+              "sequence": 30,
+              "itemName": "创建计算机支持的自主学习活动（如使用网络平台进行拓展阅读与写话等）",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-075",
+              "sequence": 31,
+              "itemName": "使用合适的技术与资源（如网络平台、APP等）设计探究学习活动，以便于引导学生理解语文知识",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 4
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-076",
+              "sequence": 32,
+              "itemName": "整合语文学科、技术与教学法知识，设计以学生为中心的学习活动",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 4
+            }
+          ],
+          "advantageThumbUps": 0,
+          "discussThumbUps": 0,
+          "introspectionThumbUps": 0
+        },
+        "lessonId": "4dc07a06f70841f1b1bcf611fb3c4826",
+        "startTime": 1510370757000,
+        "endTime": 1510371085000,
+        "mode": 0,
+        "totalMediaCount": 0,
+        "remainingMediaCount": 0,
+        "scaleCustom": false,
+        "scoreFinish": false,
+        "uploading": false,
+        "type": "tk",
+        "description": "e",
+        "title": "14 一去二三里",
+        "referenceCount": 0,
+        "creator": {
+          "id": "sample_user_test",
+          "username": "test",
+          "nickname": "Mary老师",
+          "phone": "119",
+          "sex": "Female",
+          "accountNonLocked": false,
+          "website": "w",
+          "description": "我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是",
+          "province": "北京",
+          "provinceId": 1,
+          "city": "北京市",
+          "cityId": 10000,
+          "county": "朝阳区",
+          "countyId": 72,
+          "school": "北京师范大学朝阳附属小学",
+          "schoolId": "bj-cy-bjshifanfuxiao",
+          "period": "小学",
+          "periodId": 10,
+          "subject": "语文",
+          "subjectId": 4001,
+          "postcode": "5000",
+          "language": "zh-CN",
+          "className": "??",
+          "point": 305,
+          "roleId": "ROLE_TEST1",
+          "roleEnabled": true,
+          "photo": "/public/photo/2018/6/19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoLarge": "/public/photo/2018/6/120_19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoMedium": "/public/photo/2018/6/90_19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoSmall": "/public/photo/2018/6/60_19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoUrl": "/public/photo/2018/6/19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "pending": true
+        },
+        "passed": true,
+        "unapproved": false,
+        "updateTime": 1511849294000,
+        "createTime": 1510371085000,
+        "summary": "e",
+        "released": true,
+        "point": 0,
+        "wkType": "audio",
+        "gistType": 1,
+        "gist": "<ruby>定<rt>dìng</rt>公<rt>gōng</rt>问<rt>wèn</rt>：“<rt> </rt>一<rt>yì</rt>言<rt>yán</rt>而<rt>ér</rt>可<rt>kě</rt>以<rt>yǐ</rt>兴<rt>xìng</rt>邦<rt>bāng</rt>，<rt> </rt>有<rt>yǒu</rt>诸<rt>zhū</rt>？<rt> </rt>”<rt> </rt>孔<rt>kǒng</rt>子<rt>zǐ</rt>对<rt>duì</rt>曰<rt>yuē</rt>：“<rt> </rt>言<rt>yán</rt>不<rt>bù</rt>可<rt>kě</rt>以<rt>yǐ</rt>若<rt>ruò</rt>是<rt>shì</rt>其<rt>qí</rt>几<rt>jī</rt>也<rt>yě</rt>。<rt> </rt>人<rt>rén</rt>之<rt>zhī</rt>言<rt>yán</rt>曰<rt>yuē</rt>：为<rt>wéi</rt>君<rt>jūn</rt>难<rt>nán</rt>，<rt> </rt>为<rt>wéi</rt>臣<rt>chén</rt>不<rt>bú</rt>易<rt>yì</rt>。<rt> </rt>如<rt>rú</rt>知<rt>zhī</rt>为<rt>wéi</rt>君<rt>jūn</rt>之<rt>zhī</rt>难<rt>nán</rt>也<rt>yě</rt>，<rt> </rt>不<rt>bù</rt>几<rt>jī</rt>乎<rt>hū</rt>一<rt>yì</rt>言<rt>yán</rt>而<rt>ér</rt>兴<rt>xìng</rt>邦<rt>bāng</rt>乎<rt>hū</rt>？<rt> </rt>”<rt> </rt>曰<rt>yuē</rt>：“<rt> </rt>一<rt>yī</rt>言<rt>yán</rt>而<rt>ér</rt>丧<rt>sàng</rt>邦<rt>bāng</rt>，<rt> </rt>有<rt>yǒu</rt>诸<rt>zhū</rt>？<rt> </rt>”<rt> </rt>孔<rt>kǒng</rt>子<rt>zǐ</rt>对<rt>duì</rt>曰<rt>yuē</rt>：“<rt> </rt>言<rt>yán</rt>不<rt>bù</rt>可<rt>kě</rt>以<rt>yǐ</rt>若<rt>ruò</rt>是<rt>shì</rt>其<rt>qí</rt>几<rt>jī</rt>也<rt>yě</rt>。<rt> </rt>人<rt>rén</rt>之<rt>zhī</rt>言<rt>yán</rt>曰<rt>yuē</rt>：予<rt>yú</rt>无<rt>wú</rt>乐<rt>lè</rt>乎<rt>hū</rt>为<rt>wéi</rt>君<rt>jūn</rt>，<rt> </rt>唯<rt>wéi</rt>其<rt>qí</rt>言<rt>yán</rt>而<rt>ér</rt>莫<rt>mò</rt>予<rt>yú</rt>违<rt>wé</rt>也<rt>yě</rt>。<rt> </rt>如<rt>rú</rt>其<rt>qí</rt>善<rt>shàn</rt>而<rt>ér</rt>莫<rt>mò</rt>之<rt>zhī</rt>违<rt>wéi</rt>也<rt>yě</rt>，<rt> </rt>不<rt>bú</rt>亦<rt>yì</rt>善<rt>shàn</rt>乎<rt>hū</rt>？<rt> </rt>如<rt>rú</rt>不<rt>bú</rt>善<rt>shàn</rt>而<rt>ér</rt>莫<rt>mò</rt>之<rt>zhī</rt>违<rt>wéi</rt>也<rt>yě</rt>，<rt> </rt>不<rt>bù</rt>几<rt>jī</rt>乎<rt>hū</rt>一<rt>yì</rt>言<rt>yán</rt>而<rt>ér</rt>丧<rt>sàng</rt>邦<rt>bāng</rt>乎<rt>hū</rt>？<rt> </rt>”<rt> </rt></ruby> "
+      },
+      {
+        "id": "af578b5b9db14432b5bf51251c2ebf8b",
+        "teacherId": "sample_user_admin",
+        "teacher": {
+          "id": "sample_user_admin",
+          "name": "ww",
+          "province": "北京",
+          "provinceId": 1,
+          "city": "北京市",
+          "cityId": 10000,
+          "county": "朝阳区",
+          "countyId": 72,
+          "school": "北京师范大学朝阳附属小学",
+          "schoolId": "bj-cy-bjshifanfuxiao",
+          "period": "小学",
+          "periodId": 10,
+          "subject": "语文",
+          "subjectId": 4001,
+          "grade": "一年级",
+          "gradeId": 2101,
+          "semester": "一年级上",
+          "semesterId": 21011,
+          "publisherId": 5011,
+          "publisher": "人教版新课标"
+        },
+        "period": {
+          "id": 10,
+          "name": "小学",
+          "slug": "primary",
+          "category": 1
+        },
+        "subject": {
+          "id": 4001,
+          "name": "语文",
+          "slug": "chinese",
+          "category": 4
+        },
+        "grade": {
+          "id": 2101,
+          "name": "一年级",
+          "slug": "grade1",
+          "category": 2
+        },
+        "publisher": {
+          "id": 5011,
+          "name": "人教版新课标",
+          "slug": "PEP",
+          "category": 5
+        },
+        "semester": {
+          "id": 21011,
+          "name": "一年级上",
+          "slug": "grade1-1",
+          "category": 3
+        },
+        "catalog": {
+          "id": 110101014,
+          "name": "14 一去二三里",
+          "slug": "14li"
+        },
+        "sections": [],
+        "optionResults": [],
+        "evaluation": {
+          "id": "f2b1859f5e5f41bda978f09f744d8e3d",
+          "courseRecordId": "af578b5b9db14432b5bf51251c2ebf8b",
+          "advantage": "",
+          "discuss": "",
+          "introspection": "",
+          "totalScore": 130,
+          "scaleId": "sys-scale-chinese-1",
+          "scores": [
+            {
+              "scaleItemId": "sys-scale-chinese-01",
+              "sequence": 0,
+              "itemName": "技术知识TK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-011",
+              "sequence": 1,
+              "itemName": "使用恰当的技术工具（如办公类软件Word与PPT、概念图、问卷星等）",
+              "itemParentId": "sys-scale-chinese-01",
+              "itemParentName": "技术知识TK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-012",
+              "sequence": 2,
+              "itemName": "使用搜索引擎（如百度、谷歌）搜集并应用适宜的网络资源",
+              "itemParentId": "sys-scale-chinese-01",
+              "itemParentName": "技术知识TK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-013",
+              "sequence": 3,
+              "itemName": "解决遇到的技术问题（如投影仪无法显示、网络连接失败等）",
+              "itemParentId": "sys-scale-chinese-01",
+              "itemParentName": "技术知识TK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-02",
+              "sequence": 4,
+              "itemName": "学科知识CK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-021",
+              "sequence": 5,
+              "itemName": "拥有扎实的语文学科知识基础",
+              "itemParentId": "sys-scale-chinese-02",
+              "itemParentName": "学科知识CK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-022",
+              "sequence": 6,
+              "itemName": "清晰且准确呈现语文学科知识",
+              "itemParentId": "sys-scale-chinese-02",
+              "itemParentName": "学科知识CK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-03",
+              "sequence": 7,
+              "itemName": "教学法知识PK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-031",
+              "sequence": 8,
+              "itemName": "采用恰当的教学方式促进学生学习（如启发式、探究式等）",
+              "itemParentId": "sys-scale-chinese-03",
+              "itemParentName": "教学法知识PK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-032",
+              "sequence": 9,
+              "itemName": "提出清晰和恰当的教学问题，问题有层次，鼓励学生提问与质疑",
+              "itemParentId": "sys-scale-chinese-03",
+              "itemParentName": "教学法知识PK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-033",
+              "sequence": 10,
+              "itemName": "采用多种评价方式评价学生的学习过程和所学到的知识",
+              "itemParentId": "sys-scale-chinese-03",
+              "itemParentName": "教学法知识PK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-034",
+              "sequence": 11,
+              "itemName": "管理课堂、保持课堂秩序",
+              "itemParentId": "sys-scale-chinese-03",
+              "itemParentName": "教学法知识PK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-04",
+              "sequence": 12,
+              "itemName": "学科教学知识PCK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-041",
+              "sequence": 13,
+              "itemName": "设计清晰、恰当的教学目标并有效实现教学目标",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-042",
+              "sequence": 14,
+              "itemName": "体现以语言运用为中心、教师主导-学生主体的教学理念（时间分配合理）",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-043",
+              "sequence": 15,
+              "itemName": "设计促进学生思维发展的学习活动，将语言学习与思维培养有机结合",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-044",
+              "sequence": 16,
+              "itemName": "精选与教学目标相关的拓展阅读资源，难度适宜、时间分配与反馈恰当",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-045",
+              "sequence": 17,
+              "itemName": "设计的写话题目与生活有机结合，写话导语清晰、时间分配与反馈恰当",
+              "itemParentId": "sys-scale-chinese-04",
+              "itemParentName": "学科教学知识PCK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-05",
+              "sequence": 18,
+              "itemName": "技术支持的教学法知识TPK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-051",
+              "sequence": 19,
+              "itemName": "利用技术收集和分析学生学习过程信息，发现问题，提出针对性的改进措施",
+              "itemParentId": "sys-scale-chinese-05",
+              "itemParentName": "技术支持的教学法知识TPK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-052",
+              "sequence": 20,
+              "itemName": "利用技术工具开展测验、练习等工作，提高评价工作效率",
+              "itemParentId": "sys-scale-chinese-05",
+              "itemParentName": "技术支持的教学法知识TPK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-053",
+              "sequence": 21,
+              "itemName": "利用技术工具创设教学情境、呈现学习资源，促进知识与技能的巩固与迁移",
+              "itemParentId": "sys-scale-chinese-05",
+              "itemParentName": "技术支持的教学法知识TPK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-06",
+              "sequence": 22,
+              "itemName": "技术支持的学科知识TCK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-061",
+              "sequence": 23,
+              "itemName": "选择合适的表征技术来呈现语文学科具体的概念，以便学生更好理解概念",
+              "itemParentId": "sys-scale-chinese-06",
+              "itemParentName": "技术支持的学科知识TCK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-062",
+              "sequence": 24,
+              "itemName": "了解用于促进语文学科理解和探究的技术（如电子词典、语文学习网站等）",
+              "itemParentId": "sys-scale-chinese-06",
+              "itemParentName": "技术支持的学科知识TCK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-063",
+              "sequence": 25,
+              "itemName": "选择合适的技术促进学生纠正错误概念",
+              "itemParentId": "sys-scale-chinese-06",
+              "itemParentName": "技术支持的学科知识TCK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-07",
+              "sequence": 26,
+              "itemName": "整合技术的学科教学法知识TPACK",
+              "score": 0
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-071",
+              "sequence": 27,
+              "itemName": "制定深度的语文学科讨论主题，促进学生使用合适的工具开展合作学习（如网上论坛、教学互动平台等）",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-072",
+              "sequence": 28,
+              "itemName": "设置与语文学科相关的真实问题，并能够使用电脑表征问题以吸引学生参与",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-073",
+              "sequence": 29,
+              "itemName": "使用适当的技术促进学生建构语文知识（如概念图工具、Wiki百科等）",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-074",
+              "sequence": 30,
+              "itemName": "创建计算机支持的自主学习活动（如使用网络平台进行拓展阅读与写话等）",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-075",
+              "sequence": 31,
+              "itemName": "使用合适的技术与资源（如网络平台、APP等）设计探究学习活动，以便于引导学生理解语文知识",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 5
+            },
+            {
+              "scaleItemId": "sys-scale-chinese-076",
+              "sequence": 32,
+              "itemName": "整合语文学科、技术与教学法知识，设计以学生为中心的学习活动",
+              "itemParentId": "sys-scale-chinese-07",
+              "itemParentName": "整合技术的学科教学法知识TPACK",
+              "score": 5
+            }
+          ],
+          "advantageThumbUps": 0,
+          "discussThumbUps": 0,
+          "introspectionThumbUps": 0
+        },
+        "lessonId": "4dc07a06f70841f1b1bcf611fb3c4826",
+        "startTime": 1510371672000,
+        "endTime": 1510371697000,
+        "mode": 1,
+        "totalMediaCount": 0,
+        "remainingMediaCount": 0,
+        "scaleCustom": false,
+        "scoreFinish": false,
+        "uploading": false,
+        "type": "tk",
+        "description": "w",
+        "title": "14 一去二三里",
+        "referenceCount": 0,
+        "creator": {
+          "id": "sample_user_test",
+          "username": "test",
+          "nickname": "Mary老师",
+          "phone": "119",
+          "sex": "Female",
+          "accountNonLocked": false,
+          "website": "w",
+          "description": "我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是",
+          "province": "北京",
+          "provinceId": 1,
+          "city": "北京市",
+          "cityId": 10000,
+          "county": "朝阳区",
+          "countyId": 72,
+          "school": "北京师范大学朝阳附属小学",
+          "schoolId": "bj-cy-bjshifanfuxiao",
+          "period": "小学",
+          "periodId": 10,
+          "subject": "语文",
+          "subjectId": 4001,
+          "postcode": "5000",
+          "language": "zh-CN",
+          "className": "??",
+          "point": 305,
+          "roleId": "ROLE_TEST1",
+          "roleEnabled": true,
+          "photo": "/public/photo/2018/6/19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoLarge": "/public/photo/2018/6/120_19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoMedium": "/public/photo/2018/6/90_19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoSmall": "/public/photo/2018/6/60_19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoUrl": "/public/photo/2018/6/19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "pending": true
+        },
+        "passed": true,
+        "unapproved": false,
+        "updateTime": 1510371819000,
+        "createTime": 1510371697000,
+        "summary": "w",
+        "released": true,
+        "point": 0,
+        "wkType": "audio",
+        "gistType": 1,
+        "gist": "<ruby>定<rt>dìng</rt>公<rt>gōng</rt>问<rt>wèn</rt>：“<rt> </rt>一<rt>yì</rt>言<rt>yán</rt>而<rt>ér</rt>可<rt>kě</rt>以<rt>yǐ</rt>兴<rt>xìng</rt>邦<rt>bāng</rt>，<rt> </rt>有<rt>yǒu</rt>诸<rt>zhū</rt>？<rt> </rt>”<rt> </rt>孔<rt>kǒng</rt>子<rt>zǐ</rt>对<rt>duì</rt>曰<rt>yuē</rt>：“<rt> </rt>言<rt>yán</rt>不<rt>bù</rt>可<rt>kě</rt>以<rt>yǐ</rt>若<rt>ruò</rt>是<rt>shì</rt>其<rt>qí</rt>几<rt>jī</rt>也<rt>yě</rt>。<rt> </rt>人<rt>rén</rt>之<rt>zhī</rt>言<rt>yán</rt>曰<rt>yuē</rt>：为<rt>wéi</rt>君<rt>jūn</rt>难<rt>nán</rt>，<rt> </rt>为<rt>wéi</rt>臣<rt>chén</rt>不<rt>bú</rt>易<rt>yì</rt>。<rt> </rt>如<rt>rú</rt>知<rt>zhī</rt>为<rt>wéi</rt>君<rt>jūn</rt>之<rt>zhī</rt>难<rt>nán</rt>也<rt>yě</rt>，<rt> </rt>不<rt>bù</rt>几<rt>jī</rt>乎<rt>hū</rt>一<rt>yì</rt>言<rt>yán</rt>而<rt>ér</rt>兴<rt>xìng</rt>邦<rt>bāng</rt>乎<rt>hū</rt>？<rt> </rt>”<rt> </rt>曰<rt>yuē</rt>：“<rt> </rt>一<rt>yī</rt>言<rt>yán</rt>而<rt>ér</rt>丧<rt>sàng</rt>邦<rt>bāng</rt>，<rt> </rt>有<rt>yǒu</rt>诸<rt>zhū</rt>？<rt> </rt>”<rt> </rt>孔<rt>kǒng</rt>子<rt>zǐ</rt>对<rt>duì</rt>曰<rt>yuē</rt>：“<rt> </rt>言<rt>yán</rt>不<rt>bù</rt>可<rt>kě</rt>以<rt>yǐ</rt>若<rt>ruò</rt>是<rt>shì</rt>其<rt>qí</rt>几<rt>jī</rt>也<rt>yě</rt>。<rt> </rt>人<rt>rén</rt>之<rt>zhī</rt>言<rt>yán</rt>曰<rt>yuē</rt>：予<rt>yú</rt>无<rt>wú</rt>乐<rt>lè</rt>乎<rt>hū</rt>为<rt>wéi</rt>君<rt>jūn</rt>，<rt> </rt>唯<rt>wéi</rt>其<rt>qí</rt>言<rt>yán</rt>而<rt>ér</rt>莫<rt>mò</rt>予<rt>yú</rt>违<rt>wé</rt>也<rt>yě</rt>。<rt> </rt>如<rt>rú</rt>其<rt>qí</rt>善<rt>shàn</rt>而<rt>ér</rt>莫<rt>mò</rt>之<rt>zhī</rt>违<rt>wéi</rt>也<rt>yě</rt>，<rt> </rt>不<rt>bú</rt>亦<rt>yì</rt>善<rt>shàn</rt>乎<rt>hū</rt>？<rt> </rt>如<rt>rú</rt>不<rt>bú</rt>善<rt>shàn</rt>而<rt>ér</rt>莫<rt>mò</rt>之<rt>zhī</rt>违<rt>wéi</rt>也<rt>yě</rt>，<rt> </rt>不<rt>bù</rt>几<rt>jī</rt>乎<rt>hū</rt>一<rt>yì</rt>言<rt>yán</rt>而<rt>ér</rt>丧<rt>sàng</rt>邦<rt>bāng</rt>乎<rt>hū</rt>？<rt> </rt>”<rt> </rt></ruby> "
+      }
+    ],
+    "invites": [
+      {
+        "id": "dc579f89e56a402fad806bf9221c5266",
+        "inviteTime": 1510371155000,
+        "invitee": {
+          "id": "sample_user_test",
+          "username": "test",
+          "nickname": "Mary老师",
+          "phone": "119",
+          "sex": "Female",
+          "accountNonLocked": false,
+          "website": "w",
+          "description": "我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是不爱动。我不傻，只是有点笨。我不懒，只是",
+          "province": "北京",
+          "provinceId": 1,
+          "city": "北京市",
+          "cityId": 10000,
+          "county": "朝阳区",
+          "countyId": 72,
+          "school": "北京师范大学朝阳附属小学",
+          "schoolId": "bj-cy-bjshifanfuxiao",
+          "period": "小学",
+          "periodId": 10,
+          "subject": "语文",
+          "subjectId": 4001,
+          "postcode": "5000",
+          "language": "zh-CN",
+          "className": "??",
+          "point": 305,
+          "roleId": "ROLE_TEST1",
+          "roleEnabled": true,
+          "photo": "/public/photo/2018/6/19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoLarge": "/public/photo/2018/6/120_19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoMedium": "/public/photo/2018/6/90_19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoSmall": "/public/photo/2018/6/60_19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "photoUrl": "/public/photo/2018/6/19ed0f05-620d-4a1f-8a43-e4602f68bf3f.jpg",
+          "pending": true
+        },
+        "teachingTime": 1510371151000,
+        "teachingAddress": "qq"
+      }
+    ],
+    "advantages": [{"name": "声情并茂123"},{"name": "声情并茂456"}],
+    "defects": [{"name": "无互动交流123"},{"name": "无互动交流456"}],
+    "score": 90,
+    "totalScore": 234
+  },
+  "bk": 978,
+	"totalValues": [
+    [
+      2,
+      2,
+      3
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      3,
+      3,
+      3
+    ],
+    [
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    [
+      5,
+      5,
+      5
+    ],
+    [
+      4,
+      4,
+      4
+    ],
+    [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
+    ]
+  ],
+"values": [
+    [
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+    ]
+  ]
+}
+	</script>
+	<script id="data" type="text/json">
+{
+    "tk": 618,
+    "values": [
+        [
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    ],
+    "sk": 142,
+    "lesson": {
+        "id": "932eed5e69444ee09101e3e84dfbf681",
+        "videoClass": false,
+        "period": {
+            "id": 10,
+            "name": "小学",
+            "slug": "primary",
+            "category": 1
+        },
+        "subject": {
+            "id": 4001,
+            "name": "语文",
+            "slug": "chinese",
+            "category": 4
+        },
+        "grade": {
+            "id": 2101,
+            "name": "一年级",
+            "slug": "grade1",
+            "category": 2
+        },
+        "publisher": {
+            "id": 5011,
+            "name": "人教版新课标",
+            "slug": "PEP",
+            "category": 5
+        },
+        "semester": {
+            "id": 21011,
+            "name": "一年级上",
+            "slug": "grade1-1",
+            "category": 3
+        },
+        "catalog": {
+            "id": 110101014,
+            "name": "14 一去二三里",
+            "slug": "14li"
+        },
+        "teacher": {
+            "username": "打哈哈1",
+            "sex": "Unknown",
+            "accountNonLocked": false,
+            "province": "北京",
+            "provinceId": 1,
+            "city": "北京市",
+            "cityId": 10000,
+            "county": "海淀区",
+            "countyId": 2800,
+            "school": "东北旺中心小学",
+            "schoolId": "bj-hd-dongbeiwang",
+            "period": "小学",
+            "periodId": 10,
+            "subject": "语文",
+            "subjectId": 4001,
+            "semester": "一年级上",
+            "semesterId": 21011,
+            "publisher": "人教版新课标",
+            "publisherId": 5011,
+            "point": 0,
+            "roleEnabled": false,
+            "pending": true
+        },
+        "createTime": 1533005551000,
+        "courseRecords": [
+            {
+                "id": "001600be9e0c4e02b0b13887d076da80",
+                "teacher": {
+                    "name": "打哈哈1",
+                    "province": "北京",
+                    "provinceId": 1,
+                    "city": "北京市",
+                    "cityId": 10000,
+                    "county": "海淀区",
+                    "countyId": 2800,
+                    "school": "东北旺中心小学",
+                    "schoolId": "bj-hd-dongbeiwang",
+                    "period": "小学",
+                    "periodId": 10,
+                    "subject": "语文",
+                    "subjectId": 4001,
+                    "semester": "一年级上",
+                    "semesterId": 21011,
+                    "publisherId": 5011,
+                    "publisher": "人教版新课标"
+                },
+                "period": {
+                    "id": 10,
+                    "name": "小学",
+                    "slug": "primary",
+                    "category": 1
+                },
+                "subject": {
+                    "id": 4001,
+                    "name": "语文",
+                    "slug": "chinese",
+                    "category": 4
+                },
+                "grade": {
+                    "id": 2101,
+                    "name": "一年级",
+                    "slug": "grade1",
+                    "category": 2
+                },
+                "publisher": {
+                    "id": 5011,
+                    "name": "人教版新课标",
+                    "slug": "PEP",
+                    "category": 5
+                },
+                "semester": {
+                    "id": 21011,
+                    "name": "一年级上",
+                    "slug": "grade1-1",
+                    "category": 3
+                },
+                "catalog": {
+                    "id": 110101014,
+                    "name": "14 一去二三里",
+                    "slug": "14li"
+                },
+                "sections": [
+                    {
+                        "id": "ea426415c8914e96b567f78278db3b5f",
+                        "name": "未填写",
+                        "records": [
+                            {
+                                "id": "2f9ea63fb666416dae346ceea710b353",
+                                "courseRecordId": "001600be9e0c4e02b0b13887d076da80",
+                                "sectionId": "ea426415c8914e96b567f78278db3b5f",
+                                "name": "",
+                                "startTime": 1533005430000,
+                                "duration": 122000,
+                                "teacherActivity": "",
+                                "studentActivity": "",
+                                "interact": "",
+                                "rethink": "",
+                                "mediaInfo": "",
+                                "emotionLabel": 0
+                            }
+                        ],
+                        "favored": false
+                    }
+                ],
+                "processScaleId": "sys-process-scale-st",
+                "processScale": {
+                    "id": "sys-process-scale-st",
+                    "name": "ST课堂观察分析",
+                    "scaleType": "st",
+                    "createTime": 1509420982000,
+                    "updateTime": 1509420982000,
+                    "custom": false,
+                    "open": true,
+                    "question": [
+                        {
+                            "id": "scale-question-5",
+                            "name": "st默认标题",
+                            "processScaleId": "sys-process-scale-st",
+                            "sequence": 5,
+                            "options": [
+                                {
+                                    "id": "question5-option-1",
+                                    "name": "S",
+                                    "questionId": "scale-question-5",
+                                    "sequence": 20
+                                },
+                                {
+                                    "id": "question5-option-2",
+                                    "name": "T",
+                                    "questionId": "scale-question-5",
+                                    "sequence": 21
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "optionResults": [
+                    {
+                        "id": "0dcf4a8386124b09b587d877b84920cb",
+                        "courseRecordId": "001600be9e0c4e02b0b13887d076da80",
+                        "seconds": 15,
+                        "option": "question5-option-2",
+                        "sequence": 0,
+                        "options": [
+                            "question5-option-2"
+                        ]
+                    },
+                    {
+                        "id": "02a328f405184c45ba7ab43b509132a1",
+                        "courseRecordId": "001600be9e0c4e02b0b13887d076da80",
+                        "seconds": 30,
+                        "option": "question5-option-1",
+                        "sequence": 1,
+                        "options": [
+                            "question5-option-1"
+                        ]
+                    },
+                    {
+                        "id": "d72aa3c5322e42c6a7f16af284c023ca",
+                        "courseRecordId": "001600be9e0c4e02b0b13887d076da80",
+                        "seconds": 46,
+                        "option": "question5-option-2",
+                        "sequence": 2,
+                        "options": [
+                            "question5-option-2"
+                        ]
+                    },
+                    {
+                        "id": "776aff62d62e49c5989d1fa04f79a4f4",
+                        "courseRecordId": "001600be9e0c4e02b0b13887d076da80",
+                        "seconds": 61,
+                        "option": "question5-option-1",
+                        "sequence": 3,
+                        "options": [
+                            "question5-option-1"
+                        ]
+                    },
+                    {
+                        "id": "fab73bd494604bf899ce9d08fe8fea77",
+                        "courseRecordId": "001600be9e0c4e02b0b13887d076da80",
+                        "seconds": 75,
+                        "option": "question5-option-2",
+                        "sequence": 4,
+                        "options": [
+                            "question5-option-2"
+                        ]
+                    },
+                    {
+                        "id": "b4602928a076417b8b9dd6c3cbf31a69",
+                        "courseRecordId": "001600be9e0c4e02b0b13887d076da80",
+                        "seconds": 91,
+                        "option": "question5-option-1",
+                        "sequence": 5,
+                        "options": [
+                            "question5-option-1"
+                        ]
+                    }
+                ],
+                "evaluation": {
+                    "id": "4f9cd7937e844aa49b2ad190d6574d96",
+                    "courseRecordId": "001600be9e0c4e02b0b13887d076da80",
+                    "totalScore": 0,
+                    "scaleId": "sys-scale-chinese-1",
+                    "scores": [
+                        {
+                            "scaleItemId": "sys-scale-chinese-01",
+                            "sequence": 0,
+                            "itemName": "技术知识TK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-011",
+                            "sequence": 1,
+                            "itemName": "使用恰当的技术工具（如办公类软件Word与PPT、概念图、问卷星等）",
+                            "itemParentId": "sys-scale-chinese-01",
+                            "itemParentName": "技术知识TK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-012",
+                            "sequence": 2,
+                            "itemName": "使用搜索引擎（如百度、谷歌）搜集并应用适宜的网络资源",
+                            "itemParentId": "sys-scale-chinese-01",
+                            "itemParentName": "技术知识TK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-013",
+                            "sequence": 3,
+                            "itemName": "解决遇到的技术问题（如投影仪无法显示、网络连接失败等）",
+                            "itemParentId": "sys-scale-chinese-01",
+                            "itemParentName": "技术知识TK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-02",
+                            "sequence": 4,
+                            "itemName": "学科知识CK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-021",
+                            "sequence": 5,
+                            "itemName": "拥有扎实的语文学科知识基础",
+                            "itemParentId": "sys-scale-chinese-02",
+                            "itemParentName": "学科知识CK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-022",
+                            "sequence": 6,
+                            "itemName": "清晰且准确呈现语文学科知识",
+                            "itemParentId": "sys-scale-chinese-02",
+                            "itemParentName": "学科知识CK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-03",
+                            "sequence": 7,
+                            "itemName": "教学法知识PK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-031",
+                            "sequence": 8,
+                            "itemName": "采用恰当的教学方式促进学生学习（如启发式、探究式等）",
+                            "itemParentId": "sys-scale-chinese-03",
+                            "itemParentName": "教学法知识PK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-032",
+                            "sequence": 9,
+                            "itemName": "提出清晰和恰当的教学问题，问题有层次，鼓励学生提问与质疑",
+                            "itemParentId": "sys-scale-chinese-03",
+                            "itemParentName": "教学法知识PK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-033",
+                            "sequence": 10,
+                            "itemName": "采用多种评价方式评价学生的学习过程和所学到的知识",
+                            "itemParentId": "sys-scale-chinese-03",
+                            "itemParentName": "教学法知识PK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-034",
+                            "sequence": 11,
+                            "itemName": "管理课堂、保持课堂秩序",
+                            "itemParentId": "sys-scale-chinese-03",
+                            "itemParentName": "教学法知识PK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-04",
+                            "sequence": 12,
+                            "itemName": "学科教学知识PCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-041",
+                            "sequence": 13,
+                            "itemName": "设计清晰、恰当的教学目标并有效实现教学目标",
+                            "itemParentId": "sys-scale-chinese-04",
+                            "itemParentName": "学科教学知识PCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-042",
+                            "sequence": 14,
+                            "itemName": "体现以语言运用为中心、教师主导-学生主体的教学理念（时间分配合理）",
+                            "itemParentId": "sys-scale-chinese-04",
+                            "itemParentName": "学科教学知识PCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-043",
+                            "sequence": 15,
+                            "itemName": "设计促进学生思维发展的学习活动，将语言学习与思维培养有机结合",
+                            "itemParentId": "sys-scale-chinese-04",
+                            "itemParentName": "学科教学知识PCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-044",
+                            "sequence": 16,
+                            "itemName": "精选与教学目标相关的拓展阅读资源，难度适宜、时间分配与反馈恰当",
+                            "itemParentId": "sys-scale-chinese-04",
+                            "itemParentName": "学科教学知识PCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-045",
+                            "sequence": 17,
+                            "itemName": "设计的写话题目与生活有机结合，写话导语清晰、时间分配与反馈恰当",
+                            "itemParentId": "sys-scale-chinese-04",
+                            "itemParentName": "学科教学知识PCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-05",
+                            "sequence": 18,
+                            "itemName": "技术支持的教学法知识TPK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-051",
+                            "sequence": 19,
+                            "itemName": "利用技术收集和分析学生学习过程信息，发现问题，提出针对性的改进措施",
+                            "itemParentId": "sys-scale-chinese-05",
+                            "itemParentName": "技术支持的教学法知识TPK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-052",
+                            "sequence": 20,
+                            "itemName": "利用技术工具开展测验、练习等工作，提高评价工作效率",
+                            "itemParentId": "sys-scale-chinese-05",
+                            "itemParentName": "技术支持的教学法知识TPK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-053",
+                            "sequence": 21,
+                            "itemName": "利用技术工具创设教学情境、呈现学习资源，促进知识与技能的巩固与迁移",
+                            "itemParentId": "sys-scale-chinese-05",
+                            "itemParentName": "技术支持的教学法知识TPK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-06",
+                            "sequence": 22,
+                            "itemName": "技术支持的学科知识TCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-061",
+                            "sequence": 23,
+                            "itemName": "选择合适的表征技术来呈现语文学科具体的概念，以便学生更好理解概念",
+                            "itemParentId": "sys-scale-chinese-06",
+                            "itemParentName": "技术支持的学科知识TCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-062",
+                            "sequence": 24,
+                            "itemName": "了解用于促进语文学科理解和探究的技术（如电子词典、语文学习网站等）",
+                            "itemParentId": "sys-scale-chinese-06",
+                            "itemParentName": "技术支持的学科知识TCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-063",
+                            "sequence": 25,
+                            "itemName": "选择合适的技术促进学生纠正错误概念",
+                            "itemParentId": "sys-scale-chinese-06",
+                            "itemParentName": "技术支持的学科知识TCK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-07",
+                            "sequence": 26,
+                            "itemName": "整合技术的学科教学法知识TPACK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-071",
+                            "sequence": 27,
+                            "itemName": "制定深度的语文学科讨论主题，促进学生使用合适的工具开展合作学习（如网上论坛、教学互动平台等）",
+                            "itemParentId": "sys-scale-chinese-07",
+                            "itemParentName": "整合技术的学科教学法知识TPACK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-072",
+                            "sequence": 28,
+                            "itemName": "设置与语文学科相关的真实问题，并能够使用电脑表征问题以吸引学生参与",
+                            "itemParentId": "sys-scale-chinese-07",
+                            "itemParentName": "整合技术的学科教学法知识TPACK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-073",
+                            "sequence": 29,
+                            "itemName": "使用适当的技术促进学生建构语文知识（如概念图工具、Wiki百科等）",
+                            "itemParentId": "sys-scale-chinese-07",
+                            "itemParentName": "整合技术的学科教学法知识TPACK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-074",
+                            "sequence": 30,
+                            "itemName": "创建计算机支持的自主学习活动（如使用网络平台进行拓展阅读与写话等）",
+                            "itemParentId": "sys-scale-chinese-07",
+                            "itemParentName": "整合技术的学科教学法知识TPACK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-075",
+                            "sequence": 31,
+                            "itemName": "使用合适的技术与资源（如网络平台、APP等）设计探究学习活动，以便于引导学生理解语文知识",
+                            "itemParentId": "sys-scale-chinese-07",
+                            "itemParentName": "整合技术的学科教学法知识TPACK",
+                            "score": 0
+                        },
+                        {
+                            "scaleItemId": "sys-scale-chinese-076",
+                            "sequence": 32,
+                            "itemName": "整合语文学科、技术与教学法知识，设计以学生为中心的学习活动",
+                            "itemParentId": "sys-scale-chinese-07",
+                            "itemParentName": "整合技术的学科教学法知识TPACK",
+                            "score": 0
+                        }
+                    ],
+                    "advantageThumbUps": 0,
+                    "discussThumbUps": 0,
+                    "introspectionThumbUps": 0
+                },
+                "lessonId": "932eed5e69444ee09101e3e84dfbf681",
+                "startTime": 1533005430000,
+                "endTime": 1533005552000,
+                "lessonTime": 1533005426000,
+                "mode": 1,
+                "totalMediaCount": 0,
+                "remainingMediaCount": 0,
+                "scaleCustom": false,
+                "scoreFinish": false,
+                "uploading": false,
+                "point": 0,
+                "type": "tk",
+                "description": "",
+                "passed": true,
+                "creator": {
+                    "id": "9328fb80efd4410697cd23512bfcba20",
+                    "username": "lcuser_9328fb80efd44106",
+                    "nickname": "0005",
+                    "phone": "188****0005",
+                    "sex": "Unknown",
+                    "accountNonLocked": false,
+                    "description": "简介0005",
+                    "province": "北京",
+                    "provinceId": 1,
+                    "city": "北京市",
+                    "cityId": 10000,
+                    "county": "海淀区",
+                    "countyId": 2800,
+                    "school": "官亭小学",
+                    "schoolId": "ah-hf-guanting",
+                    "period": "小学",
+                    "periodId": 10,
+                    "point": 28,
+                    "roleEnabled": false,
+                    "photo": "http://172.18.136.135/lcell/v0.3/public/photo/2017/3/8d556ac9-dcea-4c71-a21d-c7572aab31f4.jpeg",
+                    "photoLarge": "http://172.18.136.135/lcell/v0.3/public/photo/2017/3/120_8d556ac9-dcea-4c71-a21d-c7572aab31f4.jpeg",
+                    "photoMedium": "http://172.18.136.135/lcell/v0.3/public/photo/2017/3/90_8d556ac9-dcea-4c71-a21d-c7572aab31f4.jpeg",
+                    "photoSmall": "http://172.18.136.135/lcell/v0.3/public/photo/2017/3/60_8d556ac9-dcea-4c71-a21d-c7572aab31f4.jpeg",
+                    "photoUrl": "http://172.18.136.135/lcell/v0.3/public/photo/2017/3/8d556ac9-dcea-4c71-a21d-c7572aab31f4.jpeg",
+                    "pending": true
+                },
+                "title": "14 一去二三里",
+                "updateTime": 1533005551000,
+                "createTime": 1533005551000,
+                "summary": "",
+                "released": true,
+                "unapproved": false,
+                "referenceCount": 0
+            }
+        ],
+        "advantages": [],
+        "defects": [],
+        "score": 0,
+        "totalScore": 0
+    },
+    "bk": 110,
+    "totalValues": [
+        [
+            2,
+            2,
+            2
+        ],
+        [
+            2,
+            2
+        ],
+        [
+            2,
+            2,
+            2,
+            2
+        ],
+        [
+            2,
+            2,
+            2,
+            2,
+            2
+        ],
+        [
+            1,
+            2,
+            2
+        ],
+        [
+            2,
+            2,
+            2
+        ],
+        [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+        ]
+    ]
+}
+	</script>
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head xmlns:th="http://www.thymeleaf.org">
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>TPACK</title>
+	<link rel="stylesheet" href="css/report.css" />
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+</head>
+<body>
+	<div class="le-tpack hide">
+		{{#flag}}
+		<div id="allTpack" class="tpack-content">
+			<span class="title">TPACK评价量表分析</span>
+			<div id="tpack"></div>
+			<div class="col-xs-12">
+				<span>分析结论与改进建议：<br/>
+					<span id="radarSuggeset">
+						<span id="s1">您的<span id="goodData"></span>知识已经超过本节课其他执教教师群体均值，恭喜您！<br/></span>
+						<span id="s2">与教师群体的均值相比，您的<span id="badData"></span>知识还有待继续加强。<br/></span>
+					</span>
+				</span>
+			</div>
+			<div id="tk" class="detail-content col-xs-12"></div>
+			<div id="ck" class="detail-content col-xs-12"></div>
+			<div id="pk" class="detail-content col-xs-12"></div>
+			<div id="pck" class="detail-content col-xs-12"></div>
+			<div id="tpk" class="detail-content col-xs-12"></div>
+			<div id="tck" class="detail-content col-xs-12"></div>
+			<div id="tpack2" class="col-xs-12"></div>
+		</div>
+		{{/flag}}
+	</div>
+	<script type="text/javascript" src="js/mustache.min.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/echarts.min.js"></script>
+	<script type="text/javascript">
+		var debug = 0;
+		$(function() {
+			debug && render($('#data').text());
+		});
+		function durationToString(duration) {
+			var min = Math.floor(duration / 60), sec = duration % 60;
+			return min + "'" + sec + '"';
+		}
+		
+		function jsonEscape(str) {
+			//if (debug)
+				return str;
+			//else
+			//	return str.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
+		}
+	
+		function replaceLineBreak(str) {
+			return str && str.replace(/\n/g, '<br/>');
+		}
+		var template = $('.le-tpack').html();
+		Mustache.parse(template);
+		$('.le-tpack').empty().removeClass('hide').show();
+		function render(data) {
+ 			if (console.log) console.log("data: " + data);
+			try {
+				var totalSum = 0;//用来验证雷达图是否都为0
+				var allSum = 0;
+				var tsum = 0;
+				var tsum1 = 0;
+				if (typeof data === 'string') data = $.parseJSON(jsonEscape(data));
+				var tpack = {"flag" : data.flag};
+				var render = Mustache.render(template,tpack);
+				$(".le-tpack").html(render);
+				
+				
+				var totalScores = data.totalScores;
+				var scores = data.scores;
+				var values = data.values;
+				var totalValues = data.totalValues;
+				$.each(scores, function(index, item) {
+					totalSum += scores[index];
+				})
+				if (totalSum == 0) {
+					 $('#ssi').html('<span>无</span>')
+					 //$('#allTpack').html("<span class='pull-center'>TPACK雷达图暂无数据</span>");
+					 $('#allTpack').html(" ");
+				} else {
+					//雷达图
+					 var myChart = echarts.init(document.getElementById('tpack'));
+					 option = {
+							    tooltip: {
+							    },
+							    legend: {
+							        data: ['个体均值', '群体均值']
+							    },
+							    radar: {
+							        // shape: 'circle',
+							        name: {
+							            textStyle: {
+							                color: '#fff',
+							                backgroundColor: '#999',
+							                borderRadius: 3,
+							                padding: [3, 6]
+							           }
+							        },
+							        center: ['50%', '57%'],
+							        indicator: [
+							           { name: 'TK', max: 5},
+							           { name: 'CK', max: 5},
+							           { name: 'PK', max: 5},
+							           { name: 'PCK', max: 5},
+							           { name: 'TPK', max: 5},
+							           { name: 'TCK', max:5},
+							           { name: 'TPACK', max:5}
+							        ],
+							        axisLabel: {
+							        	inside: true
+							        }
+							    },
+							    series: [{
+							        name: 'TPACK量表分析',
+							        type: 'radar',
+							        // areaStyle: {normal: {}},
+							        data : [
+							            {
+							                value : scores,
+							                name : '个体均值'
+							            },
+							             {
+							                value : totalScores,
+							                name : '群体均值'
+							            }
+							        ]
+							    }]
+							};
+					 myChart.setOption(option);
+					 var goodData = "";
+					 var badData = "";
+					 var tpackPoint = ["TK", "CK", "PK", "PCK", "TPK", "TCK", "TPACK"];
+					 for (var i = 0; i < tpackPoint.length; i++) {
+						 if (scores[i] > totalScores[i]) {
+							 goodData +=  tpackPoint[i] + ",";
+						 } else if (scores[i] < totalScores[i]) {
+							 badData += tpackPoint[i] + ",";
+						 }
+					 }
+					 if (goodData.length <= 1 && badData.length <= 1) {
+						 $("#radarSuggeset").html('暂无数据');
+					 }
+					 if (goodData.length <= 1) {
+						 $("#s1").html(" ");
+						 goodData = "--";
+					 } 
+					 if (badData.length <= 1) {
+						 $("#s2").html(" ");
+						 badData = "--";
+					 }
+					 $("#goodData").html(goodData.substring(0, goodData.length - 1));
+					 $("#badData").html(badData.substring(0, badData.length - 1));
+					 
+					 $.each(values, function(index, item) {
+							var valueslist = values[index];
+							$.each(valueslist, function(index1, item) {
+								tsum += valueslist[index1];
+							})
+					 })
+				  $.each(totalValues, function(index, item) {
+					  totalValueslist = totalValues[index];
+					  $.each(totalValueslist, function(index1, item) {
+						  tsum1 += totalValueslist[index1];
+					  })
+				 	}) 
+				 	 //柱形图
+					 var series = [];
+					 echart('tk','教师的技术知识（TK）分析',data.names[0],values[0],totalValues[0]);
+					 
+					 series = [];
+					 echart('ck','教师的学科知识（CK）分析',data.names[1],values[1],totalValues[1]);
+					 
+					 series = [];
+					 echart('pk','教师的教学法知识（PK）分析',data.names[2],values[2],totalValues[2]);
+					 
+					 series = [];
+					 echart('pck','教师的学科教学知识（PCK）分析',data.names[3],values[3],totalValues[3]);
+					 
+					 series = [];
+					 echart('tpk','教师的技术支持的教学法知识（TPK）分析',data.names[4],values[4],totalValues[4]);
+					 
+					 series = [];
+					 echart('tck','教师的技术支持的学科知识（TCK）分析',data.names[5],values[5],totalValues[5]);
+					 
+					 series = [];
+					 echart('tpack2','教师的整合技术的学科教学法知识（TPACK）分析',data.names[6],values[6],totalValues[6]);
+				}
+				function echart(id,text,yaxis,series,totalSeries) {
+// 					var str = '';
+// 					for (var i = 0; i < text.length/10; i++) {
+// 							str += text.substring(i*10, (i+1)*10) + '\n';
+// 						}
+					 var myChart2 = echarts.init(document.getElementById(id));
+					 option2 = {
+							    color: ['#0072e3','#ff8000'],
+							    title: {
+							        text: text,
+// 							        left:'8%',
+							        textStyle:{
+										color: '#999999',
+										fontSize: 13,
+										//字体风格,'normal','italic','oblique'
+										fontStyle:'normal',
+										//字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+										fontWeight:'normal',
+							        }
+							    },
+							    tooltip: {
+							        trigger: 'axis',
+							        axisPointer: {
+							            type: 'shadow'
+							        },
+							        position: function(point, params, dom, rect, size) {
+							        	var name = params[0].name;
+							        	if (name.length > 10) {
+							        		var n1 = name.slice(0, 20), n2 = name.slice(20, name.length);
+							        		var html = '<div>' + n1 + '<br/>' + n2 
+							        		+ '<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#0072e3;"></span>'
+							        		+ params[0].seriesName + ':' + params[0].value + '<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#ff8000;"></span>'
+							        		+ params[1].seriesName + ':' + params[1].value
+							        		console.log($(dom).html());
+							        		$(dom).html(html);
+							        	}
+							        	return ['-15%', '50%'];
+							        }
+							    },
+							    legend: {
+							        data: ['个体均值', '群体均值'],
+							        top: 25
+							    },
+							    grid: {
+							        left: '3%',
+							        right: '4%',
+							        bottom: '3%',
+							        containLabel: true
+							    },
+							    xAxis: {
+							        type: 'value',
+							        boundaryGap: [0, 0.01]
+							    },
+							    yAxis: {
+							        type: 'category',
+							        data: yaxis,
+							        axisLabel: { //坐标轴刻度设置
+										show: true,
+										interval: 0,
+										formatter: function(value, index) {
+											var str = '';
+											if (value.length > 8) {
+												str = value.substring(0,7) + '...'
+// 												for (var i = 0; i < value.length/15; i++) {
+// 													str += value.substring(i*15, (i+1)*15) + '\n';
+// 												}
+											} else {
+												return value;
+											}
+											return str;
+										}
+									}
+								},
+								series: [
+									{
+							            name: '个体均值',
+							            type: 'bar',
+							            data: series
+							        },
+							        {
+							            name: '群体均值',
+							            type: 'bar',
+							            data: totalSeries
+							        }
+							    ]
+							};
+					 myChart2.setOption(option2);
+				 }
+			} catch (e) {
+				$('.le-tpack').html(e);
+			}
+		}
+		if (window.AndroidWebView) {
+			window.goEdit = window.AndroidWebView.edit;
+			window.goMedia = window.AndroidWebView.media;
+		} else {
+			function setupWebViewJavascriptBridge(callback) {
+				if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+				if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+				window.WVJBCallbacks = [callback];
+				var WVJBIframe = document.createElement('iframe');
+				WVJBIframe.style.display = 'none';
+				WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+				document.documentElement.appendChild(WVJBIframe);
+				setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+			}
+			
+			setupWebViewJavascriptBridge(function(bridge) {
+				bridge.registerHandler('render', function(data, responseCallback) {
+					render(data);
+				});
+				
+				window.goEdit = function(sectionId, recordId) {
+					bridge.callHandler('edit', { 'section':sectionId, 'record': recordId }, function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				};
+				
+				window.goMedia = function(sectionId, recordId, mediaIndex, type, mediaId) {
+					bridge.callHandler('media', { 'section':sectionId, 'record': recordId, 'media': mediaIndex, 'type':type, 'mediaId': mediaId },
+					function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				};
+			});
+		}
+	</script>
+	
+	<script id="data1" type="text/json">
+  {
+  "totalScores": [
+    2,
+    3,
+    3,
+    4,
+    5,
+    4,
+    4
+  ],
+  "names": [
+    [
+      "使用恰当的技术工具（如办公类软件Word与PPT、概念图、问卷星等）",
+      "使用搜索引擎（如百度、谷歌）搜集并应用适宜的网络资源",
+      "解决遇到的技术问题（如投影仪无法显示、网络连接失败等）"
+    ],
+    [
+      "拥有扎实的语文学科知识基础",
+      "清晰且准确呈现语文学科知识"
+    ],
+    [
+      "采用恰当的教学方式促进学生学习（如启发式、探究式等）",
+      "提出清晰和恰当的教学问题，问题有层次，鼓励学生提问与质疑",
+      "采用多种评价方式评价学生的学习过程和所学到的知识",
+      "管理课堂、保持课堂秩序"
+    ],
+    [
+      "设计清晰、恰当的教学目标并有效实现教学目标",
+      "体现以语言运用为中心、教师主导-学生主体的教学理念（时间分配合理）",
+      "设计促进学生思维发展的学习活动，将语言学习与思维培养有机结合",
+      "精选与教学目标相关的拓展阅读资源，难度适宜、时间分配与反馈恰当",
+      "设计的写话题目与生活有机结合，写话导语清晰、时间分配与反馈恰当"
+    ],
+    [
+      "利用技术收集和分析学生学习过程信息，发现问题，提出针对性的改进措施",
+      "利用技术工具开展测验、练习等工作，提高评价工作效率",
+      "利用技术工具创设教学情境、呈现学习资源，促进知识与技能的巩固与迁移"
+    ],
+    [
+      "选择合适的表征技术来呈现语文学科具体的概念，以便学生更好理解概念",
+      "了解用于促进语文学科理解和探究的技术（如电子词典、语文学习网站等）",
+      "选择合适的技术促进学生纠正错误概念"
+    ],
+    [
+      "制定深度的语文学科讨论主题，促进学生使用合适的工具开展合作学习（如网上论坛、教学互动平台等）",
+      "设置与语文学科相关的真实问题，并能够使用电脑表征问题以吸引学生参与",
+      "使用适当的技术促进学生建构语文知识（如概念图工具、Wiki百科等）",
+      "创建计算机支持的自主学习活动（如使用网络平台进行拓展阅读与写话等）",
+      "使用合适的技术与资源（如网络平台、APP等）设计探究学习活动，以便于引导学生理解语文知识",
+      "整合语文学科、技术与教学法知识，设计以学生为中心的学习活动"
+    ]
+  ],
+  "flag": true,
+  "scores": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "values": [
+    [
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+    ]
+  ],
+  "lessonId": "4dc07a06f70841f1b1bcf611fb3c4826",
+  "totalValues": [
+    [
+      2,
+      2,
+      3
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      3,
+      3,
+      3
+    ],
+    [
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    [
+      5,
+      5,
+      5
+    ],
+    [
+      4,
+      4,
+      4
+    ],
+    [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
+    ]
+  ]
+}
+	</script>
+	<script id="data" type="text/json">
+	{
+    "totalScores": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "names": [
+        [
+            "使用恰当的技术工具（如办公类软件Word与PPT、概念图、问卷星等）",
+            "使用搜索引擎（如百度、谷歌）搜集并应用适宜的网络资源",
+            "解决遇到的技术问题（如投影仪无法显示、网络连接失败等）"
+        ],
+        [
+            "拥有扎实的语文学科知识基础",
+            "清晰且准确呈现语文学科知识"
+        ],
+        [
+            "采用恰当的教学方式促进学生学习（如启发式、探究式等）",
+            "提出清晰和恰当的教学问题，问题有层次，鼓励学生提问与质疑",
+            "采用多种评价方式评价学生的学习过程和所学到的知识",
+            "管理课堂、保持课堂秩序"
+        ],
+        [
+            "设计清晰、恰当的教学目标并有效实现教学目标",
+            "体现以语言运用为中心、教师主导-学生主体的教学理念（时间分配合理）",
+            "设计促进学生思维发展的学习活动，将语言学习与思维培养有机结合",
+            "精选与教学目标相关的拓展阅读资源，难度适宜、时间分配与反馈恰当",
+            "设计的写话题目与生活有机结合，写话导语清晰、时间分配与反馈恰当"
+        ],
+        [
+            "利用技术收集和分析学生学习过程信息，发现问题，提出针对性的改进措施",
+            "利用技术工具开展测验、练习等工作，提高评价工作效率",
+            "利用技术工具创设教学情境、呈现学习资源，促进知识与技能的巩固与迁移"
+        ],
+        [
+            "选择合适的表征技术来呈现语文学科具体的概念，以便学生更好理解概念",
+            "了解用于促进语文学科理解和探究的技术（如电子词典、语文学习网站等）",
+            "选择合适的技术促进学生纠正错误概念"
+        ],
+        [
+            "制定深度的语文学科讨论主题，促进学生使用合适的工具开展合作学习（如网上论坛、教学互动平台等）",
+            "设置与语文学科相关的真实问题，并能够使用电脑表征问题以吸引学生参与",
+            "使用适当的技术促进学生建构语文知识（如概念图工具、Wiki百科等）",
+            "创建计算机支持的自主学习活动（如使用网络平台进行拓展阅读与写话等）",
+            "使用合适的技术与资源（如网络平台、APP等）设计探究学习活动，以便于引导学生理解语文知识",
+            "整合语文学科、技术与教学法知识，设计以学生为中心的学习活动"
+        ]
+    ],
+    "flag": true,
+    "scores": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        3,
+        3
+    ],
+    "values": [
+        [
+            1,
+            1,
+            1
+        ],
+        [
+            2,
+            2
+        ],
+        [
+            3,
+            3,
+            3,
+            3
+        ],
+        [
+            4,
+            4,
+            4,
+            4,
+            4
+        ],
+        [
+            5,
+            5,
+            5
+        ],
+        [
+            3,
+            3,
+            3
+        ],
+        [
+            5,
+            4,
+            3,
+            2,
+            1,
+            2
+        ]
+    ],
+    "lessonId": "bd795e2b186d42fb969f3b3f8e529993",
+    "totalValues": [
+        [
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    ]
+}
+	</script>
+</body>
+</html>

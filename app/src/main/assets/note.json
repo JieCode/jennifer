@@ -1,0 +1,541 @@
+{
+  "err": 0,
+  "data": {
+    "list": [{
+      "pdfId": "5863720673ebe9775c56e9ec",
+      "pages": [{
+        "areas": [{
+          "id": 0,
+          "section":"section01",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "1281",
+          "x2": "3766",
+          "y2": "1554",
+          "properties": {
+            "name": "title",
+            "lable": "环节标题"
+          }
+        }, {
+          "id": 1,
+          "section":"section01",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "1575",
+          "x2": "3766",
+          "y2": "3032",
+          "properties": {
+            "name": "content",
+            "lable": "环节内容"
+          }
+        }, {
+          "id": 2,
+          "section":"section01",
+          "type": "Rect",
+          "x1": "3794",
+          "y1": "1134",
+          "x2": "4795",
+          "y2": "3326",
+          "properties": {
+            "name": "comment",
+            "lable": "评价"
+          }
+        }, {
+          "id": 3,
+          "section":"section01",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "3053",
+          "x2": "3766",
+          "y2": "3326",
+          "properties": {
+            "name": "info",
+            "lable": "多媒体信息"
+          }
+        }, {
+          "id": 4,
+          "section":"section02",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "3354",
+          "x2": "3766",
+          "y2": "3627",
+          "properties": {
+            "name": "title",
+            "lable": "环节标题"
+          }
+        }, {
+          "id": 5,
+          "section":"section02",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "3648",
+          "x2": "3766",
+          "y2": "5097",
+          "properties": {
+            "name": "content",
+            "lable": "环节内容"
+          }
+        }, {
+          "id": 6,
+          "section":"section02",
+          "type": "Rect",
+          "x1": "3794",
+          "y1": "3354",
+          "x2": "4795",
+          "y2": "5399",
+          "properties": {
+            "name": "comment",
+            "lable": "评价"
+          }
+        }, {
+          "id": 7,
+          "section":"section02",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "5118",
+          "x2": "3766",
+          "y2": "5392",
+          "properties": {
+            "name": "info",
+            "lable": "多媒体信息"
+          }
+        }, {
+          "id": 8,
+          "section":"section03",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "5413",
+          "x2": "3766",
+          "y2": "5693",
+          "properties": {
+            "name": "title",
+            "lable": "环节标题"
+          }
+        }, {
+          "id": 9,
+          "section":"section03",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "5714",
+          "x2": "3773",
+          "y2": "7170",
+          "properties": {
+            "name": "content",
+            "lable": "环节内容"
+          }
+        }, {
+          "id": 10,
+          "section":"section03",
+          "type": "Rect",
+          "x1": "3794",
+          "y1": "5420",
+          "x2": "4795",
+          "y2": "7170",
+          "properties": {
+            "name": "comment",
+            "lable": "评价"
+          }
+        }],
+        "image": {
+          "x": "0.000",
+          "y": "0.000",
+          "width": 5600,
+          "height": 7920
+        },
+        "drawingarea": {
+          "x": "0.000",
+          "y": "0.000",
+          "width": 5600,
+          "height": 7920
+        },
+        "pageDzZone": "1536.670.22.54"
+      }, {
+        "areas": [{
+          "id": 0,
+          "section":"section03",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "686",
+          "x2": "3773",
+          "y2": "966",
+          "properties": {
+            "name": "info",
+            "lable": "多媒体信息"
+          }
+        }, {
+          "id": 1,
+          "section":"section04",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "987",
+          "x2": "3766",
+          "y2": "1260",
+          "properties": {
+            "name": "title",
+            "lable": "环节标题"
+          }
+        }, {
+          "id": 2,
+          "section":"section04",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "1281",
+          "x2": "3773",
+          "y2": "2738",
+          "properties": {
+            "name": "content",
+            "lable": "环节内容"
+          }
+        }, {
+          "id": 3,
+          "section":"section04",
+          "type": "Rect",
+          "x1": "3794",
+          "y1": "693",
+          "x2": "4795",
+          "y2": "3032",
+          "properties": {
+            "name": "comment",
+            "lable": "评价"
+          }
+        }, {
+          "id": 4,
+          "section":"section04",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "2759",
+          "x2": "3766",
+          "y2": "3032",
+          "properties": {
+            "name": "info",
+            "lable": "多媒体信息"
+          }
+        }, {
+          "id": 5,
+          "section":"section05",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "3060",
+          "x2": "3766",
+          "y2": "3333",
+          "properties": {
+            "name": "title",
+            "lable": "环节标题"
+          }
+        }, {
+          "id": 6,
+          "section":"section05",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "3361",
+          "x2": "3766",
+          "y2": "4803",
+          "properties": {
+            "name": "content",
+            "lable": "环节内容"
+          }
+        }, {
+          "id": 7,
+          "section":"section05",
+          "type": "Rect",
+          "x1": "3794",
+          "y1": "3060",
+          "x2": "4795",
+          "y2": "5104",
+          "properties": {
+            "name": "comment",
+            "lable": "评价"
+          }
+        }, {
+          "id": 8,
+          "section":"section05",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "4831",
+          "x2": "3766",
+          "y2": "5104",
+          "properties": {
+            "name": "info",
+            "lable": "多媒体信息"
+          }
+        }, {
+          "id": 9,
+          "section":"section06",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "5125",
+          "x2": "3766",
+          "y2": "5399",
+          "properties": {
+            "name": "title",
+            "lable": "环节标题"
+          }
+        }, {
+          "id": 10,
+          "section":"section06",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "5427",
+          "x2": "3766",
+          "y2": "6876",
+          "properties": {
+            "name": "content",
+            "lable": "环节内容"
+          }
+        }, {
+          "id": 11,
+          "section":"section06",
+          "type": "Rect",
+          "x1": "3794",
+          "y1": "5125",
+          "x2": "4795",
+          "y2": "7170",
+          "properties": {
+            "name": "comment",
+            "lable": "评价"
+          }
+        }, {
+          "id": 12,
+          "section":"section06",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "6897",
+          "x2": "3766",
+          "y2": "7170",
+          "properties": {
+            "name": "info",
+            "lable": "多媒体信息"
+          }
+        }],
+        "image": {
+          "x": "0.000",
+          "y": "0.000",
+          "width": 5600,
+          "height": 7920
+        },
+        "drawingarea": {
+          "x": "0.000",
+          "y": "0.000",
+          "width": 5600,
+          "height": 7920
+        },
+        "pageDzZone": "1536.670.22.55"
+      }, {
+        "areas": [{
+          "id": 0,
+          "section":"section07",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "686",
+          "x2": "3773",
+          "y2": "966",
+          "properties": {
+            "name": "title",
+            "lable": "环节标题"
+          }
+        }, {
+          "id": 1,
+          "section":"section07",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "987",
+          "x2": "3766",
+          "y2": "2289",
+          "properties": {
+            "name": "content",
+            "lable": "环节内容"
+          }
+        }, {
+          "id": 2,
+          "section":"section07",
+          "type": "Rect",
+          "x1": "3794",
+          "y1": "686",
+          "x2": "4795",
+          "y2": "2590",
+          "properties": {
+            "name": "comment",
+            "lable": "评价"
+          }
+        }, {
+          "id": 3,
+          "section":"section07",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "2317",
+          "x2": "3773",
+          "y2": "2583",
+          "properties": {
+            "name": "info",
+            "lable": "多媒体信息"
+          }
+        }, {
+          "id": 4,
+          "section":"section08",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "2611",
+          "x2": "3766",
+          "y2": "2892",
+          "properties": {
+            "name": "title",
+            "lable": "环节标题"
+          }
+        }, {
+          "id": 5,
+          "section":"section08",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "2906",
+          "x2": "3766",
+          "y2": "4215",
+          "properties": {
+            "name": "content",
+            "lable": "环节内容"
+          }
+        }, {
+          "id": 6,
+          "section":"section08",
+          "type": "Rect",
+          "x1": "3794",
+          "y1": "2611",
+          "x2": "4795",
+          "y2": "4509",
+          "properties": {
+            "name": "comment",
+            "lable": "评价"
+          }
+        }, {
+          "id": 7,
+          "section":"section08",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "4236",
+          "x2": "3773",
+          "y2": "4509",
+          "properties": {
+            "name": "info",
+            "lable": "多媒体信息"
+          }
+        }, {
+          "id": 8,
+          "section":"",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "4530",
+          "x2": "4795",
+          "y2": "7170",
+          "properties": {
+            "name": "bsdesign",
+            "lable": "板书设计"
+          }
+        }],
+        "image": {
+          "x": "0.000",
+          "y": "0.000",
+          "width": 5600,
+          "height": 7920
+        },
+        "drawingarea": {
+          "x": "0.000",
+          "y": "0.000",
+          "width": 5600,
+          "height": 7920
+        },
+        "pageDzZone": "1536.670.22.56"
+      }, {
+        "areas": [{
+          "id": 0,
+          "section":"",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "686",
+          "x2": "4795",
+          "y2": "1848",
+          "properties": {
+            "name": "advantage",
+            "lable": "本课优点"
+          }
+        }, {
+          "id": 1,
+          "section":"",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "1862",
+          "x2": "4795",
+          "y2": "3025",
+          "properties": {
+            "name": "pending",
+            "lable": "待讨论点"
+          }
+        }, {
+          "id": 2,
+          "section":"",
+          "type": "Rect",
+          "x1": "804",
+          "y1": "3046",
+          "x2": "4795",
+          "y2": "4355",
+          "properties": {
+            "name": "personalThinking",
+            "lable": "个人思考"
+          }
+        }, {
+          "id": 3,
+          "section":"",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "4376",
+          "x2": "4795",
+          "y2": "5525",
+          "properties": {
+            "name": "sayToTeacher",
+            "lable": "给执教老师的话"
+          }
+        }, {
+          "id": 4,
+          "section":"",
+          "type": "Rect",
+          "x1": "812",
+          "y1": "5553",
+          "x2": "4795",
+          "y2": "6995",
+          "properties": {
+            "name": "sayToSelf",
+            "lable": "给自己的话"
+          }
+        }],
+        "image": {
+          "x": "0.000",
+          "y": "0.000",
+          "width": 5600,
+          "height": 7920
+        },
+        "drawingarea": {
+          "x": "0.000",
+          "y": "0.000",
+          "width": 5600,
+          "height": 7920
+        },
+        "pageDzZone": "1536.670.22.57"
+      }],
+      "updateTime": 1482915570352,
+      "createTime": 1482915570352,
+      "docInfo": {
+        "pagestart": " 1536.670.22.54",
+        "pagestop": " 1536.670.22.62"
+      },
+      "pdfInfo": {
+        "createTime": 1482912272628,
+        "updateTime": 1482915568355,
+        "name": "听课笔记（设计） 81.pdf",
+        "pdfName": "听课笔记（设计） 8.pdf",
+        "memo": "听课笔记（设计） 81.pdf",
+        "pageNo": 4,
+        "submitTime": 1482915568355
+      }
+    }],
+    "count": 1
+  }
+}

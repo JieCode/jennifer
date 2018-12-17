@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">jennifer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_guide">GuideActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_base">BaseActivity</string>
+
+
+    <string name="main_guide_parallax">引导页视差滚动</string>
+    <string name="main_web">WebView</string>
+    <string name="guide_start">立即体验</string>
+</resources>

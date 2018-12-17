@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title></title>
+	<link rel="stylesheet" href="./css/bootstrap.min.css" />
+	<style type="text/css">
+	html,body{
+		width : 100%;height : 100% 
+	}
+	.center-block{
+		height : 100%;
+	}
+	body { font-size: 14px; font-family: 'Microsoft YaHei', "Helvetica Neue", Helvetica, Arial, sans-serif;}
+	.nav-tabs-dropdown { margin-bottom: 20px; }
+	.nav-tabs-dropdown .dropdown-menu { text-align: center; right: 0; }
+	.tab-content { padding: 0 10px; }
+	#sections > li .media-left time { color: #a94442; text-align: right; display: block; width: 50px; }
+	#sections > li .media-left time.datetime { color: #3c763d; font-size: 16px; }
+	#sections > li > .media .media-left  { padding-top: 10px; padding-bottom: 4px; }
+	#sections > li > .media .panel-heading a { color: #fff; font-size: 16px; }
+	#sections > li > .media-list .media-left { padding-top: 10px; }
+	#sections > li > .media-list .media { margin-top: 0; }
+	#sections > li > .media-list .media-heading { font-size: 15px; line-height: 20px; padding: 10px 15px; margin-bottom: 15px; }
+	#sections > li > .media-list .media-body .content { padding-left: 15px; }
+	.floating-button { position: fixed; right: 20px; bottom: 10%; }
+	.floating-button .btn { border-radius: 50%; }
+	#sections > li .teacher-activity,
+	#sections > li .student-activity,
+	#sections > li .interact,
+	#sections > li .media-info,
+	#sections > li .rethink
+	{ display: none; }
+	#sections > li.all .teacher-activity,
+	#sections > li.all .student-activity,
+	#sections > li.all .activity-resource,
+	#sections > li.all .teaching-generate,
+	#sections > li.all .interact,
+	#sections > li.all .media-info,
+	#sections > li.all .rethink,
+	#sections > li.all .emotion-label,
+	#sections > li.teacher .teacher-activity,
+	#sections > li.student .student-activity,
+	#sections > li.interact .interact,
+	#sections > li.media .media-info,
+	#sections > li.rethink .rethink,
+	#sections > li.resource .activity-resource,
+	#sections > li.generate .teaching-generate
+	{ display: block; }
+	#sections .heading .pull-right .btn-sm { position: relative; top: -3px; }
+	
+	.timeline1, .timeline1 li {
+		position: relative;
+	}
+	.timeline1:before {
+		content: '';
+		background: #afdcf8;
+		width: 2px;
+		position: absolute;
+		top: 1px;
+		bottom: 3px;
+		left: 10px;
+	}
+	.timeline1 .timeline-time {
+		color: #3594cb;
+		text-align: right;
+		display: block;
+		width: 54px;
+		position: absolute;
+		top: 10px;
+		left: 18px;
+		
+	}
+	.timeline1 .timeline-time-icon {
+		border-radius: 50%;
+		color: #46a4da;
+		position: absolute;
+		background-color: #afdcf8;
+		box-shadow: 0 0 0 8px #afdcf8;
+		font-size: 24px;
+		line-height: 24px;
+		width: 24px;
+		height: 24px;
+		top: 8px;
+	}
+	.timeline1 .timeline-time-icon .glyphicon {
+		top: 0;
+	}
+	.timeline1 .timeline-heading, .timeline1 .timeline-content {
+		margin-left: 105px;
+		padding-left: 0.5rem;
+	}
+	.timeline1 .timeline-content dl{
+		margin-left: -40px;
+	}
+
+	.timeline1 .timeline-heading {
+		background-color: #3594cb;
+		color: #fff;
+		line-height: 1.4;
+		border-radius: 5px;
+		margin-bottom: 15px;
+		padding: 0.5rem;
+		position: relative;
+	}
+	.timeline1 .timeline-heading:after {
+		content: " ";
+		border: solid transparent;
+		border-width: 10px;
+		border-right-color: #3594cb;
+		width: 0;
+		height: 0;
+		position: absolute;
+		top: 10px;
+		left: -20px;
+	}
+	.timeline1 .timeline-heading a {
+		color: #fff;
+	}
+	.timeline1 .timeline-heading .timeline-title {
+		font-size: 16px;
+		line-height: 30px;
+		/*height: 30px;*/
+		margin: 0;
+		overflow: hidden;
+	}
+	.timeline1 .timeline-level-2 .timeline-time {
+		color: #6cbfee;
+		font-size: 13px;
+	}
+	.timeline1 .timeline-level-2 .timeline-time-icon {
+		background-color: #46a4da;
+		box-shadow: 0 0 0 6px #afdcf8;
+		width: 10px;
+		height: 10px;
+		top: 15px;
+		left: 5px;
+	}
+	.timeline1 .timeline-level-2 .timeline-time-icon .glyphicon {
+		display: none;
+	}
+	.timeline1 .timeline-level-2 .timeline-heading {
+		background-color: #6cbfee !important;
+	}
+	.timeline1 .timeline-level-2 .timeline-heading:after {
+		border-right-color: #6cbfee !important;
+	}
+	.timeline1 .timeline-level-2 .timeline-title {
+		font-size: 15px !important;
+	}
+	
+	.timeline1 .timeline-content dl { display: none; }
+	.cr-sections .all .teacher-activity,
+	.cr-sections .all .student-activity,
+	.cr-sections .all .activity-resource,
+	.cr-sections .all .teaching-generate,
+	.cr-sections .all .interact,
+	.cr-sections .all .media-info,
+	.cr-sections .all .rethink,
+	.cr-sections .all .media,
+	.cr-sections .all .emotion-label,
+	.cr-sections .teacher .teacher-activity,
+	.cr-sections .student .student-activity,
+	.cr-sections .resource .activity-resource,
+	.cr-sections .generate .teaching-generate,
+	.cr-sections .interact .interact,
+	.cr-sections .media .media-info,
+	.cr-sections .rethink .rethink,
+	.cr-sections .emotion-label .emotion-label,
+	.cr-sections .timeline-content dl.multimedia
+	{ display: block; }
+	
+	.cr-sections .teacher-activity,
+	.cr-sections .student-activity,
+	.cr-sections .activity-resource,
+	.cr-sections .teacher-activity dt,
+	.cr-sections .student-activity dt,
+	.cr-sections .activity-resource dt{
+		color: rgb(119, 119, 119);
+	}
+
+	.cr-sections .media .glyphicon {
+		font-size: 32px;
+	}
+	.cr-sections .media li > a > span {
+		display: none;
+	}
+	.cr-sections dl.empty { margin-bottom: 5px; }
+	.cr-sections dl.empty dt { color: #999; font-weight: normal; }
+	.cr-sections dl.empty dt:after { content: "（未填写）"; }
+	.cr-sections dl.empty dd { display: none; }
+	.cr-sections .video-btn {
+		padding: 0px 0px;
+	}
+	</style>
+</head>
+<body>
+	<div class="center-block" style="max-width:800px">
+		<ul class="nav nav-tabs hidden" role="tablist">
+			<li class="active">
+				<a href="#all" data-toggle="tab">总览</a>
+			</li>
+			<li>
+				<a href="#teacher" data-toggle="tab">教师活动</a>
+			</li>
+			<li>
+				<a href="#student" data-toggle="tab">学生活动</a>
+			</li>
+			<li>
+				<a href="#interact" data-toggle="tab">师生互动</a>
+			</li>
+			<li>
+				<a href="#media" data-toggle="tab">媒体信息</a>
+			</li>
+			<li>
+				<a href="#rethink" data-toggle="tab">听课者反思</a>
+			</li>
+		</ul>
+		<div class="dropdown nav-tabs-dropdown">
+			<button class="btn btn-default btn-block dropdown-toggle" type="button" id="dropdown-label-new" data-toggle="dropdown" aria-expanded="false">
+				<span class="title">筛选</span>
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-label-new">
+<!-- 				<li><a href="#" data-target="#all">总览</a></li> -->
+<!-- 				<li><a href="#" data-target="#teacher">教师活动</a></li> -->
+<!-- 				<li><a href="#" data-target="#student">学生活动</a></li> -->
+<!-- 				<li><a href="#" data-target="#interact">师生互动</a></li> -->
+<!-- 				<li class="hide"><a href="#" data-target="#interact">教学内容</a></li> -->
+<!-- 				<li><a href="#" data-target="#media">媒体信息</a></li> -->
+<!-- 				<li><a href="#" data-target="#rethink">听课者反思</a></li> -->
+<!-- 				<li><a href="#" data-target="#emotion-label">情感标签</a></li> -->
+				<li><div class="checkbox"><label><input type="checkbox" checked="checked" disabled="disabled" data-target="#all"> 总览</label></div></li>
+				<li><div class="checkbox"><label><input type="checkbox" data-target="#teacher"> 教师活动</label></div></li>
+				<li><div class="checkbox"><label><input type="checkbox" data-target="#student"> 学生活动</label></div></li>
+				<li class="hide"><div class="checkbox"><label><input type="checkbox" data-target="#resource"> 活动资源</label></div></li>
+				<li><div class="checkbox"><label><input type="checkbox" data-target="#interact"> 师生互动</label></div></li>
+				<li class="hide"><div class="checkbox"><label><input type="checkbox" data-target="#generate"> 教学生成</label></div></li>
+				<li class="hide"><div class="checkbox"><label><input type="checkbox" data-target="#interact">教学内容</label></div></li>
+				<li class="hide"><div class="checkbox"><label><input type="checkbox" data-target="#media">媒体信息</label></div></li>
+				<li class="hide"><div class="checkbox"><label><input type="checkbox" data-target="#interact">步骤内容</label></div></li>
+				<li><div class="checkbox"><label><input type="checkbox" data-target="#rethink">听课者反思</label></div></li>
+				<li><div class="checkbox"><label><input type="checkbox" data-target="#emotion-label">情感标签</label></div></li>
+			</ul>
+		</div>
+		<div class="tab-content">
+			<div class="tab-pane fade in active cr hide" id="all">
+				<ul class="timeline1 cr-sections list-unstyled">
+					{{#sections}}
+					{{^recordOnly}}
+					<li class="timeline-level-1 cr-section all" data-id="{{index}}">
+						<time class="timeline-time"><em>{{durationString}}</em></time>
+						<span class="timeline-time-icon"><i class="glyphicon glyphicon-time"></i></span>
+						<div class="timeline-heading">
+							<div class="pull-right dropup">
+								{{^readonly}}<button class="btn btn-success btn-sm edit">修改</button>{{/readonly}}
+								<button class="btn btn-default btn-sm toggle"><span class="caret"></span></button>
+							</div>
+							<h3 class="timeline-title">
+								<a href="#" data-toggle="collapse" data-target="#rs-{{index}}">
+									{{name}}
+									{{^name}}环节 {{indexString}}{{/name}}
+								</a>
+							</h3>
+						</div>
+						<ul class="cr-records list-unstyled collapse in" id="rs-{{index}}">
+					{{/recordOnly}}
+							{{#records}}
+							<li class="timeline-level-2 cr-record{{#recordOnly}} all{{/recordOnly}}" data-section="{{section.index}}" data-id="{{index}}">
+								<time class="timeline-time"><em>{{durationString}}</em></time>
+								<span class="timeline-time-icon"></span>
+								<div class="timeline-heading">
+									<div class="pull-right dropup">
+										{{^readonly}}<button class="btn btn-success btn-sm edit">修改</button>{{/readonly}}
+										<button class="btn btn-default btn-sm toggle"><span class="caret"></span></button>
+									</div>
+									<h4 class="timeline-title">
+										<a href="#" data-toggle="collapse" data-target="#rec-{{section.index}}-{{index}}">
+											{{name}}
+											{{^name}}步骤 {{^recordOnly}}{{indexString}}{{/recordOnly}}{{#recordOnly}}{{recordIndex}}{{/recordOnly}}{{/name}}
+										</a>
+									</h4>
+								</div>
+								<div class="timeline-content collapse in" id="rec-{{section.index}}-{{index}}">
+									{{#multimedia}}
+									<dl class="multimedia">
+										<dd>
+											<ul class="row list-inline margin-top-10">
+												{{#media}}
+												<li class="text-center" style="margin-bottom: 10px;">
+													<a href="#" class="btn file video-btn" data-id="{{id}}" data-type="{{type}}" data-index="{{index}}">
+														<img alt="media" width="{{w}}" height="{{h}}" src="{{src}}">
+													</a>
+												</li>
+												{{/media}}
+											</ul>
+										</dd>
+									</dl>
+									{{/multimedia}}
+									{{^recordOnly}}
+									{{#teacherActivity}}
+									<dl class="teacher-activity{{^teacherActivity}} empty{{/teacherActivity}}">
+										<dt class="text-primary">教师活动</dt>
+										<dd>
+											{{{teacherActivity}}}
+											{{^teacherActivity}}<span class="text-muted">未填写</span>{{/teacherActivity}}
+										</dd>
+									</dl>
+									{{/teacherActivity}}
+									{{#studentActivity}}
+									<dl class="student-activity{{^studentActivity}} empty{{/studentActivity}}">
+										<dt class="text-primary">学生活动</dt>
+										<dd>
+											{{{studentActivity}}}
+											{{^studentActivity}}<span class="text-muted">未填写</span>{{/studentActivity}}
+										</dd>
+									</dl>
+									{{/studentActivity}}
+									{{#activityResource}}
+									<dl class="activity-resource{{^activityResource}} empty{{/activityResource}}">
+										<dt class="text-primary">活动资源</dt>
+										<dd>
+											{{{activityResource}}}
+											{{^activityResource}}<span class="text-muted">未填写</span>{{/activityResource}}
+										</dd>
+									</dl>
+									{{/activityResource}}
+									{{/recordOnly}}
+									{{#interact}}
+									<dl class="interact{{^interact}} empty{{/interact}}">
+										{{#designMode}}	
+											<dt class="text-primary">步骤内容</dt>
+										{{/designMode}}
+										{{^designMode}}	
+											<dt class="text-primary">{{^recordOnly}}师生互动{{/recordOnly}}{{#recordOnly}}教学内容{{/recordOnly}}</dt>
+										{{/designMode}}	
+										<dd>
+											{{{interact}}}
+											{{^interact}}<span class="text-muted">未填写</span>{{/interact}}
+										</dd>
+									</dl>
+									{{/interact}}
+									{{#teachingGenerate}}
+									<dl class="teaching-generate{{^teachingGenerate}} empty{{/teachingGenerate}}">
+										<dt class="text-primary">教学生成</dt>
+										<dd>
+											{{{teachingGenerate}}}
+											{{^teachingGenerate}}<span class="text-muted">未填写</span>{{/teachingGenerate}}
+										</dd>
+									</dl>
+									{{/teachingGenerate}}
+									{{#mediaInfo}}
+									<dl class="media-info{{^mediaInfo}} empty{{/mediaInfo}}">
+										<dt class="text-primary">媒体信息</dt>
+										<dd>
+											{{{mediaInfo}}}
+											{{^mediaInfo}}<span class="text-muted">未填写</span>{{/mediaInfo}}
+										</dd>
+									</dl>
+									{{/mediaInfo}}
+									{{#rethink}}
+									<dl class="rethink{{^rethink}} empty{{/rethink}}">
+										<dt class="text-primary">听课者反思</dt>
+										<dd>
+											{{{rethink}}}
+											{{^rethink}}<span class="text-muted">未填写</span>{{/rethink}}
+										</dd>
+									</dl>
+									{{/rethink}}
+									{{#emotionLabel}}
+									<dl class="emotion-label{{^emotionLabel}} empty{{/emotionLabel}}">
+										<dt class="text-primary">情感标签</dt>
+										<dd>
+											{{emotionLabelText}}
+											<img src="file:///android_asset/img/emotion-{{emotionLabel}}.png"/>
+											{{{emotionKeyWord}}}
+											{{^emotionKeyWord}}<span class="text-muted">未填写</span>{{/emotionKeyWord}}
+										</dd>
+									</dl>
+									{{/emotionLabel}}
+									{{^multimedia}}
+							
+									{{#hasMedia}}
+									<dl class="media">
+										<dt class="text-primary">媒体文件</dt>
+<!-- 										<dd> -->
+<!-- 											<ul class="row list-inline margin-top-10"> -->
+<!-- 												{{#media}} -->
+<!-- 												<li class="text-center"> -->
+<!-- 													<a href="#" class="btn file" data-id="{{id}}" data-type="{{type}}" data-index="{{index}}"> -->
+<!-- 														<i class="glyphicon {{icon}}"></i> <span>{{name}}</span> -->
+<!-- 													</a> -->
+<!-- 												</li> -->
+<!-- 												{{/media}} -->
+<!-- 											</ul> -->
+<!-- 										</dd> -->
+										<dd>
+											<ul class="row list-inline margin-top-10">
+												{{#media}}
+												<li class="text-center" style="margin-bottom: 10px;">
+													<a href="#" class="btn file video-btn" data-id="{{id}}" data-type="{{type}}" data-index="{{index}}">
+														<img alt="media" width="{{w}}" height="{{h}}" src="{{src}}">
+													</a>
+												</li>
+												{{/media}}
+											</ul>
+										</dd>
+									</dl>
+									{{/hasMedia}}
+								
+									{{/multimedia}}
+								</div>
+							</li>
+							{{/records}}
+					{{^recordOnly}}
+						</ul>
+					</li>
+					{{/recordOnly}}
+					{{/sections}}
+				</ul>
+				{{#withEvaluation}}
+				<div class="panel-group">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								本课优点
+								{{^readonly}}<button class="btn btn-success btn-sm evaluation-edit pull-right" data-id="advantage">修改</button>{{/readonly}}
+							</h3>
+						</div>
+						<div class="panel-body">
+							<span>{{evaluation.advantage}}</span>
+						</div>	
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								待讨论点
+								{{^readonly}}<button class="btn btn-success btn-sm evaluation-edit pull-right" data-id="discuss">修改</button>{{/readonly}}
+							</h3>
+						</div>
+						<div class="panel-body">
+							<span>{{evaluation.discuss}}</span>
+						</div>	
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								个人反思
+								{{^readonly}}<button class="btn btn-success btn-sm evaluation-edit pull-right" data-id="introspection">修改</button>{{/readonly}}
+							</h3>
+						</div>
+						<div class="panel-body">
+							<span>{{evaluation.introspection}}</span>
+						</div>	
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								<a class="evaluation-other" href="#" style="display:block">他人评价
+									<small class="pull-right" style="margin-top:2px">点击查看 &gt;</small>
+								</a>
+							</h3>
+						</div>
+					</div>
+				</div>
+				{{/withEvaluation}}
+				<ul id="sections" class="list-unstyled hide">
+					{{#sections}}
+					<li class="all">
+						<div class="media section" data-id="{{index}}">
+							<div class="media-left">
+								<time class="datetime"><em>{{durationString}}</em></time>
+							</div>
+							<div class="media-body">
+								<div class="panel panel-primary">
+									<div class="panel-heading heading">
+										<div class="pull-right dropup">
+											{{^readonly}}<button class="btn btn-success btn-sm edit">修改</button>{{/readonly}}
+											<button class="btn btn-default btn-sm toggle"><span class="caret"></span></button>
+										</div>
+										<a href="#" data-toggle="collapse" data-target="#rs-{{index}}">
+											{{name}}
+											{{^name}}环节 {{indexString}}{{/name}}
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<ul class="media-list collapse in" id="rs-{{index}}">
+							{{#records}}
+							<li class="media record" data-id="{{index}}">
+								<div class="media-left">
+									<time><em>{{durationString}}</em></time>
+								</div>
+								<div class="media-body">
+									<h4 class="media-heading bg-info heading">
+										<div class="pull-right dropup">
+											{{^readonly}}<button class="btn btn-success btn-sm edit">修改</button>{{/readonly}}
+											<button class="btn btn-default btn-sm toggle"><span class="caret"></span></button>
+										</div>
+										<a href="#" data-toggle="collapse" data-target="#rec-{{section.index}}-{{index}}">
+											{{name}}
+											{{^name}}步骤 {{indexString}}{{/name}}
+										</a>
+									</h4>
+									<div class="content collapse in" id="rec-{{section.index}}-{{index}}">
+										{{#teacherActivity}}
+										<dl class="teacher-activity{{^teacherActivity}} empty{{/teacherActivity}}">
+											<dt class="text-primary">教师活动</dt>
+											<dd>
+												{{{teacherActivity}}}
+												{{^teacherActivity}}<span class="text-muted">未填写</span>{{/teacherActivity}}
+											</dd>
+										</dl>
+										{{/teacherActivity}}
+										{{#studentActivity}}
+										<dl class="student-activity{{^studentActivity}} empty{{/studentActivity}}">
+											<dt class="text-primary">学生活动</dt>
+											<dd>
+												{{{studentActivity}}}
+												{{^studentActivity}}<span class="text-muted">未填写</span>{{/studentActivity}}
+											</dd>
+										</dl>
+										{{/studentActivity}}
+										{{#activityResource}}
+										<dl class="activity-resource{{^activityResource}} empty{{/activityResource}}">
+											<dt class="text-primary">活动资源</dt>
+											<dd>
+												{{{activityResource}}}
+												{{^activityResource}}<span class="text-muted">未填写</span>{{/activityResource}}
+											</dd>
+										</dl>
+										{{/activityResource}}
+										{{#interact}}
+										<dl class="interact{{^interact}} empty{{/interact}}">
+											<dt class="text-primary">师生互动</dt>
+											<dd>
+												{{{interact}}}
+												{{^interact}}<span class="text-muted">未填写</span>{{/interact}}
+											</dd>
+										</dl>
+										{{/interact}}
+										{{#teachingGenerate}}
+										<dl class="teaching-generate{{^teachingGenerate}} empty{{/teachingGenerate}}">
+											<dt class="text-primary">教学生成</dt>
+											<dd>
+												{{{teachingGenerate}}}
+												{{^teachingGenerate}}<span class="text-muted">未填写</span>{{/teachingGenerate}}
+											</dd>
+										</dl>
+										{{/teachingGenerate}}
+										{{#mediaInfo}}
+										<dl class="media-info{{^mediaInfo}} empty{{/mediaInfo}}">
+											<dt class="text-primary">媒体信息</dt>
+											<dd>
+												{{{mediaInfo}}}
+												{{^mediaInfo}}<span class="text-muted">未填写</span>{{/mediaInfo}}
+											</dd>
+										</dl>
+										{{/mediaInfo}}
+										{{#rethink}}
+										<dl class="rethink{{^rethink}} empty{{/rethink}}">
+											<dt class="text-primary">听课者反思</dt>
+											<dd>
+												{{{rethink}}}
+												{{^rethink}}<span class="text-muted">未填写</span>{{/rethink}}
+											</dd>
+										</dl>
+										{{/rethink}}
+									
+										{{#hasMedia}}
+										<dl class="media">
+											<dt class="text-primary">媒体文件</dt>
+											<dd>
+												<ul class="row list-inline margin-top-10">
+													{{#media}}
+													<li class="text-center">
+														<a href="#" class="btn file" data-id="{{id}}" data-type="{{type}}">
+															<i class="glyphicon {{icon}}"></i> <span>{{name}}</span>
+														</a>
+													</li>
+													{{/media}}
+												</ul>
+											</dd>
+										</dl>
+										{{/hasMedia}}
+										
+									</div>
+								</div>
+							</li>
+							{{/records}}
+						</ul>
+					</li>
+					{{/sections}}
+				</ul>
+			</div>
+			<div class="tab-pane fade" id="teacher">
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>开始</th>
+								<th>时长</th>
+								<th>环节</th>
+								<th>步骤</th>
+								<th>教师活动</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>14:00</td>
+								<td>10分钟</td>
+								<td>环节一</td>
+								<td>步骤一</td>
+								<td>教师教师教师教师教师</td>
+							</tr>
+							<tr>
+								<td>14:00</td>
+								<td>10分钟</td>
+								<td>环节一</td>
+								<td>步骤一</td>
+								<td>教师教师教师教师教师</td>
+							</tr>
+							<tr>
+								<td>14:00</td>
+								<td>10分钟</td>
+								<td>环节一</td>
+								<td>步骤一</td>
+								<td>教师教师教师教师教师</td>
+							</tr>
+							<tr>
+								<td>14:00</td>
+								<td>10分钟</td>
+								<td>环节一</td>
+								<td>步骤一</td>
+								<td>教师教师教师教师教师</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="student"></div>
+			<div class="tab-pane fade" id="interact"></div>
+			<div class="tab-pane fade" id="media"></div>
+			<div class="tab-pane fade" id="rethink"></div>
+		</div>
+		<div class="floating-button">
+			<button class="btn btn-primary expand" data-text-toggle="全部<br/>展开">全部<br/>收起</button>
+		</div>
+	</div>
+<!-- 	<script type="text/javascript" src="file:///android_asset/js/jquery.min.js"></script> -->
+<!-- 	<script type="text/javascript" src="file:///android_asset/js/bootstrap.min.js"></script> -->
+<!-- 	<script type="text/javascript" src="file:///android_asset/js/mustache.min.js"></script> -->
+	
+	<script type="text/javascript" src="./js/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="./js/mustache.min.js"></script>
+	<script type="text/javascript" id="container" data-multi-debug="0" data-load-delay="0">
+	var debug = 1, 
+		env = 'test', //当前运行环境
+		defaultVideoUrl = './video-default.png',//视频默认缩略图路径(非多媒体模式下)
+		defaultMultiVideoUrl = './video-multi.png',//视频默认缩略图路径(多媒体模式下)
+		defaultPhotoUrl = './photo-default.png',//图片默认缩略图
+		defaultAudioUrl = './audio-default.png';//音频默认缩略图
+	
+	var urlMap = {
+		'dev': 'http://localhost:9099',
+		'test': 'http://172.18.136.135/lcell/v0.3/api',
+		'pre': 'https://lcell.bnu.edu.cn/pre/api',
+		'master': 'http://www.etc.edu.cn/v2/api'
+	}
+	var mediaUrl = urlMap[env] + '/tingke/media/download/';
+	$(function() {
+// 		$('.nav-tabs-dropdown').each(function() {
+// 			var $dropdown = $(this), $tabs = $dropdown.prev('.nav-tabs'),
+// 				$items = $dropdown.find('> .dropdown-menu > li > a'),
+// 				classNames = $items.map(function() { return $(this).data('target').substring(1); });
+// 			$items.on("click", function(e) {
+// 				//var $tab = $tabs.find('> li > a[href="' + $(this).data('target') + '"]');//.tab('show');
+// 				$dropdown.find('> .dropdown-toggle > .title').text($(this).text());
+				
+// 				var $li = $('.cr-sections > li');
+// 				$.each(classNames, function(i) {
+// 					$li.removeClass(classNames[i]);
+// 				});
+// 				$li.addClass($(this).data('target').substring(1));
+// 				e.preventDefault();
+// 			});
+// 		});
+		
+		$('.nav-tabs-dropdown').each(function() {
+			var $dropdown = $(this), $items = $dropdown.find('> .dropdown-menu > li .checkbox input'),
+				classNames = $items.map(function() { return $(this).data('target').substring(1);}),
+				$all = $items.first();
+			$items.on("change", function(e) {
+				var $li = $('.cr-sections > li'), $this = $(this);
+					className = $this.data('target').substring(1),
+					checked = $this.prop('checked');
+				
+				if (checked) {
+					if (className === 'all') {
+						$items.not(':eq(0)').prop('checked', false);
+						$.each(classNames, function(i,e) {
+							$li.each(function() {
+								$(this).removeClass(e);
+							});
+						});
+						$all.prop('disabled', true);
+					} else {
+						$all.prop('disabled', false)
+							.prop('checked', false);
+						$li.removeClass('all');
+					}
+					$li.addClass(className);
+				} else {
+					$li.removeClass(className);
+					if (!$items.filter(':checked').length) {
+						$all.prop('checked', true).prop('disabled', true);
+						$li.addClass('all');
+					}
+				}
+				e.preventDefault();
+			});
+		});
+		
+		$('.cr')
+		.on('click', 'a[data-toggle="collapse"]', function(e) {
+			e.preventDefault();
+			$(this).parent().prev().toggleClass('dropup');
+		})
+		.on('click', '.btn.toggle', function(e) {
+			$(this).parent().parent().find('a[data-toggle="collapse"]').click();
+		})
+		.on('click', '.btn.edit', function(e) {
+			var $record = $(this).closest('.cr-record'), $section = $(this).closest('.cr-section');
+			var recordId = $record.data('id'), sectionId = $section.length ? $section.data('id') : $record.data('section');
+			if (console.log)
+				console.log("section: " + sectionId + ", record:" + recordId);
+			if (window.AndroidWebView)
+				window.AndroidWebView.edit(sectionId, recordId);
+			else if (window.goEdit)
+				window.goEdit(sectionId, recordId);
+		})
+		.on('click', '.btn.file', function(e) {
+			var $media = $(this), $record = $media.closest('.cr-record'), $section = $media.closest('.cr-section');
+			var recordId = $record.data('id'), sectionId = $section.length ? $section.data('id') : $record.data('section'),
+				mediaId = $media.data('id'), type = $media.data('type'), mediaIndex = $media.data('index');
+			if (console.log) {
+				console.log("file: " + sectionId + "-" + recordId + "-" + mediaIndex);
+				console.log("file: " + type + ", " + mediaId);
+			}
+			if (window.AndroidWebView)
+				window.AndroidWebView.media(sectionId, recordId, mediaIndex, type, mediaId);
+			else if (window.goMedia)
+				window.goMedia(sectionId, recordId, mediaIndex, type, mediaId);
+			return false;
+		})
+		.on('click', '.btn.evaluation-edit', function(e) {
+			var id = $(e.target).data('id');
+			if (window.AndroidWebView)
+				window.AndroidWebView.editEvaluation(id);
+			else if (window.goEditEvaluation)
+				window.goEditEvaluation(sectionId, recordId);
+			return false;
+		})
+		.on('click', 'a.evaluation-other', function(e) {
+			if (window.AndroidWebView)
+				window.AndroidWebView.otherEvaluation();
+			else if (window.goOtherEvaluation)
+				window.goOtherEvaluation();
+			return false;
+		});
+		
+		$('#sections')
+		.on('click', '[data-toggle="collapse"]', function(e) {
+			e.preventDefault();
+		})
+		.on('click', '.btn.toggle', function(e) {
+			$(this).parent().toggleClass('dropup').next('a').click();
+		})
+		.on('click', '.btn.edit', function(e) {
+			var $record = $(this).closest('.record'), $section = $record.length ? $record.parent().prev('.section') : $(this).closest('.section');
+			var recordId = $record.data('id'), sectionId = $section.data('id');
+			if (console.log)
+				console.log("section: " + sectionId + ", record:" + recordId);
+			if (window.AndroidWebView)
+				window.AndroidWebView.edit(sectionId, recordId);
+			else if (window.goEdit)
+				window.goEdit(sectionId, recordId);
+		});
+		
+		$('.floating-button .expand').on('click', function() {
+			var $btn = $(this).blur(), text = $btn.data('text-toggle'), collapsed = !$btn.prop('collapsed');
+			$btn.data('text-toggle', $btn.html());
+			$btn.html(text);
+			$btn.prop('collapsed', collapsed);
+			if (collapsed) {
+				$('.cr-sections .btn.toggle').parent().removeClass('dropup');
+				$('.cr-sections .collapse').collapse('hide');
+			} else {
+				$('.cr-sections .btn.toggle').parent().addClass('dropup');
+				$('.cr-sections .collapse').collapse('show');
+			}
+		});
+		
+		debug && render($('#data').text());
+	});
+	
+	function durationToString(duration) {
+		var min = Math.floor(duration / 60), sec = duration % 60;
+		return min + "'" + sec + '"';
+	}
+	
+	function jsonEscape(str) {
+		if (debug)
+			return str;
+		else
+			return str.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
+	}
+
+	function replaceLineBreak(str) {
+		return str && str.replace(/\n/g, '<br/>');
+	}
+	
+	var lineNum = 2, totalWidth = window.screen.width - 155;
+	if (totalWidth > 600)
+		lineNum = 3;
+	var width = totalWidth / lineNum, 
+		height = width - 10;
+	
+	var template = $('.cr').html();
+	Mustache.parse(template);
+	$('.cr').empty().removeClass('hide').show();
+	
+	var multiDebug = $('#container').data('multi-debug'), //以多媒体模式调试
+		delay = $('#container').data('load-delay');
+	delay = delay && delay > 0 ? delay : 0;
+	function render(course) {
+		if (console.log) console.log("course: " + course);
+		try {
+			if (typeof course === 'string') course = $.parseJSON(jsonEscape(course));
+			if (console.log) console.log("course: " + course);
+			course.recordOnly = course.mode == 1 || course.mode == 66 || course.mode == 2;
+			course.readonly = course.readonly || course.uploading;
+			course.withEvaluation = course.mode == 66;
+			//多媒体模式
+			course.multimedia = course.mode == 2 || multiDebug;
+
+			course.designMode = course.mode == 3;
+			
+			if (course.recordOnly) {
+				$('.nav-tabs-dropdown > .dropdown-menu > li')
+					.filter(':eq(1), :eq(2), :eq(3)').hide().end()
+					.filter(':eq(4)').removeClass('hide').show();
+			}
+			if (course.mode == 3) {
+				$('.nav-tabs-dropdown > .dropdown-menu > li')
+					.filter(' :eq(4)').hide().end()
+					.filter(':eq(3),:eq(5),:eq(8)').removeClass('hide').show();
+			}
+			var recordCount = 0, mediaQueue = {};
+			$.each(course.sections, function(i) {
+				var section = this;
+				section.duration = 0;
+				section.index = i;
+				section.indexString = i + 1;
+				$.each(section.records, function(i) {
+					var record = this;
+					section.duration += record.duration;
+					record.section = section;
+					record.index = i;
+					record.indexString = i + 1;
+					record.recordIndex = ++recordCount;
+					record.durationString = durationToString(record.duration);
+					
+					record.teacherActivity = replaceLineBreak(record.teacherActivity);
+					record.studentActivity = replaceLineBreak(record.studentActivity);
+					record.interact = replaceLineBreak(record.interact);
+					record.activityResource= replaceLineBreak(record.activityResource);
+					record.teachingGenerate = replaceLineBreak(record.teachingGenerate);
+					record.mediaInfo = replaceLineBreak(record.mediaInfo);
+					record.rethink = replaceLineBreak(record.rethink);
+					
+					switch (record.emotionLabel) {
+					case 1:
+						record.emotionLabelText = '高兴';
+						break;
+					case 2:
+						record.emotionLabelText = '失望';
+						break;
+					case 3:
+						record.emotionLabelText = '困惑';
+						break;
+					}
+					
+					var media = [];
+				
+					record.hasMedia = record.media && record.media.length;
+
+					if (record.hasMedia) {
+						$.each(record.media, function(i) {
+							var icon;
+							switch (this.type) {
+							case 'photo':
+							case 'doodle':
+								icon = 'glyphicon-picture';
+								this.src = defaultPhotoUrl;
+								this.realSrc = mediaUrl + this.id + '/' + this.name;
+								mediaQueue[this.id] = this;
+								break;
+							case 'audio':
+								icon = 'glyphicon-music';
+								this.src = defaultAudioUrl;
+								break;
+							case 'video':
+								icon = 'glyphicon-facetime-video';
+								if (course.multimedia) {
+									this.src = defaultMultiVideoUrl;
+								} else {
+									this.src = defaultVideoUrl;
+								}
+								this.isVideo = true;
+								break;
+							case 'camera':
+								break;
+							default:
+								icon = 'glyphicon-file';
+								break;
+							}
+							this.index = i;
+							if (icon) {
+								this.icon = icon;
+								media.push(this);
+							}
+							if (this.isVideo && course.multimedia) {
+								this.w = totalWidth;
+								this.h = totalWidth*9 / 16;
+							} else {
+								this.w = width;
+								this.h = height;
+							}
+						});
+						record.mediaOriginal = record.media;
+						record.media = media;
+					}
+				});
+				section.durationString = durationToString(section.duration);
+			});
+			var rendered = Mustache.render(template, course);
+			$('.cr').html(rendered);
+			renderMedia(course, mediaQueue, delay);
+		} catch (e) {
+			$('.cr').html(e);
+		}
+	}
+	
+	function renderMedia(course, mediaQueue, timeout) {
+		var $medias = $('.cr-sections .cr-record li [data-type="photo"]');
+		if (!timeout) {
+			timeout = 0;
+		}
+		if ($medias.length) {
+			$medias.each(function(i, e) {
+				var $parent = $(this), m = mediaQueue[$(this).data('id')];
+				var mediaCount = ($medias.length==1);
+				if (!m)
+					return;
+				if (mediaCount){
+					m.w = m.w*2;
+					m.h = m.h*2;
+				}
+				setTimeout(function() {
+					$('<img/>').attr('src', m.realSrc)
+					.attr('width', m.w).attr('height', m.h)
+					.load(function() {
+						if (this.complete && typeof this.naturalWidth !== 'undefined' && this.naturalWidth > 0) {
+							$parent.find('img').remove();
+							$parent.append($(this));
+						}
+					});
+				}, timeout);
+			});
+		}
+	}
+	
+	if (window.AndroidWebView) {
+		window.goEdit = window.AndroidWebView.edit;
+		window.goMedia = window.AndroidWebView.media;
+	} else {
+		function setupWebViewJavascriptBridge(callback) {
+			if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+			if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+			window.WVJBCallbacks = [callback];
+			var WVJBIframe = document.createElement('iframe');
+			WVJBIframe.style.display = 'none';
+			WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+			document.documentElement.appendChild(WVJBIframe);
+			setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+		}
+		
+		setupWebViewJavascriptBridge(function(bridge) {
+			bridge.registerHandler('render', function(data, responseCallback) {
+				render(data);
+			});
+			
+			window.goEdit = function(sectionId, recordId) {
+				bridge.callHandler('edit', { 'section':sectionId, 'record': recordId }, function responseCallback(responseData) {
+					console.log("JS received response:", responseData)
+				});
+			};
+			
+			window.goMedia = function(sectionId, recordId, mediaIndex, type, mediaId) {
+				bridge.callHandler('media', { 'section':sectionId, 'record': recordId, 'media': mediaIndex, 'type':type, 'mediaId': mediaId },
+				function responseCallback(responseData) {
+					console.log("JS received response:", responseData)
+				});
+			};
+		});
+	}
+	</script>
+	<script id="data" type="text/json">
+{
+        "id": "431f0c86d5fd4a97b99205446f9a07f3",
+    "teachingDesignId": "73657338150d433f9dfd655510ece3c6",
+    "teachingDesign": {
+        "id": "73657338150d433f9dfd655510ece3c6",
+        "courseDesign": {
+            "id": "85bf88d1980c48df83ab568eb8cb87db",
+            "createTime": 1542766188000,
+            "updateTime": 1542772099000
+        },
+        "strategy": {
+            "id": "EnglishCiHuiJuXingKe",
+            "name": "词汇和句型课"
+        },
+        "period": {
+            "id": 10,
+            "name": "小学",
+            "slug": "primary",
+            "category": 1
+        },
+        "subject": {
+            "id": 4003,
+            "name": "英语",
+            "slug": "english",
+            "category": 4
+        },
+        "grade": {
+            "id": 2105,
+            "name": "五年级",
+            "slug": "grade5",
+            "category": 2
+        },
+        "semester": {
+            "id": 21051,
+            "name": "五年级上",
+            "slug": "grade5-1",
+            "category": 3
+        },
+        "publisher": {
+            "id": 5048,
+            "name": "人教版（三年级起点）2012-2013",
+            "slug": "PEP3_2012-2013",
+            "category": 5
+        },
+        "catalog": {
+            "id": 480309001,
+            "name": "Unit1 what's he like?",
+            "slug": "unit1"
+        },
+        "basicScore": 0,
+        "favorited": false,
+        "latestRevision": 2,
+        "lessonTime": 1,
+        "revisions": [
+            {
+                "thumbUpNum": 0,
+                "favoriteNum": 0,
+                "commentNum": 0,
+                "referenceNum": 0,
+                "sections": [
+                    {
+                        "id": 1,
+                        "name": "环节名称哈哈哈哈哈哈哈哈哈广告",
+                        "steps": [
+                            {
+                                "id": 1,
+                                "name": "步骤标题呀呀呀呀呀呀晕晕晕晕晕晕晕晕晕",
+                                "detailId": "c775759ec7c8459db1212a900d67f80e",
+                                "oldSectionId": "c775759ec7c8459db1212a900d67f80e",
+                                "originalId": "c775759ec7c8459db1212a900d67f80e",
+                                "thumbUpNum": 0,
+                                "favoriteNum": 0,
+                                "commentNum": 0,
+                                "basicScore": 0,
+                                "teacherSupport": "教师活动咔咔咔咔咔咔扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩",
+                                "studentActivity": "查看资源",
+                                "activityResource": "活动资源",
+                                "activityRemark": "哈哈哈哈哈哈哈哈哈哈或"
+                            }
+                        ],
+                        "detailId": "a7f5043440c340fe8b4482563530e737",
+                        "basicScore": 0,
+                        "thumbUpNum": 0,
+                        "favoriteNum": 0,
+                        "commentNum": 0,
+                        "referenceNum": 0,
+                        "minute": 0,
+                        "thumbUped": false,
+                        "favorited": false,
+                        "oldSectionId": "a7f5043440c340fe8b4482563530e737",
+                        "originalId": "a7f5043440c340fe8b4482563530e737"
+                    }
+                ],
+                "revision": 2,
+                "updated": 1542772099000
+            },
+            {
+                "thumbUpNum": 0,
+                "favoriteNum": 0,
+                "commentNum": 0,
+                "referenceNum": 0,
+                "sections": [
+                    {
+                        "id": 1,
+                        "name": "环节名称哈哈哈哈哈哈哈哈哈广告",
+                        "steps": [
+                            {
+                                "id": 1,
+                                "name": "步骤标题呀呀呀呀呀呀晕晕晕晕晕晕晕晕晕",
+                                "detailId": "c775759ec7c8459db1212a900d67f80e",
+                                "oldSectionId": "c775759ec7c8459db1212a900d67f80e",
+                                "originalId": "c775759ec7c8459db1212a900d67f80e",
+                                "thumbUpNum": 0,
+                                "favoriteNum": 0,
+                                "commentNum": 0,
+                                "basicScore": 0,
+                                "teacherSupport": "教师活动咔咔咔咔咔咔扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩",
+                                "studentActivity": "查看资源",
+                                "activityResource": "活动资源",
+                                "activityRemark": "哈哈哈哈哈哈哈哈哈哈或"
+                            }
+                        ],
+                        "detailId": "a7f5043440c340fe8b4482563530e737",
+                        "basicScore": 0,
+                        "thumbUpNum": 0,
+                        "favoriteNum": 0,
+                        "commentNum": 0,
+                        "referenceNum": 0,
+                        "minute": 0,
+                        "thumbUped": false,
+                        "favorited": false,
+                        "oldSectionId": "a7f5043440c340fe8b4482563530e737",
+                        "originalId": "a7f5043440c340fe8b4482563530e737"
+                    }
+                ],
+                "revision": 1,
+                "updated": 1542766188000
+            }
+        ],
+        "currentRevId": 0,
+        "hot": 0,
+        "type": "td",
+        "description": "",
+        "referenceCount": 0,
+        "createTime": 1542766188000,
+        "label": "111模式",
+        "updateTime": 1542772099000,
+        "title": "Unit1 what's he like?",
+        "passed": true,
+        "summary": "",
+        "unapproved": false,
+        "released": true,
+        "point": 0
+    },
+    "teacherId": "7af1f96f33184aafb89f17842c8897e2",
+    "teacher": {
+        "id": "7af1f96f33184aafb89f17842c8897e2",
+        "name": "可口可乐0就飞鸿干活哈哈姐01",
+        "province": "北京",
+        "provinceId": 1,
+        "city": "北京市",
+        "cityId": 10000,
+        "county": "海淀区",
+        "countyId": 2800,
+        "school": "八一学校附属玉泉中学",
+        "schoolId": "bj-hd-bayiyuquanzhong",
+        "period": "小学",
+        "periodId": 10,
+        "subject": "英语",
+        "subjectId": 4003,
+        "grade": "五年级",
+        "gradeId": 2105,
+        "semester": "一年级",
+        "semesterId": 2101,
+        "publisherId": 5048,
+        "publisher": "人教版（三年级起点）2012-2013"
+    },
+    "period": {
+        "id": 10,
+        "name": "小学",
+        "slug": "primary",
+        "category": 1
+    },
+    "subject": {
+        "id": 4003,
+        "name": "英语",
+        "slug": "english",
+        "category": 4
+    },
+    "grade": {
+        "id": 2105,
+        "name": "五年级",
+        "slug": "grade5",
+        "category": 2
+    },
+    "publisher": {
+        "id": 5048,
+        "name": "人教版（三年级起点）2012-2013",
+        "slug": "PEP3_2012-2013",
+        "category": 5
+    },
+    "semester": {
+        "id": 21051,
+        "name": "五年级上",
+        "slug": "grade5-1",
+        "category": 3
+    },
+    "catalog": {
+        "id": 480309001,
+        "name": "Unit1 what's he like?",
+        "slug": "unit1"
+    },
+    "sections": [
+        {
+            "id": "bb32df85edca40a69bcab9734d25f7ce",
+            "name": "环节名称哈哈哈哈哈哈哈哈哈广告",
+            "records": [
+                {
+                    "id": "b1afbb62a2fb409cabc635c6d5574134",
+                    "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+                    "sectionId": "bb32df85edca40a69bcab9734d25f7ce",
+                    "name": "步骤标题呀呀呀呀呀呀晕晕晕晕晕晕",
+                    "startTime": 1542781388000,
+                    "duration": 565000,
+                    "teacherActivity": "教师活动咔咔咔咔咔咔扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩扩",
+                    "studentActivity": "查看资源",
+                    "interact": "",
+                    "activityResource": "活动资源",
+                    "distinguishStep": 3,
+                    "teachingGenerate": "教学生成物理学的是吧！",
+                    "rethink": "反思内容物业楼的人呢，",
+                    "emotionLabel": 1,
+                    "emotionKeyWord": "与阅读活动有关的思想情感 ",
+                    "extractedKeyWord": "cn.edu.bnu.lcell.tingke.entity.Words@a2e37a6e ",
+                    "media": [
+                        {
+                            "id": "af29d004a6ea4aaeb43f14e0e6b76de2",
+                            "recordId": "b1afbb62a2fb409cabc635c6d5574134",
+                            "resourceId": "4f3708e9c43f407ca0a753619985f53a",
+                            "type": "audio",
+                            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+                            "created": 1542766392000,
+                            "seq": 0,
+                            "name": "VID_20181121_101312.mp3",
+                            "size": 11598,
+                            "contentType": "audio/mpeg"
+                        },
+                        {
+                            "id": "65bf8f9407b74e3ab8b5a6b7237cb14a",
+                            "recordId": "b1afbb62a2fb409cabc635c6d5574134",
+                            "resourceId": "afda7e02ec774ce0883ac7e6943fbda4",
+                            "type": "photo",
+                            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+                            "created": 1542769420664,
+                            "seq": 0,
+                            "name": "list.png",
+                            "size": 1302528,
+                            "contentType": "image/png"
+                        }
+                    ]
+                },
+                {
+                    "id": "1d28ee1bac6d453eba81956871596d65",
+                    "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+                    "sectionId": "bb32df85edca40a69bcab9734d25f7ce",
+                    "name": "步骤标题好红红火火恍恍惚惚嘎嘎嘎",
+                    "startTime": 1542781388000,
+                    "duration": 550001,
+                    "teacherActivity": "",
+                    "studentActivity": "",
+                    "interact": "步骤内容一样一样一样咿呀咿呀哟丫丫呀呀呀一样一样一样一样",
+                    "activityResource": "",
+                    "distinguishStep": 1,
+                    "teachingGenerate": "",
+                    "rethink": "反思内容的时候啊。",
+                    "mediaInfo": "",
+                    "emotionLabel": 1,
+                    "emotionKeyWord": "知识支架 ",
+                    "extractedKeyWord": "cn.edu.bnu.lcell.tingke.entity.Words@3899ac09 ",
+                    "media": [
+                        {
+                            "id": "5a8531175bec43c5b7f1b046a08879b4",
+                            "recordId": "1d28ee1bac6d453eba81956871596d65",
+                            "resourceId": "4f3708e9c43f407ca0a753619985f53a",
+                            "type": "audio",
+                            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+                            "created": 1542766392000,
+                            "seq": 0,
+                            "name": "VID_20181121_101312.mp3",
+                            "size": 11598,
+                            "contentType": "audio/mpeg"
+                        },
+                        {
+                            "id": "c252b179c82f40dd88088ce311925b07",
+                            "recordId": "1d28ee1bac6d453eba81956871596d65",
+                            "resourceId": "bc145a04dfff4beab44769cea609be25",
+                            "type": "photo",
+                            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+                            "created": 1542780305231,
+                            "seq": 0,
+                            "name": "22.1.png",
+                            "size": 248456,
+                            "contentType": "image/png"
+                        }
+                    ]
+                },
+                {
+                    "id": "123073ee966745febea887f541602774",
+                    "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+                    "sectionId": "bb32df85edca40a69bcab9734d25f7ce",
+                    "name": "步骤标题",
+                    "startTime": 1542781388000,
+                    "duration": 130001,
+                    "teacherActivity": "",
+                    "studentActivity": "",
+                    "interact": "步骤内容",
+                    "activityResource": "",
+                    "distinguishStep": 1,
+                    "teachingGenerate": "",
+                    "rethink": "反思",
+                    "mediaInfo": "",
+                    "emotionLabel": 3,
+                    "emotionKeyWord": "综合性学习方案编制 ",
+                    "extractedKeyWord": "cn.edu.bnu.lcell.tingke.entity.Words@a06375cf "
+                }
+            ],
+            "distinguishTache": 0,
+            "favored": false
+        },
+        {
+            "id": "9b2568c367b24061bea66aeb7d0987e0",
+            "name": "未填写",
+            "records": [
+                {
+                    "id": "0e6d98ccb6f8428483fae41512005be7",
+                    "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+                    "sectionId": "9b2568c367b24061bea66aeb7d0987e0",
+                    "name": "步骤标题",
+                    "startTime": 1542780309000,
+                    "duration": 1,
+                    "teacherActivity": "",
+                    "studentActivity": "",
+                    "interact": "步骤内容",
+                    "activityResource": "",
+                    "distinguishStep": 1,
+                    "teachingGenerate": "",
+                    "rethink": "反思内容",
+                    "mediaInfo": "",
+                    "emotionLabel": 1,
+                    "emotionKeyWord": "激活先前知识的策略 ",
+                    "extractedKeyWord": "cn.edu.bnu.lcell.tingke.entity.Words@b59b377e ",
+                    "media": [
+                        {
+                            "id": "1d6f005e7eb44ef684e51d4a19990ba7",
+                            "recordId": "0e6d98ccb6f8428483fae41512005be7",
+                            "resourceId": "a78b705735d5484ba9f9e4db70344024",
+                            "type": "photo",
+                            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+                            "created": 1542779591401,
+                            "seq": 0,
+                            "name": "?????.jpg",
+                            "size": 118624,
+                            "contentType": "image/jpeg"
+                        }
+                    ]
+                }
+            ],
+            "distinguishTache": 1,
+            "favored": false
+        }
+    ],
+    "processScaleId": "sys-process-scale-flds",
+    "processScale": {
+        "id": "sys-process-scale-flds",
+        "name": "弗兰德斯课堂互动分析系统",
+        "scaleType": "flds",
+        "createTime": 1513320635000,
+        "updateTime": 1513320635000,
+        "custom": false,
+        "open": true,
+        "question": [
+            {
+                "id": "scale-question-6",
+                "name": "教师语言（间接影响）",
+                "processScaleId": "sys-process-scale-flds",
+                "sequence": 6,
+                "options": [
+                    {
+                        "id": "question6-option-1",
+                        "name": "表达感情",
+                        "questionId": "scale-question-6",
+                        "sequence": 22
+                    },
+                    {
+                        "id": "question6-option-2",
+                        "name": "表扬或鼓励",
+                        "questionId": "scale-question-6",
+                        "sequence": 23
+                    },
+                    {
+                        "id": "question6-option-3",
+                        "name": "接纳或利用学生的观点",
+                        "questionId": "scale-question-6",
+                        "sequence": 24
+                    },
+                    {
+                        "id": "question6-option-4",
+                        "name": "提问",
+                        "questionId": "scale-question-6",
+                        "sequence": 25
+                    }
+                ]
+            },
+            {
+                "id": "scale-question-7",
+                "name": "教师语言（直接影响）",
+                "processScaleId": "sys-process-scale-flds",
+                "sequence": 7,
+                "options": [
+                    {
+                        "id": "question7-option-1",
+                        "name": "讲授",
+                        "questionId": "scale-question-7",
+                        "sequence": 26
+                    },
+                    {
+                        "id": "question7-option-2",
+                        "name": "给予指导或指令",
+                        "questionId": "scale-question-7",
+                        "sequence": 27
+                    },
+                    {
+                        "id": "question7-option-3",
+                        "name": "批评学生或维护权威",
+                        "questionId": "scale-question-7",
+                        "sequence": 28
+                    }
+                ]
+            },
+            {
+                "id": "scale-question-8",
+                "name": "学生语言",
+                "processScaleId": "sys-process-scale-flds",
+                "sequence": 8,
+                "options": [
+                    {
+                        "id": "question8-option-1",
+                        "name": "被动应答",
+                        "questionId": "scale-question-8",
+                        "sequence": 29
+                    },
+                    {
+                        "id": "question8-option-2",
+                        "name": "主动应答",
+                        "questionId": "scale-question-8",
+                        "sequence": 30
+                    },
+                    {
+                        "id": "question8-option-3",
+                        "name": "与同伴讨论",
+                        "questionId": "scale-question-8",
+                        "sequence": 31
+                    }
+                ]
+            },
+            {
+                "id": "scale-question-9",
+                "name": "沉寂",
+                "processScaleId": "sys-process-scale-flds",
+                "sequence": 9,
+                "options": [
+                    {
+                        "id": "question9-option-1",
+                        "name": "无效语言",
+                        "questionId": "scale-question-9",
+                        "sequence": 32
+                    },
+                    {
+                        "id": "question9-option-2",
+                        "name": "做练习",
+                        "questionId": "scale-question-9",
+                        "sequence": 33
+                    },
+                    {
+                        "id": "question9-option-3",
+                        "name": "媒体演示",
+                        "questionId": "scale-question-9",
+                        "sequence": 34
+                    }
+                ]
+            }
+        ]
+    },
+    "optionResults": [
+        {
+            "id": "6d4dea43d0cc4a929094470aa635fcfe",
+            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+            "seconds": 3,
+            "option": "question7-option-2",
+            "sequence": 0,
+            "options": [
+                "question7-option-2"
+            ]
+        },
+        {
+            "id": "97c32bbaca894f5c966a21e642378701",
+            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+            "seconds": 6,
+            "option": "question8-option-2",
+            "sequence": 1,
+            "options": [
+                "question8-option-2"
+            ]
+        },
+        {
+            "id": "436228a342c140fdbc0109903e63ba65",
+            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+            "seconds": 9,
+            "option": "question6-option-3",
+            "sequence": 2,
+            "options": [
+                "question6-option-3"
+            ]
+        },
+        {
+            "id": "5aea3e67b0c7433587b7fc7ac4bd2ad4",
+            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+            "seconds": 12,
+            "option": "question8-option-3",
+            "sequence": 3,
+            "options": [
+                "question8-option-3"
+            ]
+        },
+        {
+            "id": "b5918733d71641ecaf67a8c8ff1a090c",
+            "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+            "seconds": 15,
+            "option": "question9-option-2",
+            "sequence": 4,
+            "options": [
+                "question9-option-2"
+            ]
+        }
+    ],
+    "evaluation": {
+        "id": "ef7bddba72634f13b77b2140d82e5715",
+        "courseRecordId": "431f0c86d5fd4a97b99205446f9a07f3",
+        "advantage": "",
+        "discuss": "",
+        "introspection": "",
+        "totalScore": 77,
+        "scaleId": "sys-scale-english-1",
+        "scores": [
+            {
+                "scaleItemId": "sys-scale-english-01",
+                "sequence": 0,
+                "itemName": "技术知识TK",
+                "score": 0,
+                "children": [
+                    {
+                        "scaleItemId": "sys-scale-english-011",
+                        "sequence": 1,
+                        "itemName": "使用恰当的技术工具（如PPT、概念图、口语100、英语流利说以及其他英语教学APP）",
+                        "itemParentId": "sys-scale-english-01",
+                        "itemParentName": "技术知识TK",
+                        "score": 3
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-012",
+                        "sequence": 2,
+                        "itemName": "使用搜索引擎（如百度、谷歌）搜集并应用适宜的网络资源",
+                        "itemParentId": "sys-scale-english-01",
+                        "itemParentName": "技术知识TK",
+                        "score": 3
+                    }
+                ]
+            },
+            {
+                "scaleItemId": "sys-scale-english-02",
+                "sequence": 4,
+                "itemName": "学科知识CK",
+                "score": 0,
+                "children": [
+                    {
+                        "scaleItemId": "sys-scale-english-021",
+                        "sequence": 5,
+                        "itemName": "拥有扎实的英语学科知识基础",
+                        "itemParentId": "sys-scale-english-02",
+                        "itemParentName": "学科知识CK",
+                        "score": 4
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-022",
+                        "sequence": 6,
+                        "itemName": "清晰且准确呈现英语学科知识",
+                        "itemParentId": "sys-scale-english-02",
+                        "itemParentName": "学科知识CK",
+                        "score": 5
+                    }
+                ]
+            },
+            {
+                "scaleItemId": "sys-scale-english-03",
+                "sequence": 7,
+                "itemName": "教学法知识PK",
+                "score": 0,
+                "children": [
+                    {
+                        "scaleItemId": "sys-scale-english-031",
+                        "sequence": 8,
+                        "itemName": "合理设计教学内容，由浅入深，体现出课堂教学的层次性。",
+                        "itemParentId": "sys-scale-english-03",
+                        "itemParentName": "教学法知识PK",
+                        "score": -1
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-032",
+                        "sequence": 9,
+                        "itemName": "合理设计师生对话、生生对话活动，并有效落实。",
+                        "itemParentId": "sys-scale-english-03",
+                        "itemParentName": "教学法知识PK",
+                        "score": 1
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-033",
+                        "sequence": 10,
+                        "itemName": "采用多种评价方式评价学生的学习过程和所学到的知识。",
+                        "itemParentId": "sys-scale-english-03",
+                        "itemParentName": "教学法知识PK",
+                        "score": 2
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-034",
+                        "sequence": 11,
+                        "itemName": "管理课堂、保持课堂秩序",
+                        "itemParentId": "sys-scale-english-03",
+                        "itemParentName": "教学法知识PK",
+                        "score": 3
+                    }
+                ]
+            },
+            {
+                "scaleItemId": "sys-scale-english-04",
+                "sequence": 12,
+                "itemName": "学科教学知识PCK",
+                "score": 0,
+                "children": [
+                    {
+                        "scaleItemId": "sys-scale-english-041",
+                        "sequence": 13,
+                        "itemName": "设计清晰、恰当的教学目标并有效实现教学目标",
+                        "itemParentId": "sys-scale-english-04",
+                        "itemParentName": "学科教学知识PCK",
+                        "score": 4
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-042",
+                        "sequence": 14,
+                        "itemName": "体现以语言语交际为中心、教师主导-学生主体的教学理念（时间分配理）",
+                        "itemParentId": "sys-scale-english-04",
+                        "itemParentName": "学科教学知识PCK",
+                        "score": 3
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-043",
+                        "sequence": 15,
+                        "itemName": "设计促进学生思维发展的言语交际活动，将语言学习与思维培养有机结合",
+                        "itemParentId": "sys-scale-english-04",
+                        "itemParentName": "学科教学知识PCK",
+                        "score": 2
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-044",
+                        "sequence": 16,
+                        "itemName": "精选与教学目标相关的拓展听读资源，难度适宜、时间分配与反馈恰当",
+                        "itemParentId": "sys-scale-english-04",
+                        "itemParentName": "学科教学知识PCK",
+                        "score": 3
+                    }
+                ]
+            },
+            {
+                "scaleItemId": "sys-scale-english-05",
+                "sequence": 17,
+                "itemName": "技术支持的教学法知识TPK",
+                "score": 0,
+                "children": [
+                    {
+                        "scaleItemId": "sys-scale-english-051",
+                        "sequence": 18,
+                        "itemName": "利用技术收集和分析学生学习过程信息，发现问题，提出针对性的改进措施",
+                        "itemParentId": "sys-scale-english-05",
+                        "itemParentName": "技术支持的教学法知识TPK",
+                        "score": 4
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-052",
+                        "sequence": 19,
+                        "itemName": "利用技术工具开展测验、练习等工作，提高评价工作效率",
+                        "itemParentId": "sys-scale-english-05",
+                        "itemParentName": "技术支持的教学法知识TPK",
+                        "score": 3
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-053",
+                        "sequence": 20,
+                        "itemName": "恰当运用媒体或实物等创设合适的语言环境，在情境中开展教学活动",
+                        "itemParentId": "sys-scale-english-05",
+                        "itemParentName": "技术支持的教学法知识TPK",
+                        "score": 4
+                    }
+                ]
+            },
+            {
+                "scaleItemId": "sys-scale-english-06",
+                "sequence": 21,
+                "itemName": "技术支持的学科知识TCK",
+                "score": 0,
+                "children": [
+                    {
+                        "scaleItemId": "sys-scale-english-061",
+                        "sequence": 22,
+                        "itemName": "选择合适的表征技术来呈现英语学科的知识点，方便学生理解和记忆",
+                        "itemParentId": "sys-scale-english-06",
+                        "itemParentName": "技术支持的学科知识TCK",
+                        "score": 5
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-062",
+                        "sequence": 23,
+                        "itemName": "了解用于促进英语学科语言运用能力的技术（如盒子鱼、口语100等英语APP工具）",
+                        "itemParentId": "sys-scale-english-06",
+                        "itemParentName": "技术支持的学科知识TCK",
+                        "score": -1
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-063",
+                        "sequence": 24,
+                        "itemName": "选择合适的技术促进学生纠正错误概念",
+                        "itemParentId": "sys-scale-english-06",
+                        "itemParentName": "技术支持的学科知识TCK",
+                        "score": -1
+                    }
+                ]
+            },
+            {
+                "scaleItemId": "sys-scale-english-07",
+                "sequence": 25,
+                "itemName": "整合技术的学科教学法知识TPACK",
+                "score": 0,
+                "children": [
+                    {
+                        "scaleItemId": "sys-scale-english-071",
+                        "sequence": 26,
+                        "itemName": "制定深度的英语学科讨论话题，促进学生使用合适的工具开展同位两两交际（如网上论坛、教学互动平台等）",
+                        "itemParentId": "sys-scale-english-07",
+                        "itemParentName": "整合技术的学科教学法知识TPACK",
+                        "score": 5
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-072",
+                        "sequence": 27,
+                        "itemName": "设置与英语学科知识点相关的问题情境，激发学生的学习兴趣",
+                        "itemParentId": "sys-scale-english-07",
+                        "itemParentName": "整合技术的学科教学法知识TPACK",
+                        "score": 4
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-073",
+                        "sequence": 28,
+                        "itemName": "使用适当的技术促进学生英语表达能力的提升",
+                        "itemParentId": "sys-scale-english-07",
+                        "itemParentName": "整合技术的学科教学法知识TPACK",
+                        "score": 3
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-074",
+                        "sequence": 29,
+                        "itemName": "创建信息技术支持的拓展听读活动（如使用网络平台进行拓展听读与交际等）",
+                        "itemParentId": "sys-scale-english-07",
+                        "itemParentName": "整合技术的学科教学法知识TPACK",
+                        "score": 2
+                    },
+                    {
+                        "scaleItemId": "sys-scale-english-075",
+                        "sequence": 30,
+                        "itemName": "整合英语学科、技术与教学法知识，设计以学生为中心的言语交际活动",
+                        "itemParentId": "sys-scale-english-07",
+                        "itemParentName": "整合技术的学科教学法知识TPACK",
+                        "score": 2
+                    }
+                ]
+            }
+        ],
+        "advantageThumbUps": 0,
+        "discussThumbUps": 0,
+        "introspectionThumbUps": 0
+    },
+    "lessonId": "98179061336b4a3d9871adfac279a798",
+    "startTime": 1542766222000,
+    "endTime": 1542767107000,
+    "mode": 3,
+    "totalMediaCount": 1,
+    "remainingMediaCount": 0,
+    "skillQuestionResults": [],
+    "scaleCustom": false,
+    "scoreFinish": true,
+    "uploading": false,
+    "type": "tk",
+    "description": "",
+    "referenceCount": 0,
+    "createTime": 1542767108000,
+    "updateTime": 1542781651000,
+    "title": "Unit1 what's he like?",
+    "passed": true,
+    "summary": "",
+    "unapproved": false,
+    "released": true,
+    "point": 0,
+    "creator": {
+        "id": "8f31437e95e34e3d9e6250a701994218",
+        "username": "lcuser_8f31437e95e34e3d",
+        "nickname": "测试0002",
+        "email": "1***@163.com",
+        "phone": "188****0002",
+        "sex": "Unknown",
+        "accountNonLocked": false,
+        "description": "哈哈哈",
+        "province": "北京",
+        "provinceId": 1,
+        "city": "北京市",
+        "cityId": 10000,
+        "county": "朝阳区",
+        "countyId": 72,
+        "school": "北京师范大学朝阳附属小学",
+        "schoolId": "bj-cy-bjshifanfuxiao",
+        "period": "小学",
+        "periodId": 10,
+        "subject": "数学",
+        "subjectId": 4002,
+        "language": "zh-CN",
+        "point": 134,
+        "roleEnabled": false,
+        "photo": "/public/photo/2018/11/4b3e3fdc-37e6-441d-850c-a465b38d3be7.jpg",
+        "photoLarge": "/public/photo/2018/11/120_4b3e3fdc-37e6-441d-850c-a465b38d3be7.jpg",
+        "photoMedium": "/public/photo/2018/11/90_4b3e3fdc-37e6-441d-850c-a465b38d3be7.jpg",
+        "photoSmall": "/public/photo/2018/11/60_4b3e3fdc-37e6-441d-850c-a465b38d3be7.jpg",
+        "photoUrl": "/public/photo/2018/11/4b3e3fdc-37e6-441d-850c-a465b38d3be7.jpg",
+        "pending": true
+    }
+}
+	</script>
+</body>
+</html>

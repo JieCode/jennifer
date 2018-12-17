@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html>
+<head xmlns:th="http://www.thymeleaf.org">
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title></title>
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/skill.css" />
+</head>
+<body>
+	<div class="skill-body">
+		<div class="pie-area">
+			<div id="processEchart">
+				<div class="question-chart" id="process"></div>
+			</div>
+			<div class="suggest-block hide">
+				<span class="title">分析结论与改进建议：</span><br/>
+				<div class="body">
+					<p>1、您在这节课中平均提出××个问题，其中是何类问题占××%，XXX。</p>
+					<p>2、您挑选回答问题的方式多为XXX。XXX。</p>
+					<p>3、您回应学生的方式多为××。XXX。</p>
+				</div>
+			</div>
+		</div>
+		<div class="pie-area">
+			<div id="processEchart1">
+				<div class="question-chart" id="process1"></div>
+			</div>
+			<div class="suggest-block hide">
+				<span class="title">分析结论与改进建议：</span><br/>
+				<div class="body">
+					<p>1、您在这节课中平均提出××个问题，其中是何类问题占××%，XXX。</p>
+					<p>2、您挑选回答问题的方式多为XXX。XXX。</p>
+					<p>3、您回应学生的方式多为××。XXX。</p>
+				</div>
+			</div>
+		</div>
+		<div class="pie-area">
+			<div id="processEchart2">
+				<div class="question-chart" id="process2"></div>
+			</div>
+			<div class="suggest-block hide">
+				<span class="title">分析结论与改进建议：</span><br/>
+				<div class="body">
+					<p>1、您在这节课中平均提出××个问题，其中是何类问题占××%，XXX。</p>
+					<p>2、您挑选回答问题的方式多为XXX。XXX。</p>
+					<p>3、您回应学生的方式多为××。XXX。</p>
+				</div>
+			</div>
+		</div>
+		<div class="pie-area">
+			<div id="processEchart3">
+				<div class="question-chart" id="process3"></div>
+			</div>
+			<div class="suggest-block hide">
+				<span class="title">分析结论与改进建议：</span><br/>
+				<div class="body">
+					<p>1、您在这节课中平均提出××个问题，其中是何类问题占××%，XXX。</p>
+					<p>2、您挑选回答问题的方式多为XXX。XXX。</p>
+					<p>3、您回应学生的方式多为××。XXX。</p>
+				</div>
+			</div>
+		</div>
+		<!-- 柱状图 -->
+		<div id="Echarts" class="panel-group hide" style="margin-top:40px">
+			<div style="padding-left: 5%;"><span style="font-size:13px;color: #999999;">技能评价量表分析</span></div>
+			<div style="margin-top: 20px;" class="hide"><input type="radio" id="myScale" name="process" checked/>只看我&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="scale" name="process"/>全部</div>
+			<div id="processEcharts">
+				<div id="questionType" class="bar-graph col-sm-6"></div>
+				<div id="teacherQT" class="bar-graph col-sm-6"></div>
+				<div id="SAnswer" class="bar-graph col-sm-6"></div>
+				<div id="TAnswer" class="bar-graph col-sm-6"></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/mustache.min.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/echarts.min.js"></script>
+	<script type="text/javascript">
+		var debug = 0;
+		$('.skill-body .suggest-block').addClass('hide');
+		$(function() {
+			debug && render($('#data1').text());
+		});
+		function durationToString(duration) {
+			var min = Math.floor(duration / 60), sec = duration % 60;
+			return min + "'" + sec + '"';
+		}
+
+		var template = $('.skill-body').html();
+		Mustache.parse(template);
+// 		$('.skill-body').empty().removeClass('hide').show();
+		
+		var countMap = null;
+		
+		function render(data) {
+			if (typeof data === 'string') 
+				data = $.parseJSON(data);
+// 	 		var recordJson = data.courseRecord;
+// 			if (recordJson) {
+// 	 			var scale = recordJson.processScale,
+// 	 				qs = scale.question, results = recordJson.optionResults, size = results ? results.length : 0;
+// 	 			if (scale.scaleType == 'radio') {
+// 					if (countMap == null)
+// 						initCountMap(scale);
+// 					$.each(results, function(i, r) {
+// 						var options = r.options;
+// 						$.each(options, function() {
+// 							var opt = countMap.get(this);
+// 							opt.count = opt.count + 1;
+// 						});
+// 					});
+// 					$('.question-chart').each(function(i, d) {
+// 						var q = qs[i];
+// 						param = fillPieData(q, size);
+// 						$(this).attr('id', q.id + '-pie');
+// 						initSkillPie(this, param);
+// 					});
+// 	 			}
+// 	 		}
+			if (data.hasData) {
+				drawPie(data.radioTimes, data.processNames);
+				barGraph(data.processNames, data.myDatas, data.allDatas);
+			}
+		}
+		
+		function Map() {
+			return {
+				val: {},
+				put: function(k, v) {
+					this.val[k] = v;
+				},
+				get: function(k) {
+					return this.val[k];
+				},
+				remove: function(k) {
+					this.val[k] = null;
+				},
+				isEmpty: function() {
+					for (var name in this.val) {
+						return false;
+					}
+					return true;
+				},
+				clear: function() {
+					this.val = {};
+				},
+				addResult: function(r) {
+					if (this.get('optionResults') == undefined)
+						this.put('optionResults', []);
+					if (r != undefined) {
+						if (r.position == undefined) {
+							r.position = this.get('optionResults').length;
+							this.get('optionResults').push(r);
+						} else {
+							if (r.position > -1 && r.position < this.resultLength())
+								this.get('optionResults')[r.position] = r;
+						}
+						var m = parseInt(r.seconds/60);
+						if (m > 0)
+							r.m = m + '′';
+						r.s = r.seconds%60 + '″';
+						r.p = r.position + 1;
+						return r;
+					}
+				},
+				resultLength: function() {
+					return this.get('optionResults') == undefined ? 0 : this.get('optionResults').length;
+				},
+				getResults: function() {
+					return this.get('optionResults');
+				},
+				getOne: function(i) {
+					return this.getResults() != undefined ? this.getResults()[i] : null;
+				}
+			};
+		}
+		
+		function initCountMap(scale) {
+			countMap = new Map();
+			var questions = scale.question;
+			$.each(questions, function() {
+				var qr = this;
+				var opts = qr.options;
+				$.each(opts, function() {
+					var opt = {};
+					opt.qid = qr.id;
+					opt.count = 0;
+					opt.name = this.name;
+					opt.id = this.id;
+					countMap.put(opt.id, opt);
+				});
+			});
+		}
+		
+ 		function fillPieData(q, count) {
+			var param = {};
+			param.name = q.name;
+			param.data = [];
+			for (var n = 0; n < q.options.length; n++) {
+				var size = count ? count : resultMap.resultLength(), opt = q.options[n];
+				var optResult = countMap.get(q.options[n].id);
+				var dt = {};
+				dt.name = opt.name + ',' + optResult.count + ',' + new Number(parseFloat(optResult.count / size) * 100).toFixed(0) + '%';
+				dt.value = optResult.count;
+				param.data.push(dt);
+			}
+			return param;
+		}
+ 		
+ 		//画饼图
+ 		function initSkillPie($container, param) {
+ 			var skillChart = echarts.init($container),
+ 				data = [];
+ 			$.each(param.data, function() {
+ 				data.push(this);
+ 			});
+ 			var option = {
+ 				tooltip : {
+ 					show: false,
+ 					trigger: 'item',
+ 					formatter: "{a} <br/>{b} : {c} %"
+ 				},
+ 				title : {
+ 					text: param.name,
+ 					x: 'left',
+ 					textStyle: {
+ 					    fontSize: 13,
+ 					    color: '#999999 '
+ 					} 
+ 				},
+ 				color: ['#B6E283', '#6CA1FF', '#FFD44C', '#6DCEFF', '#FC9F9F'],
+// 				legend: {
+// 					orient: 'vertical',
+// 					x: 'right',
+// 					y: '30%',
+// 					data: data
+// 				},
+ 				grid: {
+ 					left: '15%',
+ 					top: '15%'
+ 				},
+ 				series : [
+ 					{
+ 						name:'问题名称',
+ 						type:'pie',
+ 						radius : '55%',
+ 						center: [ '50%', '55%' ],
+ 						data: data,
+ 						itemStyle: {
+ 		 					normal: {
+ 		 						label: {
+ 		 							show: true,
+ 		 							formatter:function(val){
+ 		 								var text = val.name
+ 		 								return text.length < 6
+ 		 									? text 
+ 		 									: text.slice(0,6) + '\r\n' + text.slice(6,text.length);
+ 		 							},
+ 		 							textStyle: {
+ 		 								align: 'left',
+ 		 								baseline: 'top',
+ 		 								fontSize: 12
+ 		 							}
+ 		 						},
+ 		 						labelLine: {
+ 		 							length: 10
+ 		 						}
+ 		 					}
+ 		 				}
+ 					}
+ 				]
+ 			};
+ 			skillChart.setOption(option);
+ 		}
+ 		
+ 		//画柱状图
+ 		function barGraph(processNames, radioDatas, radioTimes) {
+ 			var questionTypeNames = [];
+ 			var teacherQTNaems = [];
+ 			var SAnswerNames = [];
+ 			var TAnswerNames = [];
+ 			var processCount = radioTimes['count']; 
+ 			var totalData = [];
+ 			$.each(processNames, function(index, item) {
+ 				var total = [];
+ 				$.each(item, function(proIndex, proItem) {
+ 					if (index == 0 && proIndex != item.length -1) {
+ 						questionTypeNames.push(proItem);
+ 						total.push(processCount[index][proIndex]);
+ 					} else if (index == 1) {
+ 						teacherQTNaems.push(proItem);
+ 						total.push(processCount[index][proIndex]);
+ 					} else if (index == 2) {
+ 						SAnswerNames.push(proItem);
+ 						total.push(processCount[index][proIndex]);
+ 					} else if (index == 3) {
+ 						total.push(processCount[index][proIndex]);
+ 						TAnswerNames.push(proItem);
+ 					}
+ 				})
+ 				totalData.push(total);
+ 			});
+ 			
+ 			var processSum = 0;
+ 			$.each(radioDatas, function(index, item) {
+ 				$.each(item, function(pIndex, pItem) {
+ 					processSum += pItem;	
+ 				})
+ 			});
+ 			if (processSum != 0) {
+ 				$('#Echarts').removeClass('hide');
+ 				totalEchart('questionType','提出问题的类型',questionTypeNames,radioDatas[0],totalData[0]);
+				totalEchart('teacherQT','教师挑选回答问题的方式',teacherQTNaems,radioDatas[1],totalData[1]);
+				totalEchart('SAnswer','学生回答的方式',SAnswerNames,radioDatas[2],totalData[2]);
+				totalEchart('TAnswer','教师回应的方式',TAnswerNames,radioDatas[3],totalData[3]);
+ 			 
+ 				 $('#scale').on('click', function() {
+ 					 totalEchart('questionType','提出问题的类型',questionTypeNames,radioDatas[0],totalData[0]);
+ 					 totalEchart('teacherQT','教师挑选回答问题的方式',teacherQTNaems,radioDatas[1],totalData[1]);
+ 					 totalEchart('SAnswer','学生回答的方式',SAnswerNames,radioDatas[2],totalData[2]);
+ 					 totalEchart('TAnswer','教师回应的方式',TAnswerNames,radioDatas[3],totalData[3]);
+ 				 })
+ 				 $('#myScale').on('click', function() {
+ 					 $('#processEcharts').html('<div id="questionType" style="height:300px;margin-top:30px;" class="col-sm-6"></div>'+
+ 								'<div id="teacherQT" style="height:300px;margin-top:30px;" class="col-sm-6"></div>'+
+ 								'<div id="SAnswer" style="height:300px;margin-top:30px;" class="col-sm-6"></div>'+
+ 								'<div id="TAnswer" style="height:300px;margin-top:30px;" class="col-sm-6"></div>');
+ 					 echart('questionType','提出问题的类型',questionTypeNames,radioDatas[0]);
+ 					 echart('teacherQT','教师挑选回答问题的方式',teacherQTNaems,radioDatas[1]);
+ 					 echart('SAnswer','学生回答的方式',SAnswerNames,radioDatas[2]);
+ 					 echart('TAnswer','教师回应的方式',TAnswerNames,radioDatas[3]);
+ 				 })
+ 				//过程性量表图表js
+ 				function totalEchart(id,text,yaxis,series,totalSeries) {
+ 					 var myChart2 = echarts.init(document.getElementById(id));
+ 					 option2 = {
+ 							    color: ['#ff8000', '#0072e3'],
+ 							    title: {
+ 							        text: text,
+ 							        left: 'left',
+ 							       	textStyle: {
+ 				 					    fontSize: 16,
+ 				 					    color: '#7297F4'
+ 				 					}
+ 							    },
+ 							    tooltip: {
+ 							        trigger: 'axis',
+ 							        axisPointer: {
+ 							            type: 'shadow'
+ 							        }
+ 							    },
+ 							    legend: {
+ 							        data: ['我的选择', '总体选择'],
+ 							        top: 30,
+ 							        x: 'left'
+ 							    },
+ 							    grid: {
+ 							        left: '3%',
+ 							        right: '4%',
+ 							        bottom: '3%',
+ 							        containLabel: true
+ 							    },
+ 							    xAxis: {
+ 							        type: 'value',
+ 							        boundaryGap: [0, 0.01]
+ 							    },
+ 							    yAxis: {
+ 							        type: 'category',
+ 							        data: yaxis,
+ 							        axisLabel: { //坐标轴刻度设置
+ 										show: true,
+ 										interval: 0
+ 								 	}
+ 							    },
+ 							    series: [
+ 							        {
+ 							            name: '我的选择',
+ 							            type: 'bar',
+ 							            data: series
+ 							        },
+ 							        {
+ 							            name: '总体选择',
+ 							            type: 'bar',
+ 							            data: totalSeries
+ 							        }
+ 							    ]
+ 							};
+ 					 myChart2.setOption(option2);
+ 				}
+ 				function echart(id,text,yaxis,series) {
+ 					 var myChart2 = echarts.init(document.getElementById(id));
+ 					 option2 = {
+ 							    color: ['#ff8000'],
+ 							    title: {
+ 							        text: text,
+ 							        left: 'center'
+ 							    },
+ 							    tooltip: {
+ 							        trigger: 'axis',
+ 							        axisPointer: {
+ 							            type: 'shadow'
+ 							        }
+ 							    },
+ 							    legend: {
+ 							        data: ['我的选择'],
+ 							        top: 25
+ 							    },
+ 							    grid: {
+ 							        left: '3%',
+ 							        right: '4%',
+ 							        bottom: '3%',
+ 							        containLabel: true
+ 							    },
+ 							    xAxis: {
+ 							        type: 'value',
+ 							        boundaryGap: [0, 0.01]
+ 							    },
+ 							    yAxis: {
+ 							        type: 'category',
+ 							        data: yaxis,
+ 							        axisLabel: { //坐标轴刻度设置
+ 										show: true,
+ 										interval: 0
+ 								 	}
+ 							    },
+ 							    series: [
+ 							        {
+ 							            name: '我的选择',
+ 							            type: 'bar',
+ 							            data: series
+ 							        }
+ 							    ]
+ 							};
+ 					myChart2.setOption(option2);
+ 				}
+ 			}
+ 		}
+ 		
+ 		
+ 		function drawPie(radioTimes, processNames) {
+				var processCount = radioTimes['count']; 
+				var processPercent = radioTimes['percent'];
+				//var processCount = [];
+				//var processPercent = [];
+				//processCount.push([12,15,5,15],[11,15,0,0,15],[2,5,5,5,5],[2,5,0,0,0]);
+				//processPercent.push([11.7,29.4,29.4,29.4],[11.7,29.4,0,0,29.4],[11.7,29.4,29.4,29.4,29.4],[11.7,29.4,0,0,0]);
+				var processCount1 = 0; //问题类型分布
+				var processCount2 = 0; //老师挑选学生回答问题的数量
+				var processCount3 = 0;
+				var processCount4 = 0;
+				var processSelect = [];//老师挑选学生回答问题的方式
+				var processSelect1 = [];//老师回应的方式
+				var process1 = [];
+				var process2 = [];
+				var process3 = [];
+				var process4 = [];
+// 				$('#processEchart').html('<div id="process" style="height: 400px">');
+// 				$('#processEchart1').html('<div id="process1" style="height: 400px">');
+// 				$('#processEchart2').html('<div id="process2" style="height: 400px">');
+// 				$('#processEchart3').html('<div id="process3" style="height: 400px">');
+				var myChart3 = echarts.init(document.getElementById('process'));
+				var myChart4 = echarts.init(document.getElementById('process1'));
+				var myChart5 = echarts.init(document.getElementById('process2'));
+				var myChart6 = echarts.init(document.getElementById('process3'));
+				
+				$.each(processNames, function(index, item) {
+					var pc = 0;
+					var pk = 0;
+					$.each(processNames[index], function(proIndex, item) {
+						var processData = {};
+						var normal = {};
+						var label = {};
+						var textStyle={};
+						if (index != 0 || proIndex != processNames[0].length - 1) {
+							processData.value = processCount[index][proIndex];
+							var str = '';
+							var sss = processNames[index][proIndex];
+							for (var i = 0; i <= parseInt(sss.length / 4); i++) {
+								if (i != parseInt(sss.length / 4)) {
+									str += sss.substring(4*i, 4*(i + 1));
+									str += '\n';
+								} else {
+									str += sss.substring(4*i, sss.length);
+								}
+							}
+							/* processData.name = str + ',\n' + processCount[index][proIndex] + ',' + processPercent[index][proIndex] + '%'; */
+							processData.name = str + ',\n' + processPercent[index][proIndex] + '%';
+							if (processPercent[index][proIndex] < 10) {
+								normal.position = 'outside';
+							} else {
+								normal.position = 'inner';
+							}
+							textStyle.fontSize = 12;
+							normal.textStyle = textStyle;
+							label.normal = normal;
+							processData.label = label;
+							if (index == 0) {
+								process1.push(processData);
+							} else if (index == 1) {
+								process2.push(processData);
+							} else if (index == 2) {
+								process3.push(processData);
+							} else if (index ==3) {
+								process4.push(processData);
+							}
+						}
+						if (index == 0) {
+							processCount1 += processCount[index][proIndex];
+						}
+						if (index == 1) {
+							processCount2 += processCount[index][proIndex];
+							if (pc == 0) {
+								processSelect = [];
+								pc = processCount[index][proIndex];
+								processSelect.push(proIndex);
+							} else if (pc < processCount[index][proIndex]) {
+								processSelect = [];
+								processSelect.push(proIndex);
+							} else if (pc == processCount[index][proIndex] && pc != 0) {
+								processSelect.push(proIndex);
+							}
+						}
+						if (index == 2) {
+							processCount3 += processCount[index][proIndex];
+						}
+						if (index == 3) {
+							processCount4 += processCount[index][proIndex];
+							if (pk == 0) {
+								processSelect1 = [];
+								pk = processCount[index][proIndex];
+								processSelect1.push(proIndex);
+							} else if (pk < processCount[index][proIndex]) {
+								processSelect1 = [];
+								processSelect1.push(proIndex);
+							} else if (pk == processCount[index][proIndex] && pk != 0) {
+								processSelect1.push(proIndex);
+							}
+						}
+					})
+				})
+				
+				var processSum1 = 0;
+				var processSum3 = 0;
+				var allprocess = 0;
+				$.each(processCount, function(index, item) {
+					$.each(item, function(index1, item1) {
+						allprocess += item1;
+						if (index == 1) {
+							processSum1 += item1;
+						} else if (index == 3) {
+							processSum3 += item1;
+						}
+					})		
+				})
+				
+				//过程性量表评语
+// 				if (processCount1 == 0) {
+// 					$('#questionType').html('暂无数据');
+// 				} else {
+// 					$('#processQuestion').html(processCount1);
+// 					$('#processPercent').html(processPercent[0][0]);
+// 					if (processPercent[0][0] >= 60) {
+// 						$('#processSuggest').html('是何类问题较多，建议减少是何类问题数量，增加其他三类问题的数量');
+// 					} else {
+// 						$('#processSuggest').html('是何类问题数量适宜');
+// 					}
+// 				}
+				
+				if (allprocess != 0) {
+					$('#processPart').removeClass('hide');
+					dataflag = true;
+				} else {
+					$('#processPart').html(' ');
+					//$('#questionType2').html('暂无数据');
+				}
+				
+				option3 = {
+						color: ['#6CA1FF', '#FFD85A', '#6DCEFF', '#FC9F9F', '#B2DE80'],
+			    		 title : {
+			    		        text: '问题类型分布',
+			    		        x: 'left',
+			 					textStyle: {
+			 					    fontSize: 13,
+			 					    color: '#999999 '
+			 					} 
+			    		    },
+			   		    tooltip : {
+			   		        trigger: 'item',
+			   		        formatter: "{a} <br/>{b}"
+			   		    },
+			   		    legend: {
+			   		        orient: 'vertical',
+			   		        left: 'left'
+			   		    },
+			   		    series : [
+			   		        {
+			   		            name: '课型分布',
+			   		            type: 'pie',
+			   		            radius : '65%',
+			   		            center: ['50%', '60%'],
+			   		            data: process1
+			   		        }
+			   		    ]
+			   		 };
+				    myChart3.setOption(option3);
+						
+			    	option4 = {
+			    		color: ['#6CA1FF', '#FFD85A', '#6DCEFF', '#FC9F9F', '#B2DE80'],
+			    		 title : {
+			    		        text: '教师挑选回答问题的方式',
+			    		        x: 'left',
+			 					textStyle: {
+			 					    fontSize: 13,
+			 					    color: '#999999 '
+			 					} 
+			    		    },
+			   		    tooltip : {
+			   		        trigger: 'item',
+			   		        formatter: "{a} <br/>{b}"
+			   		    },
+			   		    legend: {
+			   		        orient: 'vertical',
+			   		        left: 'left'
+			   		    },
+			   		    series : [
+			   		        {
+			   		            name: '课型分布',
+			   		            type: 'pie',
+			   		            radius : '65%',
+			   		            center: ['50%', '60%'],
+			   		            data: process2,
+			   		            label: {
+				                    normal: {
+				                        position: 'outside',
+				                        textStyle:{
+				                        	fontSize: 12
+				                        }
+				                    }
+				                },
+			   		            itemStyle: {
+			   		                emphasis: {
+			   		                    shadowBlur: 10,
+			   		                    shadowOffsetX: 0,
+			   		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+			   		                }
+			   		            }
+			   		        }
+			   		    ]
+			   		 };
+				    myChart4.setOption(option4);
+							    
+			    	option5 = {
+			    	    color: ['#6CA1FF', '#FFD85A', '#6DCEFF', '#FC9F9F', '#B2DE80'],
+			    		 title : {
+			    		        text: '学生回答的方式',
+			    		        x: 'left',
+			 					textStyle: {
+			 					    fontSize: 13,
+			 					    color: '#999999 '
+			 					} 
+			    		    },
+			   		    tooltip : {
+			   		        trigger: 'item',
+			   		        formatter: "{a} <br/>{b}"
+			   		    },
+			   		    legend: {
+			   		        orient: 'vertical',
+			   		        left: 'left'
+			   		    },
+			   		    series : [
+			   		        {
+			   		            name: '课型分布',
+			   		            type: 'pie',
+			   		            radius : '65%',
+			   		            center: ['50%', '60%'],
+			   		            data: process3,
+			   		            itemStyle: {
+			   		                emphasis: {
+			   		                    shadowBlur: 10,
+			   		                    shadowOffsetX: 0,
+			   		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+			   		                }
+			   		            }
+			   		        }
+			   		    ]
+			   		 };
+				    myChart5.setOption(option5);
+								    
+			    	option6 = {
+			    		color: ['#6CA1FF', '#B2DE80', '#FFD85A', '#6DCEFF', '#FC9F9F'],
+			    		 title : {
+			    		        text: '教师回应的方式',
+			    		        x: 'left',
+			 					textStyle: {
+			 					    fontSize: 13,
+			 					    color: '#999999 '
+			 					} 
+			    		    },
+			   		    tooltip : {
+			   		        trigger: 'item',
+			   		        formatter: "{a} <br/>{b}"
+			   		    },
+			   		    legend: {
+			   		        orient: 'vertical',
+			   		        left: 'center'
+			   		    },
+			   		    series : [
+			   		        {
+			   		            name: '课型分布',
+			   		            type: 'pie',
+			   		            radius : '65%',
+			   		            center: ['50%', '60%'],
+			   		            data: process4,
+			   		            itemStyle: {
+			   		                emphasis: {
+			   		                    shadowBlur: 10,
+			   		                    shadowOffsetX: 0,
+			   		                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+			   		                }
+			   		            }
+			   		        }
+			   		    ]
+			   		 };
+			myChart6.setOption(option6);
+		}
+ 		
+		if (window.AndroidWebView) {
+			window.goEdit = window.AndroidWebView.edit;
+			window.goMedia = window.AndroidWebView.media;
+		} else {
+			function setupWebViewJavascriptBridge(callback) {
+				if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+				if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+				window.WVJBCallbacks = [callback];
+				var WVJBIframe = document.createElement('iframe');
+				WVJBIframe.style.display = 'none';
+				WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+				document.documentElement.appendChild(WVJBIframe);
+				setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+			}
+			
+			setupWebViewJavascriptBridge(function(bridge) {
+				bridge.registerHandler('render', function(data, responseCallback) {
+					render(data);
+				});
+				
+				window.goEdit = function(sectionId, recordId) {
+					bridge.callHandler('edit', { 'section':sectionId, 'record': recordId }, function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				};
+				
+				window.goMedia = function(sectionId, recordId, mediaIndex, type, mediaId) {
+					bridge.callHandler('media', { 'section':sectionId, 'record': recordId, 'media': mediaIndex, 'type':type, 'mediaId': mediaId },
+					function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				};
+			});
+		}
+	</script>
+	<script id="data" type="text/json">
+{
+    "myDatas": [
+        [
+            1,
+            1,
+            1,
+            1,
+            0
+        ],
+        [
+            1,
+            1,
+            1,
+            1,
+            0
+        ],
+        [
+            1,
+            1,
+            1,
+            1,
+            0
+        ],
+        [
+            1,
+            1,
+            1,
+            1,
+            0
+        ]
+    ],
+    "processNames": [
+        [
+            "是何类问题",
+            "为何类问题",
+            "如何类问题",
+            "若何类问题",
+            " "
+        ],
+        [
+            "提问前先点名",
+            "让学生齐答或自由答",
+            "叫举手者答",
+            "叫未举手者答",
+            "鼓励学生提出问题"
+        ],
+        [
+            "集体齐答",
+            "讨论后汇报",
+            "个别回答",
+            "自由答",
+            "无人回答"
+        ],
+        [
+            "肯定回应",
+            "否定回应",
+            "无回应",
+            "打断回答或教师代答",
+            "重复学生回答并解释"
+        ]
+    ],
+    "allDatas": {
+        "count": [
+            [
+                4,
+                2,
+                2,
+                2,
+                0
+            ],
+            [
+                3,
+                2,
+                2,
+                2,
+                1
+            ],
+            [
+                3,
+                2,
+                2,
+                2,
+                1
+            ],
+            [
+                3,
+                2,
+                2,
+                2,
+                1
+            ]
+        ],
+        "percent": [
+            [
+                40,
+                20,
+                20,
+                20,
+                0
+            ],
+            [
+                30,
+                20,
+                20,
+                20,
+                10
+            ],
+            [
+                30,
+                20,
+                20,
+                20,
+                10
+            ],
+            [
+                30,
+                20,
+                20,
+                20,
+                10
+            ]
+        ]
+    },
+    "times": 4,
+    "hasData": true,
+    "radioTimes": {
+        "count": [
+            [
+                4,
+                2,
+                2,
+                2,
+                0
+            ],
+            [
+                3,
+                2,
+                2,
+                2,
+                1
+            ],
+            [
+                3,
+                2,
+                2,
+                2,
+                1
+            ],
+            [
+                3,
+                2,
+                2,
+                2,
+                1
+            ]
+        ],
+        "percent": [
+            [
+                40,
+                20,
+                20,
+                20,
+                0
+            ],
+            [
+                30,
+                20,
+                20,
+                20,
+                10
+            ],
+            [
+                30,
+                20,
+                20,
+                20,
+                10
+            ],
+            [
+                30,
+                20,
+                20,
+                20,
+                10
+            ]
+        ]
+    },
+    "questionNames": [
+        "提出问题的类型",
+        "教师挑选回答问题的方式",
+        "学生回答的方式",
+        "教师回应的方式"
+    ],
+    "radioName": "教师行为量表"
+}
+	</script>
+	<script type="text/json" id="data1">
+	{
+    "myDatas": [
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    ],
+    "processNames": [
+        [
+            "是何类问题",
+            "为何类问题",
+            "如何类问题",
+            "若何类问题",
+            " "
+        ],
+        [
+            "提问前先点名",
+            "让学生齐答或自由答",
+            "叫举手者答",
+            "叫未举手者答",
+            "鼓励学生提出问题"
+        ],
+        [
+            "集体齐答",
+            "讨论后汇报",
+            "个别回答",
+            "自由答",
+            "无人回答"
+        ],
+        [
+            "肯定回应",
+            "否定回应",
+            "无回应",
+            "打断回答或教师代答",
+            "重复学生回答并解释"
+        ]
+    ],
+    "allDatas": {
+        "count": [
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        ],
+        "percent": [
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        ]
+    },
+    "times": 0,
+    "hasData": true,
+    "radioTimes": {
+        "count": [
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        ],
+        "percent": [
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        ]
+    },
+    "questionNames": [
+        "提出问题的类型",
+        "教师挑选回答问题的方式",
+        "学生回答的方式",
+        "教师回应的方式"
+    ],
+    "radioName": "教师行为量表"
+}
+	</script>
+</body>
+</html>

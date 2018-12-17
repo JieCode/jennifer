@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#34c796</color>
+    <!--<color name="colorPrimary">#59d1d6</color>-->
+    <color name="colorPrimaryDark">#59d1d6</color>
+    <color name="colorAccent">#FF5f7c</color>
+
+    <color name="state_bar_color">@color/colorPrimary</color>
+    <color name="color_assist">#e4f8f9</color>
+    <color name="color_major">@color/colorAccent</color>
+    <color name="color_C2ECE8">#C2ECE8</color>
+    <color name="color_5ACCC0">#5ACCC0</color>
+
+    <!--基础的颜色，文本，按钮常用色-->
+    <color name="base_color">#2ec4a9</color>
+    <color name="base_color2">#2bc2b4</color>
+
+    <color name="style_color">@color/base_color</color>
+
+    <color name="color_33">#333333</color>
+    <color name="color_55">#555555</color>
+    <color name="color_66">#666666</color>
+    <color name="color_99">#999999</color>
+    <color name="color_15">#151515</color>
+    <color name="color_b5">#B5B5B5</color>
+    <color name="color_8c">#8C8C8C</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
+
+    <color name="color_ee">#eeeeee</color>
+    <color name="color_ed">#ededed</color>
+    <color name="color_aa">#aaaaaa</color>
+    <color name="color_cc">#cccccc</color>
+    <color name="color_dd">#dddddd</color>
+    <color name="bottom_bar_bg">#fdfdfd</color>
+    <color name="nav_button_color_selected">@color/base_color</color>
+    <color name="color_77">#777777</color>
+    <color name="color_progress_blue">#2FC4A6</color>
+
+    <color name="dark_green">#00b486</color>
+    <color name="dark_red">#FF3030</color>
+
+    <!--线的颜色-->
+    <color name="line_color">@color/color_ee</color>
+    <!--点击事件响应时的一个颜色-->
+    <color name="press_bg">#e8e8e8</color>
+
+    <color name="live_top_bg">#2bc2b4</color>
+    <color name="live_green">#2cc3b2</color>
+    <color name="seek_bg">#f2f2f2</color>
+    <color name="half_alpha_color">#7fffffff</color>
+    <color name="alpha_black_color">#11000000</color>
+
+    <!--评分控件的星星-->
+    <color name="evaluate_color">#ffbd28</color>
+    <color name="purple">#ffff00ff</color>
+    <color name="red">#ffff0000</color>
+    <color name="blue">#0000ff</color>
+
+    <color name="test">#ff00FFFF</color>
+
+    <color name="bg_search_view">#20AF8C</color>
+
+</resources>

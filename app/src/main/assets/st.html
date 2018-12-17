@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head xmlns:th="http://www.thymeleaf.org">
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>ST</title>
+	<link rel="stylesheet" href="css/report.css" />
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+</head>
+<body>
+	<div class="le-st">
+		<div id="part">
+			<div id="stpart" class="hide">
+				<div class="stpart-content">
+					<img class="rt-ch" src="img/st-4.png"/>
+					<a class="upload_sign" role="button" tabindex="0" data-trigger="hover" style="display: block;"
+						data-toggle="popover" data-placement="top"
+						data-content="注：Ch表示师生行为转换率，即教师行为与学生行为间的转换次数与总的行为采样数之比。（Ch≥0.4则为对话型课堂教学类型，Ch越高，说明教师学生之间的互动越多）;Rt表示教师行为占有率，即教师行为在教学过程中所占的比例。（Rt≤0.3为练习型课堂教学类型；Rt≥0.7则为讲授型；0.3 < Rt < 0.7 则为混合型）
+						Rs表示学生行为占有率，即学生行为在教学过程中所占的比例。">
+						<span class="st-material">
+							<img src="img/info-material.png"/>&nbsp;<span class="info-material">提示</span>
+						</span>
+					</a>
+					<div id="st" class="st-content">
+						<img class="st-result-img" src="img/stpoint-2.png"/>
+					</div>
+				</div>
+				<br/>
+				<div class="row">
+					<div class="col-xs-12 result">
+						<span>
+							分析结论与改进建议：<br/>
+							<span id="stSuggest">
+								1.T行为占有率为<span id="stNt"></span>，S行为占有率为<span id="stNs"></span>，学生行为和教师行为的分配<span id="isRational"></span>。<br/>
+								2.师生转化率为<span id="stSchange"></span>。<br/>
+								3.该节课是<span id="stModel"></span>教学模式。
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/mustache.min.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/echarts3.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var debug = 0;
+		$(function() {
+			$('[data-toggle="popover"]').popover();
+			debug && render($('#data').text());
+		});
+		function durationToString(duration) {
+			var min = Math.floor(duration / 60), sec = duration % 60;
+			return min + "'" + sec + '"';
+		}
+		
+		function jsonEscape(str) {
+			//if (debug)
+				return str;
+			//else
+			//	return str.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
+		}
+	
+		function replaceLineBreak(str) {
+			return str && str.replace(/\n/g, '<br/>');
+		}
+// 		var template = $('le-st').html();
+// 		Mustache.parse(template);
+// 		$('.le-st').empty().removeClass('hide').show();
+		function render(data) {
+			if (console.log) console.log("data: " + data);
+			try {
+				if (typeof data === 'string') data = $.parseJSON(jsonEscape(data));
+				if (console.log) console.log("lesson: " + data);
+				//处理st数据
+				var stns = 0; //st中N的数量
+				var stSum = 0; //st的数量
+				var strt = 0; //st的rt值
+				var stch = 0; //st的ch值
+				var stChangeTimes = 0; //st的st变化次数
+				var stchPercents = 0; //st的各个ch值
+				//stRadio.push(['S','T','S','S','S','S','T','T','T','T'],[],[]);
+				var stcount = 0;
+				$.each(data, function(index, item) {
+					if (item.length > 0) {
+						stcount += 1;
+					}
+					stChangeTimes = 0;
+					var change = '';
+					$.each(data[index], function(index2, item) {
+						if (change == '') {
+							change = data[index][index2];
+						} else if (change != data[index][index2]) {
+							change = data[index][index2];
+							stChangeTimes +=1;
+						}
+						if (data[index][index2] == 'T') {
+							stns += 1;
+						}
+					})
+					if (data[index].length != 0) {
+						stchPercents += stChangeTimes/data[index].length;
+					}
+					stSum += data[index].length;
+				})
+				if (stSum == 0) {
+					//$('#stSuggest').html('暂无数据');
+					//$('#st').css('left', '6px');
+					//$('#st').css('top', '388px');
+					$('#stpart').html(' ');
+				} else {
+					$('#stpart').removeClass('hide');
+					strt = stns*100/stSum;
+					stch = stchPercents * 100 /stcount;
+// 					alert(strt + '-------' + stch)
+					$('#st').css('left', (strt * 290 / 100 - 65) + 'px');
+					$('#st').css('top', (275 - 290 * stch / 100) + 'px');
+					$('#stNt').html(Math.round(strt) + '%');
+					$('#stNs').html((100 - Math.round(strt)) + '%');
+					if (strt <= 30) {
+						$('#isRational').html('不合理，建议增加教师行为');
+					} else if (30 < strt && strt < 70) {
+						$('#isRational').html('合理');
+					} else if (strt >= 70) {
+						$('#isRational').html('不合理，建议增加学生行为');
+					}
+					$('#stSchange').html(Math.round(stch) + '%');
+					if (strt <= 30) {
+						$('#stModel').html('练习型 ');
+					} else if (strt >= 70) {
+						$('#stModel').html('讲授型');
+					} else if (stch >= 40 && 30 < strt && strt < 70) {
+						$('#stModel').html('对话型');
+					} else if (30 < strt && strt < 70 && stch < 40) {
+						$('#stModel').html('混合型');
+					}
+				}
+			} catch (e) {
+				$('.le-st').html(e);
+			}
+		}
+		if (window.AndroidWebView) {
+			window.goEdit = window.AndroidWebView.edit;
+			window.goMedia = window.AndroidWebView.media;
+		} else {
+			function setupWebViewJavascriptBridge(callback) {
+				if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+				if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+				window.WVJBCallbacks = [callback];
+				var WVJBIframe = document.createElement('iframe');
+				WVJBIframe.style.display = 'none';
+				WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+				document.documentElement.appendChild(WVJBIframe);
+				setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+			}
+			
+			setupWebViewJavascriptBridge(function(bridge) {
+				bridge.registerHandler('render', function(data, responseCallback) {
+					render(data);
+				});
+				
+				window.goEdit = function(sectionId, recordId) {
+					bridge.callHandler('edit', { 'section':sectionId, 'record': recordId }, function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				};
+				
+				window.goMedia = function(sectionId, recordId, mediaIndex, type, mediaId) {
+					bridge.callHandler('media', { 'section':sectionId, 'record': recordId, 'media': mediaIndex, 'type':type, 'mediaId': mediaId },
+					function responseCallback(responseData) {
+						console.log("JS received response:", responseData)
+					});
+				};
+			});
+		}
+	</script>
+	<script id="data" type="text/json">
+		[
+  [
+    "T","S","T","S","S","T","T","T","S","T","T","T","T","S","S"
+  ],
+["S","T"],["S","S","T"]
+]
+	</script>
+</body>
+</html>

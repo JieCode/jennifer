@@ -1,0 +1,107 @@
+body { 
+	font-size: 14px;
+	font-family: PingFangSC-Regular;
+	color: #333333;
+	}
+.diagnose-report {
+	color: #7297F4;
+}
+.diagnose-report-font {
+	font-size: 20px;
+	color: #333333;
+}
+.tab-content .report-content {
+	padding-left: 10%;
+	padding-right: 10%;
+}
+.tab-content .report-content .teaching {
+	padding-top: 5%;
+	padding-bottom : 2%;
+}
+.tab-content .report-content .teaching span{
+	padding-top: 5%;
+	padding-bottom : 2%;
+	color: #999999;
+}
+.tab-content .report-content .detailed-content {
+	padding-top: 1%;
+	padding-left: 3%;
+}
+.tab-content .report-content .detailed-content .times {
+	color: #7297F4;
+}
+.tab-content .report-content .detailed-content .address {
+	color: #999999;
+}
+.tab-content .report-content .detailed-content .img-circle{
+	border-radius: 50%;
+	width: 88px;
+	height: 88px;
+}
+.tab-content .report-content .catalog {
+	background-color: #eeeeee;
+	color: inherit;
+}
+.tab-content .report-content .catalog .catalog-content{
+	color: #999999;
+}
+.nav-tabs-underline > li.active > a, .nav-tabs-underline > li.active > a:hover, .nav-tabs-underline > li.active > a:active, .nav-tabs-underline > li.active > a:focus {
+	background-color: transparent;
+	border-width: 0 0 5px 0;
+	border-bottom-color: #7297F4;
+	color: #7297F4;
+}
+.nav-tabs-underline > li.active > a::after {
+	border-bottom-color: #7297F4;
+}
+.le-tpack .tpack-content {
+	padding-left: 10%;
+	padding-right: 10%;
+}
+.le-tpack .tpack-content .title{
+	padding-top: 5%;
+	padding-bottom : 2%;
+	color: #999999;
+}
+.le-tpack .tpack-content #tpack{
+	height: 320px;
+	margin-top:5%;
+}
+.le-tpack .tpack-content .detail-content {
+	height: 223px;
+	margin-top: 30px
+}
+.le-tpack .tpack-content #tpack2 {
+	height: 400px;
+	margin-top: 30px;
+}
+.le-st .stpart-content{
+	position: relative;
+	margin-top: 10%;
+	margin-bottom: 5%;
+}
+.le-st .rt-ch{
+	weight: 300px;
+	height: 300px;
+	margin-left: 2%;
+}
+.le-st .st-material{
+	position:absolute;
+	margin-left: 80%;
+	margin-top: -72%;
+}
+.le-st .info-material{
+	color: #7297F4;
+}
+.le-st .st-content{
+	margin-left: 25%;
+	position:absolute;
+	z-index: 2;
+}
+.le-st .st-content .st-result-img{
+	margin-left: 0%;
+}
+.le-st .result {
+	margin-left: 3%;
+	margin-bottom: 20%;
+}
