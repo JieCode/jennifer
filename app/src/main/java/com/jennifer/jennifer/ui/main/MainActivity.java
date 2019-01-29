@@ -11,7 +11,7 @@ import com.jennifer.jennifer.ui.parallax.GuideActivity;
 import com.jennifer.jennifer.ui.web.WebViewActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
-    private TextView tvParallax,tvWeb;
+    private TextView tvParallax, tvWeb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
