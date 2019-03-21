@@ -45,6 +45,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
         viewPager.setPageTransformer(true, new ParallaxTransformer(PARALLAX_COEFFICIENT, DISTANCE_COEFFICIENT, layoutViewMap));
         viewPager.addOnPageChangeListener(this);
         setTitleText(R.string.main_guide_parallax);
+        setToolbarVisible(View.GONE);
 
     }
 

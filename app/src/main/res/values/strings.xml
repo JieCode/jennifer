@@ -7,8 +7,19 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_base">BaseActivity</string>
 
-
     <string name="main_guide_parallax">引导页视差滚动</string>
     <string name="main_web">WebView</string>
     <string name="guide_start">立即体验</string>
+    <string name="environment_net">网络测试</string>
+    <string name="environment_net_hss">双师服务</string>
+    <string name="environment_net_wl">平台接口服务</string>
+    <string name="environment_net_audio">音频服务</string>
+    <string name="environment_mic">麦克风测试</string>
+    <string name="environment_speaker">扬声器测试</string>
+    <string-array name="main_guide">
+        <item>引导页视差滚动</item>
+        <item>WebView</item>
+        <item>画板</item>
+        <item>环境测试</item>
+    </string-array>
 </resources>

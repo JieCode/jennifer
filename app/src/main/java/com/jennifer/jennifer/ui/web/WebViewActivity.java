@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jennifer.jennifer.R;
+import com.jennifer.jennifer.util.AppFileUtils;
 
 public class WebViewActivity extends AppCompatActivity {
     private static final String LOADING_URL = "loading_url";
@@ -101,7 +102,19 @@ public class WebViewActivity extends AppCompatActivity {
         settings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
         settings.setLoadsImagesAutomatically(true);//设置自动加载图片
         settings.setDefaultTextEncodingName("utf-8");//设置默认编码
-        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不适用缓存只从网络中加载
+        // 缓存模式说明:
+        // LOAD_CACHE_ONLY: 不使用网络，只读取本地缓存数据
+        // LOAD_NO_CACHE: 不使用缓存，只从网络获取数据.
+        // LOAD_DEFAULT: （默认）根据cache-control决定是否从网络上取数据。
+        // LOAD_CACHE_ELSE_NETWORK，只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。
+        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        // 1. 设置缓存路径
+        String cacheDirPath = AppFileUtils.CACHE;
+        settings.setAppCachePath(cacheDirPath);
+        // 2. 设置缓存大小
+        settings.setAppCacheMaxSize(20 * 1024 * 1024);
+        // 3. 开启Application Cache存储机制
+        settings.setAppCacheEnabled(true);
     }
 
     @Override

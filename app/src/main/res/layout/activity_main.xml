@@ -7,32 +7,10 @@
     android:orientation="vertical"
     tools:context=".ui.main.MainActivity">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/size_42"
+        android:id="@+id/rv_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="15dp">
-
-        <TextView
-            android:id="@+id/tv_parallax"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/shape_radiu10_base"
-            android:gravity="center"
-            android:text="@string/main_guide_parallax"
-            android:textColor="@color/base_color"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_marginTop="10dp"
-            android:id="@+id/tv_web"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/shape_radiu10_base"
-            android:gravity="center"
-            android:text="@string/main_web"
-            android:textColor="@color/base_color"
-            android:textSize="20sp" />
-    </LinearLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

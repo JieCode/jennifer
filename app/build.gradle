@@ -37,4 +37,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     //腾讯云实时音视频
     implementation 'com.tencent.ilivesdk:ilivesdk:1.9.6.1.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
