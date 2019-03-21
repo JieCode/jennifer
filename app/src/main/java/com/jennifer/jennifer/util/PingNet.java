@@ -1,7 +1,5 @@
 package com.jennifer.jennifer.util;
 
-import android.util.Log;
-
 import com.jennifer.jennifer.entity.PingNetEntity;
 
 import java.io.BufferedReader;
@@ -10,7 +8,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 
 /**
- * @author jingjie
+ * @author jennifer
  * @date 2019/3/20
  * @desc:ping工具类
  */
@@ -47,7 +45,7 @@ public class PingNet {
                     count++;
                 }
             }
-            //三次时间取平均值，四舍五入保留两位小数
+            //时间取平均值，四舍五入保留两位小数
             pingNetEntity.setPingTime((sum.divide(new BigDecimal(count), 2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString() + " ms"));
             int status = process.waitFor();
             if (status == 0) {

@@ -13,7 +13,7 @@ import com.jennifer.jennifer.R;
 import java.util.List;
 
 /**
- * @author jingjie
+ * @author jennifer
  * @date 2019/3/19
  */
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {

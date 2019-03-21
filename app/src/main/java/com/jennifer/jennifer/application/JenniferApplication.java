@@ -8,7 +8,7 @@ import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
 
 /**
- * @author jingjie
+ * @author jennifer
  * @date 2019/1/2
  */
 public class JenniferApplication extends Application {

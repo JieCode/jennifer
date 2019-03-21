@@ -1,7 +1,7 @@
 package com.jennifer.jennifer.entity;
 
 /**
- * @author jingjie
+ * @author jennifer
  * @date 2019/3/20
  */
 public class PingNetEntity {
