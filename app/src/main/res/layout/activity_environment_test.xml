@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,13 +7,27 @@
     android:orientation="vertical"
     tools:context=".ui.environment.EnvironmentTestActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_42"
+        android:background="@color/base_color"
+        android:padding="@dimen/size_20">
+
+        <com.jennifer.jennifer.ui.environment.RadarView
+            android:id="@+id/radar_view"
+            android:layout_width="@dimen/size_130"
+            android:layout_height="@dimen/size_130"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/tv_net"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginLeft="@dimen/size_15"
         android:layout_marginRight="@dimen/size_15"
-        android:layout_marginTop="@dimen/size_42"
+        android:layout_marginTop="@dimen/size_15"
         android:background="@drawable/shape_radiu10_base"
         android:gravity="center"
         android:text="@string/environment_net"

@@ -26,6 +26,9 @@ public class EnvironmentTestActivity extends AppCompatActivity implements View.O
     private static final String TAG = "EnvironmentTestActivity";
     private Handler handler;
 
+    private RadarView radarView;
+    private Handler radarHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +56,29 @@ public class EnvironmentTestActivity extends AppCompatActivity implements View.O
                 }
             }
         };
+        radarHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                radarView.setProgress(msg.what);
+                addProgress(msg.what);
+            }
+        };
+    }
+
+    private void addProgress(int i) {
+        if (i < 100)
+            i++;
+        else i = 0;
+        radarHandler.sendEmptyMessageDelayed(i, 50);
     }
 
     private void initView() {
         tvNet = findViewById(R.id.tv_net);
         tvContent = findViewById(R.id.tv_content);
+        radarView = findViewById(R.id.radar_view);
+        radarView.setProgress(0);
+        addProgress(0);
     }
 
     private void initListener() {
@@ -75,9 +96,9 @@ public class EnvironmentTestActivity extends AppCompatActivity implements View.O
                         public void run() {
                             PingNetEntity pingNetEntity = new PingNetEntity(api, 3, 5, new StringBuffer());
                             pingNetEntity = PingNet.ping(pingNetEntity);
-                            Log.e("testPing",pingNetEntity.getIp());
-                            Log.e("testPing","time="+pingNetEntity.getPingTime());
-                            Log.e("testPing",pingNetEntity.isResult()+"");
+                            Log.e("testPing", pingNetEntity.getIp());
+                            Log.e("testPing", "time=" + pingNetEntity.getPingTime());
+                            Log.e("testPing", pingNetEntity.isResult() + "");
                             Message msg = new Message();
                             msg.obj = pingNetEntity.getIp() + " 耗时：" + pingNetEntity.getPingTime() + "\n";
                             msg.what = UPDATE_CONTENT;

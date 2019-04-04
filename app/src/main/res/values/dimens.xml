@@ -5,7 +5,12 @@
     <dimen name="size_14">14dp</dimen>
     <dimen name="size_15">15dp</dimen>
     <dimen name="size_19">19dp</dimen>
+    <dimen name="size_20">20dp</dimen>
     <dimen name="size_28">28dp</dimen>
     <dimen name="size_38">38dp</dimen>
     <dimen name="size_42">42dp</dimen>
+    <dimen name="size_80">80dp</dimen>
+    <dimen name="size_100">100dp</dimen>
+    <dimen name="size_130">130dp</dimen>
+    <dimen name="size_200">200dp</dimen>
 </resources>
