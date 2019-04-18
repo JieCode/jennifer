@@ -16,6 +16,8 @@
     <string name="environment_net_audio">音频服务</string>
     <string name="environment_mic">麦克风测试</string>
     <string name="environment_speaker">扬声器测试</string>
+    <string name="palette_paint">画笔</string>
+    <string name="palette_eraser">橡皮擦</string>
     <string-array name="main_guide">
         <item>引导页视差滚动</item>
         <item>WebView</item>
