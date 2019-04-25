@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.jennifer.jennifer.R;
 import com.jennifer.jennifer.base.BaseActivity;
@@ -13,6 +12,7 @@ import com.jennifer.jennifer.ui.environment.EnvironmentTestActivity;
 import com.jennifer.jennifer.ui.main.adapter.MainAdapter;
 import com.jennifer.jennifer.ui.palette.PaletteActivity;
 import com.jennifer.jennifer.ui.parallax.GuideActivity;
+import com.jennifer.jennifer.ui.trtc.TRTCVideoTestActivity;
 import com.jennifer.jennifer.ui.web.WebViewActivity;
 
 import java.util.ArrayList;
@@ -69,6 +69,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case 3:
                 intentClass(EnvironmentTestActivity.class);
+                break;
+            case 4:
+                intentClass(TRTCVideoTestActivity.class);
                 break;
         }
     }

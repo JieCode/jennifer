@@ -50,7 +50,7 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             super.onReceivedError(view, request, error);
-            webView.loadUrl(LOCAL_URL);
+//            webView.loadUrl(LOCAL_URL);
         }
     };
 

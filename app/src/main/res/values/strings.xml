@@ -23,5 +23,6 @@
         <item>WebView</item>
         <item>画板</item>
         <item>环境测试</item>
+        <item>腾讯云视频</item>
     </string-array>
 </resources>

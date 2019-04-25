@@ -28,6 +28,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation(name: 'LiteAVSDK_TRTC_6.3.7089', ext: 'aar')
+    implementation(name: 'imsdk-4.0.13', ext: 'aar')
     implementation 'com.android.support:appcompat-v7:28.+'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:support-v4:28.+'
@@ -35,7 +37,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    //腾讯云实时音视频
-    implementation 'com.tencent.ilivesdk:ilivesdk:1.9.6.1.2'
     implementation 'com.google.code.gson:gson:2.8.5'
 }

@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.ViewGroup;
 
 public class ParallaxTransformer implements ViewPager.PageTransformer {
     private float parallaxCoefficient;
