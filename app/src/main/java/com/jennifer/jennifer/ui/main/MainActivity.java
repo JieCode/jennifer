@@ -2,13 +2,14 @@ package com.jennifer.jennifer.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.jennifer.jennifer.R;
-import com.jennifer.jennifer.base.BaseActivity;
 import com.jennifer.jennifer.ui.environment.EnvironmentTestActivity;
+import com.jennifer.jennifer.ui.life.LifeCycleActivity;
 import com.jennifer.jennifer.ui.main.adapter.MainAdapter;
 import com.jennifer.jennifer.ui.palette.PaletteActivity;
 import com.jennifer.jennifer.ui.parallax.GuideActivity;
@@ -18,7 +19,7 @@ import com.jennifer.jennifer.ui.web.WebViewActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, MainAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, MainAdapter.OnItemClickListener {
 
     private RecyclerView rvMain;
     private MainAdapter adapter;
@@ -40,7 +41,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initView() {
-        setToolbarVisible(View.GONE);
         rvMain = findViewById(R.id.rv_main);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -73,6 +73,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case 4:
                 intentClass(TRTCVideoTestActivity.class);
                 break;
+            case 5:
+                intentClass(LifeCycleActivity.class);
+                break;
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

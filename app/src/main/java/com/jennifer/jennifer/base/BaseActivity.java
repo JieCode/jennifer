@@ -26,7 +26,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         initContentView(R.layout.activity_base);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             AppBarLayout appBarLayout = findViewById(R.id.appbar);
-//            appBarLayout.setPadding(0, (int) (getResources().getDisplayMetrics().density * 25), 0, 0);
+            appBarLayout.setPadding(0, (int) (getResources().getDisplayMetrics().density * 25), 0, 0);
         }
         initToolBar();
     }

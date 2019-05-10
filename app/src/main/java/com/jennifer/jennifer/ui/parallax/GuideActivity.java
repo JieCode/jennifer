@@ -4,11 +4,11 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.View;
 
 import com.jennifer.jennifer.R;
-import com.jennifer.jennifer.base.BaseActivity;
 import com.jennifer.jennifer.ui.parallax.adapter.GuideAdapter;
 import com.jennifer.jennifer.ui.parallax.fragment.BaseGuideFragment;
 import com.jennifer.jennifer.ui.parallax.fragment.GuideCoachFragment;
@@ -16,7 +16,7 @@ import com.jennifer.jennifer.ui.parallax.fragment.GuideCoachMoreFragment;
 import com.jennifer.jennifer.ui.parallax.fragment.GuideRecommendFragment;
 import com.jennifer.jennifer.ui.parallax.transformer.ParallaxTransformer;
 
-public class GuideActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class GuideActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private final float PARALLAX_COEFFICIENT = 1.2f;
     private final float DISTANCE_COEFFICIENT = 0.5f;
     private ViewPager viewPager;
@@ -39,8 +39,6 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
         viewPager.setAdapter(guideAdapter);
         viewPager.setPageTransformer(true, new ParallaxTransformer(PARALLAX_COEFFICIENT, DISTANCE_COEFFICIENT, layoutViewMap));
         viewPager.addOnPageChangeListener(this);
-        setTitleText(R.string.main_guide_parallax);
-        setToolbarVisible(View.GONE);
 
     }
 
