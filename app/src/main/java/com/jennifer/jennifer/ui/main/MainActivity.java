@@ -13,6 +13,7 @@ import com.jennifer.jennifer.ui.life.LifeCycleActivity;
 import com.jennifer.jennifer.ui.main.adapter.MainAdapter;
 import com.jennifer.jennifer.ui.palette.PaletteActivity;
 import com.jennifer.jennifer.ui.parallax.GuideActivity;
+import com.jennifer.jennifer.ui.radio.RecycleViewRadioButtonActivity;
 import com.jennifer.jennifer.ui.trtc.TRTCVideoTestActivity;
 import com.jennifer.jennifer.ui.web.WebViewActivity;
 
@@ -75,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 5:
                 intentClass(LifeCycleActivity.class);
+                break;
+            case 6:
+                intentClass(RecycleViewRadioButtonActivity.class);
                 break;
         }
     }

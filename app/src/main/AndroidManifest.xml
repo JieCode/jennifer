@@ -49,8 +49,9 @@
             android:screenOrientation="landscape" />
         <activity android:name=".ui.environment.EnvironmentTestActivity" />
         <activity android:name=".ui.trtc.TRTCVideoTestActivity" />
-        <activity android:name=".ui.life.LifeCycleActivity"/>
-        <activity android:name=".ui.life.LifeCycle2Activity"/>
+        <activity android:name=".ui.life.LifeCycleActivity" />
+        <activity android:name=".ui.life.LifeCycle2Activity" />
+        <activity android:name=".ui.radio.RecycleViewRadioButtonActivity"></activity>
     </application>
 
 </manifest>

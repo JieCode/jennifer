@@ -3,8 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/goodbai"
     tools:context=".ui.palette.PaletteActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/goodbai" />
 
     <com.jennifer.jennifer.ui.palette.view.MyPalette
         android:id="@+id/my_palette"
@@ -26,6 +30,7 @@
             android:paddingLeft="@dimen/size_15"
             android:paddingRight="@dimen/size_15"
             android:paddingTop="@dimen/size_5">
+
             <Button
                 android:id="@+id/btn_paint"
                 android:layout_width="wrap_content"
@@ -33,11 +38,12 @@
                 android:background="@drawable/shape_toolbar"
                 android:text="@string/palette_paint"
                 android:textColor="@color/white" />
+
             <Button
-                android:layout_marginLeft="@dimen/size_5"
                 android:id="@+id/btn_eraser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_5"
                 android:background="@drawable/shape_toolbar"
                 android:text="@string/palette_eraser"
                 android:textColor="@color/white" />
