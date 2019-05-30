@@ -35,10 +35,10 @@ public class PaletteActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_paint:
-                myPalette.setMode(MyPalette.MODE_PAINT);
+                myPalette.selectPaintStyle(MyPalette.MODE_PAINT);
                 break;
             case R.id.btn_eraser:
-                myPalette.setMode(MyPalette.MODE_ERASER);
+                myPalette.selectPaintStyle(MyPalette.MODE_ERASER);
                 break;
         }
     }

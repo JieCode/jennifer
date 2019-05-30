@@ -40,18 +40,11 @@ public class MyPalette extends View {
     private static final String TAG = "MyPalette";
     public static final int MODE_PAINT = 1;
     public static final int MODE_ERASER = 2;
-    private int mode = MODE_PAINT;
-
-    public void setMode(int mode) {
-        this.mode = mode;
-    }
-
     /**
      * 本人的画笔
      */
     private Paint mPaint;
     private Paint mReceiverPaint;
-    private Paint mEraserPaint;
 
     private Path mPath;
     private Path mReceiverPath;
@@ -286,7 +279,6 @@ public class MyPalette extends View {
         if (width > 0) {
             setPaintStyle(currentColor);
             setReceiverPaintStyle(receiverColor);
-            setEraserPaintStyle();
             if (mBitmap != null) {
                 if (!mBitmap.isRecycled()) {
                     mBitmap = null;
@@ -314,19 +306,22 @@ public class MyPalette extends View {
 
     // 设置画笔样式
     public void setPaintStyle(int colorResId) {
-        mPaint = new Paint();
-        mPaint.setColor(colorResId);
-        mPaint.setAntiAlias(true);
-        mPaint.setDither(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(paintSize);
-
+        if (currentStyle == MODE_ERASER) {
+            mPaint = getEraserPaintStyle();
+        } else {
+            mPaint = new Paint();
+            mPaint.setColor(colorResId);
+            mPaint.setAntiAlias(true);
+            mPaint.setDither(true);
+            mPaint.setStyle(Paint.Style.STROKE);
+            mPaint.setStrokeJoin(Paint.Join.ROUND);
+            mPaint.setStrokeCap(Paint.Cap.ROUND);
+            mPaint.setStrokeWidth(paintSize);
+        }
     }
 
-    private void setEraserPaintStyle() {
-        mEraserPaint = new Paint();
+    private Paint getEraserPaintStyle() {
+        Paint mEraserPaint = new Paint();
         mEraserPaint.setAlpha(0);//橡皮擦透明度为0
         mEraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));//设置橡皮擦的混合模式,只在原图像和目标图像橡胶的地方绘制目标图像
         mEraserPaint.setAntiAlias(true);
@@ -334,21 +329,13 @@ public class MyPalette extends View {
         mEraserPaint.setStyle(Paint.Style.STROKE);
         mEraserPaint.setStrokeJoin(Paint.Join.ROUND);
         mEraserPaint.setStrokeWidth(10);
+        return mEraserPaint;
     }
 
     // 设置画笔样式
     public void selectPaintStyle(int which) {
-
-        if (which == 0) {
-            currentStyle = 1;
-            setPaintStyle(currentColor);
-        }
-        // 当选择的是橡皮擦时，设置颜色为白色
-        if (which == 1) {
-            currentStyle = 2;
-            setPaintStyle(currentColor);
-            mPaint.setStrokeWidth(20);
-        }
+        currentStyle = which;
+        setPaintStyle(currentColor);
     }
 
 //    // 选择画笔大小
@@ -596,13 +583,14 @@ public class MyPalette extends View {
 
         if (mPath != null) {
             // 实时的显示
-            if (mode == MODE_PAINT)
+            if (currentStyle != MODE_ERASER)
                 canvas.drawPath(mPath, mPaint);
         }
 
         if (mReceiverPath != null) {
 //            Log.e("TAG", "draw width = " +  mReceiverPaint.getStrokeWidth());
-            canvas.drawPath(mReceiverPath, mReceiverPaint);
+            if (receiverColorIndex != 9)
+                canvas.drawPath(mReceiverPath, mReceiverPaint);
         }
 
         //点阵笔相关
@@ -936,15 +924,13 @@ public class MyPalette extends View {
         mPath.moveTo(x, y);
         mX = x;
         mY = y;
-        if (mode==MODE_PAINT) {
-            this.isMoving = false;
-            LinePath path = new LinePath();
-            path.setX((int) (x * 1000 / screenWidth));
-            path.setY((int) (y * 1000 / screenHeight));
-            list.add(path);
-        }else{
-            mCanvas.drawPath(mPath,mEraserPaint);
-        }
+        this.isMoving = false;
+        LinePath path = new LinePath();
+        path.setX((int) (x * 1000 / screenWidth));
+        path.setY((int) (y * 1000 / screenHeight));
+        list.add(path);
+        if (currentStyle == MODE_ERASER)
+            mCanvas.drawPath(mPath, mPaint);
 
     }
 
@@ -955,35 +941,28 @@ public class MyPalette extends View {
 
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
-        if (mode==MODE_PAINT) {
-            if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
 //             mPath.quadTo(mX, mY, x, y);
-                mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);// 让线条圆滑
+            mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);// 让线条圆滑
 //            mX = x;
 //            mY = y;
-            } else {
-                mPath.lineTo(x, y);
-            }
-
-
-            this.isMoving = true;
-
-            mX = x;
-            mY = y;
-            this.isMoving = true;
-
-            LinePath path = new LinePath();
-            path.setX((int) (x * 1000 / screenWidth));
-            path.setY((int) (y * 1000 / screenHeight));
-            list.add(path);
-        }else{
-            if (dx>=TOUCH_TOLERANCE||dy>=TOUCH_TOLERANCE){
-                mPath.quadTo(mX,mY,(x+mX)/2,(y+mY)/2);
-                mX = x;
-                mY = y;
-                mCanvas.drawPath(mPath,mEraserPaint);
-            }
+        } else {
+            mPath.lineTo(x, y);
         }
+
+
+        this.isMoving = true;
+
+        mX = x;
+        mY = y;
+        this.isMoving = true;
+
+        LinePath path = new LinePath();
+        path.setX((int) (x * 1000 / screenWidth));
+        path.setY((int) (y * 1000 / screenHeight));
+        list.add(path);
+        if (currentStyle == MODE_ERASER)
+            mCanvas.drawPath(mPath, mPaint);
     }
 
     private void touch_up(float x, float y) {
@@ -992,29 +971,24 @@ public class MyPalette extends View {
             return;
         }
         mPath.lineTo(mX, mY);
-        if (mode==MODE_PAINT) {
-            Paint_id_time = System.currentTimeMillis() + "";
-            dp.paint_id = Paint_id_time;
-            mCanvas.drawPath(mPath, mPaint);
+        Paint_id_time = System.currentTimeMillis() + "";
+        dp.paint_id = Paint_id_time;
+        mCanvas.drawPath(mPath, mPaint);
 
-            savePath.add(dp);
-            mPath = null;
-            this.isMoving = false;
+        savePath.add(dp);
+        mPath = null;
+        this.isMoving = false;
 
 //        LinePath path = new LinePath();
 //        path.setX((int) (x * 1000 / screenWidth));
 //        path.setY((int) (y * 1000 / screenHeight));
 //        list.add(path);
 
-            List<LinePath> linePaths = new ArrayList<>();
-            if (null != list) {
-                linePaths.addAll(list);
-            }
-            dp.linePaths = linePaths;
-        }else{
-            mCanvas.drawPath(mPath,mEraserPaint);
+        List<LinePath> linePaths = new ArrayList<>();
+        if (null != list) {
+            linePaths.addAll(list);
         }
-
+        dp.linePaths = linePaths;
     }
 
 
@@ -1037,19 +1011,15 @@ public class MyPalette extends View {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mPath = new Path();
-                if (mode == MODE_PAINT) {
-                    dp = new DrawPath();
-                    dp.path = mPath;
-                    dp.paint = mPaint;
-                    selectPaintColor(curColorIndex);
+                dp = new DrawPath();
+                dp.path = mPath;
+                dp.paint = mPaint;
+                selectPaintColor(curColorIndex);
 
-                    pathInfo = new PathInfo();
-                    list.clear();
-                }
+                pathInfo = new PathInfo();
+                list.clear();
                 touch_start(x, y);
                 invalidate();
-
-
                 break;
             case MotionEvent.ACTION_MOVE:
 
@@ -1063,7 +1033,7 @@ public class MyPalette extends View {
                 invalidate();
 
 
-                if (onFinishDrawingListener != null && mode == MODE_PAINT) {
+                if (onFinishDrawingListener != null) {
                     if (pathInfo != null) {
                         pathInfo.setLineColor(curColorIndex);
                         pathInfo.setLineData(list);
