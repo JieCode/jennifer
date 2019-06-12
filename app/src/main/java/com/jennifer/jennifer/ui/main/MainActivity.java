@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.jennifer.jennifer.R;
+import com.jennifer.jennifer.ui.SpeechRecognizerActivity;
 import com.jennifer.jennifer.ui.environment.EnvironmentTestActivity;
 import com.jennifer.jennifer.ui.life.LifeCycleActivity;
 import com.jennifer.jennifer.ui.main.adapter.MainAdapter;
@@ -79,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 6:
                 intentClass(RecycleViewRadioButtonActivity.class);
+                break;
+            case 7:
+                intentClass(SpeechRecognizerActivity.class);
                 break;
         }
     }

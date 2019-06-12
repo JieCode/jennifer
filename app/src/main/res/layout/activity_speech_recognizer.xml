@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.SpeechRecognizerActivity">
+
+    <TextView
+        android:id="@+id/tv_speech"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_speech"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_5"
+        android:background="@drawable/selector_radiu10_base"
+        android:gravity="center"
+        android:padding="@dimen/size_5"
+        android:text="@string/speech"
+        android:textColor="@color/base_color"
+        android:textSize="@dimen/size_20" />
+</LinearLayout>

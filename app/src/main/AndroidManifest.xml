@@ -51,7 +51,9 @@
         <activity android:name=".ui.trtc.TRTCVideoTestActivity" />
         <activity android:name=".ui.life.LifeCycleActivity" />
         <activity android:name=".ui.life.LifeCycle2Activity" />
-        <activity android:name=".ui.radio.RecycleViewRadioButtonActivity"></activity>
+        <activity android:name=".ui.radio.RecycleViewRadioButtonActivity" />
+        <activity android:name=".ui.tax.TaxCalculatorActivity" />
+        <activity android:name=".ui.SpeechRecognizerActivity"></activity>
     </application>
 
 </manifest>
