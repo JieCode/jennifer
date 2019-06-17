@@ -30,10 +30,10 @@ public class JsonParser {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		return ret.toString();
 	}
-	
+
 	public static String parseGrammarResult(String json) {
 		StringBuffer ret = new StringBuffer();
 		try {
@@ -59,10 +59,10 @@ public class JsonParser {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ret.append("没有匹配结果.");
-		} 
+		}
 		return ret.toString();
 	}
-	
+
 	public static String parseLocalGrammarResult(String json) {
 		StringBuffer ret = new StringBuffer();
 		try {
@@ -89,7 +89,7 @@ public class JsonParser {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ret.append("没有匹配结果.");
-		} 
+		}
 		return ret.toString();
 	}
 

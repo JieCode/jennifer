@@ -20,6 +20,10 @@
     <string name="palette_paint">画笔</string>
     <string name="palette_eraser">橡皮擦</string>
     <string name="speech">语音识别</string>
+    <string name="ai_speech_start">长按说话</string>
+    <string name="ai_speech_up">手指上滑，取消发送</string>
+    <string name="ai_speech_cancel">松开手指，取消发送</string>
+    <string name="ai_speech_send">松开结束</string>
     <string-array name="main_guide">
         <item>引导页视差滚动</item>
         <item>WebView</item>
@@ -29,5 +33,6 @@
         <item>Activity生命周期</item>
         <item>RecyclerView嵌套RadioButton</item>
         <item>语音识别</item>
+        <item>VideoView</item>
     </string-array>
 </resources>

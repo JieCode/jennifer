@@ -53,7 +53,11 @@
         <activity android:name=".ui.life.LifeCycle2Activity" />
         <activity android:name=".ui.radio.RecycleViewRadioButtonActivity" />
         <activity android:name=".ui.tax.TaxCalculatorActivity" />
-        <activity android:name=".ui.SpeechRecognizerActivity"></activity>
+        <activity android:name=".ui.speech.SpeechRecognizerActivity" />
+        <activity
+            android:name=".ui.VideoViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

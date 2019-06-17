@@ -62,5 +62,6 @@
     <color name="test">#ff00FFFF</color>
 
     <color name="bg_search_view">#20AF8C</color>
+    <color name="color_bf3c3d">#BF3C3D</color>
 
 </resources>
