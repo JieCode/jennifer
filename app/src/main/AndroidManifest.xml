@@ -58,6 +58,7 @@
             android:name=".ui.VideoViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.notification.NotificationActivity"></activity>
     </application>
 
 </manifest>

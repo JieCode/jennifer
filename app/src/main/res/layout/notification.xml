@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/size_8">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="@dimen/size_30"
+        android:layout_height="@dimen/size_30"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/content_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_5"
+        android:layout_toRightOf="@+id/iv_icon"
+        android:text="下载中..."
+        android:textColor="@color/color_33"
+        android:textSize="@dimen/textsize_14" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/content_title"
+        android:layout_below="@+id/content_title"
+        android:layout_gravity="center_vertical"
+        android:background="@null"
+        android:max="100"
+        android:maxHeight="4dp"
+        android:minHeight="4dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:progressDrawable="@drawable/video_seek_progress"
+        android:thumb="@drawable/video_seek_thumb" />
+</RelativeLayout>

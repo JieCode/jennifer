@@ -24,6 +24,12 @@
     <string name="ai_speech_up">手指上滑，取消发送</string>
     <string name="ai_speech_cancel">松开手指，取消发送</string>
     <string name="ai_speech_send">松开结束</string>
+
+    <string name="notification_title">通知栏</string>
+    <string name="notification_start">开始</string>
+    <string name="notification_pause">暂停</string>
+    <string name="notification_stop">结束</string>
+
     <string-array name="main_guide">
         <item>引导页视差滚动</item>
         <item>WebView</item>
@@ -34,5 +40,6 @@
         <item>RecyclerView嵌套RadioButton</item>
         <item>语音识别</item>
         <item>VideoView</item>
+        <item>通知栏</item>
     </string-array>
 </resources>

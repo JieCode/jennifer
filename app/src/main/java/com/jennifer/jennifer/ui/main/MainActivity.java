@@ -9,13 +9,14 @@ import android.view.View;
 
 import com.jennifer.jennifer.R;
 import com.jennifer.jennifer.ui.VideoViewActivity;
-import com.jennifer.jennifer.ui.speech.SpeechRecognizerActivity;
 import com.jennifer.jennifer.ui.environment.EnvironmentTestActivity;
 import com.jennifer.jennifer.ui.life.LifeCycleActivity;
 import com.jennifer.jennifer.ui.main.adapter.MainAdapter;
+import com.jennifer.jennifer.ui.notification.NotificationActivity;
 import com.jennifer.jennifer.ui.palette.PaletteActivity;
 import com.jennifer.jennifer.ui.parallax.GuideActivity;
 import com.jennifer.jennifer.ui.radio.RecycleViewRadioButtonActivity;
+import com.jennifer.jennifer.ui.speech.SpeechRecognizerActivity;
 import com.jennifer.jennifer.ui.trtc.TRTCVideoTestActivity;
 import com.jennifer.jennifer.ui.web.WebViewActivity;
 
@@ -87,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 8:
                 intentClass(VideoViewActivity.class);
+                break;
+            case 9:
+                intentClass(NotificationActivity.class);
                 break;
         }
     }
