@@ -12,9 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.aitangba.swipeback.SwipeBackActivity;
 import com.jennifer.jennifer.R;
 
-public class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public class BaseActivity extends SwipeBackActivity implements View.OnClickListener {
     private LinearLayout parentLinearLayout;//把父类activity和子类activity的view都add到这里
     private Toolbar toolbar;
     private ImageView ivBack, ivMore;
