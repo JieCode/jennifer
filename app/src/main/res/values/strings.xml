@@ -41,5 +41,6 @@
         <item>语音识别</item>
         <item>VideoView</item>
         <item>通知栏</item>
+        <item>SLPLoginActivity</item>
     </string-array>
 </resources>
