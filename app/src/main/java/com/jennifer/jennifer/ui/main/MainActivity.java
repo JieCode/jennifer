@@ -13,6 +13,7 @@ import android.view.View;
 import com.jennifer.jennifer.R;
 import com.jennifer.jennifer.ui.SLPLoginActivity;
 import com.jennifer.jennifer.ui.VideoViewActivity;
+import com.jennifer.jennifer.ui.canvas.CanvasActivity;
 import com.jennifer.jennifer.ui.environment.EnvironmentTestActivity;
 import com.jennifer.jennifer.ui.life.LifeCycleActivity;
 import com.jennifer.jennifer.ui.main.adapter.MainAdapter;
@@ -104,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 10:
                 intentClass(SLPLoginActivity.class);
+                break;
+            case 11:
+                intentClass(CanvasActivity.class);
                 break;
         }
     }

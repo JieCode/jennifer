@@ -18,6 +18,7 @@
     <string name="environment_mic">麦克风测试</string>
     <string name="environment_speaker">扬声器测试</string>
     <string name="palette_paint">画笔</string>
+    <string name="palette_paint_red">红色画笔</string>
     <string name="palette_eraser">橡皮擦</string>
     <string name="speech">语音识别</string>
     <string name="ai_speech_start">长按说话</string>
@@ -42,5 +43,6 @@
         <item>VideoView</item>
         <item>通知栏</item>
         <item>SLPLoginActivity</item>
+        <item>绘制矩形+倒三角+阴影</item>
     </string-array>
 </resources>

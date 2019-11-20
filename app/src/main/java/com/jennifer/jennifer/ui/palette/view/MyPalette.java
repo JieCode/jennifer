@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -39,7 +40,8 @@ public class MyPalette extends View {
 
     private static final String TAG = "MyPalette";
     public static final int MODE_PAINT = 1;
-    public static final int MODE_ERASER = 2;
+    public static final int MODE_ERASER = 3;
+    public static final int MODE_PAINT_RED = 2;
     /**
      * 本人的画笔
      */
@@ -71,7 +73,7 @@ public class MyPalette extends View {
     private boolean isMoving = false;
 
     private int currentColor = Color.BLUE;//默认是蓝色
-    private int receiverColor = R.color.purple;//默认是紫色
+    private int receiverColor = Color.RED;//默认是紫色
     private int curColorIndex = 2;//默认是蓝色的
     private int receiverColorIndex = 0;
 
@@ -308,7 +310,7 @@ public class MyPalette extends View {
     public void setPaintStyle(int colorResId) {
         if (currentStyle == MODE_ERASER) {
             mPaint = getEraserPaintStyle();
-        } else {
+        } else if (currentStyle == MODE_PAINT) {
             mPaint = new Paint();
             mPaint.setColor(colorResId);
             mPaint.setAntiAlias(true);
@@ -317,18 +319,21 @@ public class MyPalette extends View {
             mPaint.setStrokeJoin(Paint.Join.ROUND);
             mPaint.setStrokeCap(Paint.Cap.ROUND);
             mPaint.setStrokeWidth(paintSize);
+        } else {
+            mPaint = mReceiverPaint;
         }
     }
 
     private Paint getEraserPaintStyle() {
         Paint mEraserPaint = new Paint();
         mEraserPaint.setAlpha(0);//橡皮擦透明度为0
-        mEraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));//设置橡皮擦的混合模式,只在原图像和目标图像橡胶的地方绘制目标图像
+//        mEraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));//设置橡皮擦的混合模式,只在原图像和目标图像橡胶的地方绘制目标图像
         mEraserPaint.setAntiAlias(true);
         mEraserPaint.setDither(true);
         mEraserPaint.setStyle(Paint.Style.STROKE);
         mEraserPaint.setStrokeJoin(Paint.Join.ROUND);
         mEraserPaint.setStrokeWidth(10);
+        mEraserPaint.setColorFilter(new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.DST_IN));
         return mEraserPaint;
     }
 

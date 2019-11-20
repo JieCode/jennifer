@@ -10,7 +10,7 @@ import com.jennifer.jennifer.ui.palette.view.MyPalette;
 
 public class PaletteActivity extends AppCompatActivity implements View.OnClickListener {
     private MyPalette myPalette;
-    private Button btnPaint, btnEraser;
+    private Button btnPaint, btnEraser, btnPaintRed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +23,13 @@ public class PaletteActivity extends AppCompatActivity implements View.OnClickLi
     private void initView() {
         myPalette = findViewById(R.id.my_palette);
         btnPaint = findViewById(R.id.btn_paint);
+        btnPaintRed = findViewById(R.id.btn_paint_red);
         btnEraser = findViewById(R.id.btn_eraser);
     }
 
     private void initListener() {
         btnPaint.setOnClickListener(this);
+        btnPaintRed.setOnClickListener(this);
         btnEraser.setOnClickListener(this);
     }
 
@@ -36,6 +38,9 @@ public class PaletteActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.btn_paint:
                 myPalette.selectPaintStyle(MyPalette.MODE_PAINT);
+                break;
+            case R.id.btn_paint_red:
+                myPalette.selectPaintStyle(MyPalette.MODE_PAINT_RED);
                 break;
             case R.id.btn_eraser:
                 myPalette.selectPaintStyle(MyPalette.MODE_ERASER);
