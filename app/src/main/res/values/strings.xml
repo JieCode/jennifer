@@ -18,12 +18,19 @@
     <string name="environment_mic">麦克风测试</string>
     <string name="environment_speaker">扬声器测试</string>
     <string name="palette_paint">画笔</string>
+    <string name="palette_paint_red">红色画笔</string>
     <string name="palette_eraser">橡皮擦</string>
     <string name="speech">语音识别</string>
     <string name="ai_speech_start">长按说话</string>
     <string name="ai_speech_up">手指上滑，取消发送</string>
     <string name="ai_speech_cancel">松开手指，取消发送</string>
     <string name="ai_speech_send">松开结束</string>
+
+    <string name="notification_title">通知栏</string>
+    <string name="notification_start">开始</string>
+    <string name="notification_pause">暂停</string>
+    <string name="notification_stop">结束</string>
+
     <string-array name="main_guide">
         <item>引导页视差滚动</item>
         <item>WebView</item>
@@ -34,5 +41,8 @@
         <item>RecyclerView嵌套RadioButton</item>
         <item>语音识别</item>
         <item>VideoView</item>
+        <item>通知栏</item>
+        <item>SLPLoginActivity</item>
+        <item>绘制矩形+倒三角+阴影</item>
     </string-array>
 </resources>

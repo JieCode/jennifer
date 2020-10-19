@@ -26,10 +26,10 @@
             android:layout_alignParentBottom="true"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/size_5"
             android:paddingLeft="@dimen/size_15"
+            android:paddingTop="@dimen/size_5"
             android:paddingRight="@dimen/size_15"
-            android:paddingTop="@dimen/size_5">
+            android:paddingBottom="@dimen/size_5">
 
             <Button
                 android:id="@+id/btn_paint"
@@ -37,6 +37,15 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_toolbar"
                 android:text="@string/palette_paint"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btn_paint_red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_5"
+                android:background="@drawable/shape_toolbar"
+                android:text="@string/palette_paint_red"
                 android:textColor="@color/white" />
 
             <Button

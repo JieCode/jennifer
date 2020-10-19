@@ -2,6 +2,7 @@ package com.jennifer.jennifer.application;
 
 import android.app.Application;
 
+import com.aitangba.swipeback.ActivityLifecycleHelper;
 import com.iflytek.cloud.SpeechUtility;
 import com.jennifer.jennifer.R;
 
@@ -21,6 +22,7 @@ public class JenniferApplication extends Application {
         // 注意： appid 必须和下载的SDK保持一致，否则会出现10407错误
 
         SpeechUtility.createUtility(JenniferApplication.this, "appid=" + getString(R.string.app_id));
+        registerActivityLifecycleCallbacks(ActivityLifecycleHelper.build());
 
         // 以下语句用于设置日志开关（默认开启），设置成false时关闭语音云SDK日志打印
         // Setting.setShowLog(false);

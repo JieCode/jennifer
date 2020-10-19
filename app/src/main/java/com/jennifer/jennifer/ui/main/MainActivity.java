@@ -1,25 +1,35 @@
 package com.jennifer.jennifer.ui.main;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.jennifer.jennifer.R;
+import com.jennifer.jennifer.ui.SLPLoginActivity;
 import com.jennifer.jennifer.ui.VideoViewActivity;
-import com.jennifer.jennifer.ui.speech.SpeechRecognizerActivity;
+import com.jennifer.jennifer.ui.canvas.CanvasActivity;
 import com.jennifer.jennifer.ui.environment.EnvironmentTestActivity;
 import com.jennifer.jennifer.ui.life.LifeCycleActivity;
 import com.jennifer.jennifer.ui.main.adapter.MainAdapter;
+import com.jennifer.jennifer.ui.notification.NotificationActivity;
 import com.jennifer.jennifer.ui.palette.PaletteActivity;
 import com.jennifer.jennifer.ui.parallax.GuideActivity;
 import com.jennifer.jennifer.ui.radio.RecycleViewRadioButtonActivity;
+import com.jennifer.jennifer.ui.speech.SpeechRecognizerActivity;
 import com.jennifer.jennifer.ui.trtc.TRTCVideoTestActivity;
 import com.jennifer.jennifer.ui.web.WebViewActivity;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, MainAdapter.OnItemClickListener {
@@ -28,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MainAdapter adapter;
     private List<String> lstData;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lstData.add(str);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initView() {
         rvMain = findViewById(R.id.rv_main);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -87,6 +99,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 8:
                 intentClass(VideoViewActivity.class);
+                break;
+            case 9:
+                intentClass(NotificationActivity.class);
+                break;
+            case 10:
+                intentClass(SLPLoginActivity.class);
+                break;
+            case 11:
+                intentClass(CanvasActivity.class);
                 break;
         }
     }
