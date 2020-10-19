@@ -1,4 +1,4 @@
-package cn.jzvd;
+package com.example.custom_videoview;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -41,32 +41,7 @@ public class JzvdStd extends Jzvd {
     public static int LAST_GET_BATTERYLEVEL_PERCENT = 70;
     protected static Timer DISMISS_CONTROL_VIEW_TIMER;
 
-    public ImageView backButton;
-    public ProgressBar bottomProgressBar, loadingProgressBar;
-    public TextView titleTextView;
     public ImageView thumbImageView;
-    public ImageView tinyBackImageView;
-    public LinearLayout batteryTimeLayout;
-    public ImageView batteryLevel;
-    public TextView videoCurrentTime;
-    public TextView replayTextView;
-    public TextView clarity;
-    public PopupWindow clarityPopWindow;
-    public TextView mRetryBtn;
-    public LinearLayout mRetryLayout;
-    protected DismissControlViewTimerTask mDismissControlViewTimerTask;
-    protected Dialog mProgressDialog;
-    protected ProgressBar mDialogProgressBar;
-    protected TextView mDialogSeekTime;
-    protected TextView mDialogTotalTime;
-    protected ImageView mDialogIcon;
-    protected Dialog mVolumeDialog;
-    protected ProgressBar mDialogVolumeProgressBar;
-    protected TextView mDialogVolumeTextView;
-    protected ImageView mDialogVolumeImageView;
-    protected Dialog mBrightnessDialog;
-    protected ProgressBar mDialogBrightnessProgressBar;
-    protected TextView mDialogBrightnessTextView;
 
 
     public JzvdStd(Context context) {
@@ -80,40 +55,14 @@ public class JzvdStd extends Jzvd {
     @Override
     public void init(Context context) {
         super.init(context);
-        batteryTimeLayout = findViewById(R.id.battery_time_layout);
-        bottomProgressBar = findViewById(R.id.bottom_progress);
-        titleTextView = findViewById(R.id.title);
-        backButton = findViewById(R.id.back);
         thumbImageView = findViewById(R.id.thumb);
-        loadingProgressBar = findViewById(R.id.loading);
-        tinyBackImageView = findViewById(R.id.back_tiny);
-        batteryLevel = findViewById(R.id.battery_level);
-        videoCurrentTime = findViewById(R.id.video_current_time);
-        replayTextView = findViewById(R.id.replay_text);
-        clarity = findViewById(R.id.clarity);
-        mRetryBtn = findViewById(R.id.retry_btn);
-        mRetryLayout = findViewById(R.id.retry_layout);
 
         thumbImageView.setOnClickListener(this);
-        backButton.setOnClickListener(this);
-        tinyBackImageView.setOnClickListener(this);
-        clarity.setOnClickListener(this);
-        mRetryBtn.setOnClickListener(this);
     }
 
     public void setUp(JZDataSource jzDataSource, int screen, Class mediaInterfaceClass) {
         super.setUp(jzDataSource, screen, mediaInterfaceClass);
-        titleTextView.setText(jzDataSource.title);
         setScreen(screen);
-    }
-
-    public void changeStartButtonSize(int size) {
-        ViewGroup.LayoutParams lp = startButton.getLayoutParams();
-        lp.height = size;
-        lp.width = size;
-        lp = loadingProgressBar.getLayoutParams();
-        lp.height = size;
-        lp.width = size;
     }
 
     @Override
@@ -157,24 +106,16 @@ public class JzvdStd extends Jzvd {
         super.onStateAutoComplete();
         changeUiToComplete();
         cancelDismissControlViewTimer();
-        bottomProgressBar.setProgress(100);
     }
 
     @Override
     public void changeUrl(int urlMapIndex, long seekToInAdvance) {
         super.changeUrl(urlMapIndex, seekToInAdvance);
-        startButton.setVisibility(INVISIBLE);
-        replayTextView.setVisibility(View.GONE);
-        mRetryLayout.setVisibility(View.GONE);
     }
 
     @Override
     public void changeUrl(JZDataSource jzDataSource, long seekToInAdvance) {
         super.changeUrl(jzDataSource, seekToInAdvance);
-        titleTextView.setText(jzDataSource.title);
-        startButton.setVisibility(INVISIBLE);
-        replayTextView.setVisibility(View.GONE);
-        mRetryLayout.setVisibility(View.GONE);
     }
 
 
@@ -197,13 +138,15 @@ public class JzvdStd extends Jzvd {
                     if (mChangePosition) {
                         long duration = getDuration();
                         int progress = (int) (mSeekTimePosition * 100 / (duration == 0 ? 1 : duration));
-                        bottomProgressBar.setProgress(progress);
                     }
 
                     //加上延时是为了判断点击是否是双击之一，双击不执行这个逻辑
-                    Runnable task = () -> {
-                        if (!mChangePosition && !mChangeVolume) {
-                            onClickUiToggle();
+                    Runnable task = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!mChangePosition && !mChangeVolume) {
+                                onClickUiToggle();
+                            }
                         }
                     };
                     v.postDelayed(task, doubleTime + 20);
@@ -219,19 +162,9 @@ public class JzvdStd extends Jzvd {
                         }
                         if (state == STATE_PLAYING || state == STATE_PAUSE) {
                             Log.d(TAG, "doublClick [" + this.hashCode() + "] ");
-                            startButton.performClick();
                         }
                     }
                     lastClickTime = currentTimeMillis;
-                    break;
-            }
-        } else if (id == R.id.bottom_seek_progress) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    cancelDismissControlViewTimer();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    startDismissControlViewTimer();
                     break;
             }
         }
@@ -260,121 +193,32 @@ public class JzvdStd extends Jzvd {
             }
         } else if (i == R.id.surface_container) {
             startDismissControlViewTimer();
-        } else if (i == R.id.back) {
-            backPress();
-        } else if (i == R.id.back_tiny) {
-            clearFloatScreen();
-        } else if (i == R.id.clarity) {
-            LayoutInflater inflater = (LayoutInflater) getContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.jz_layout_clarity, null);
-
-            OnClickListener mQualityListener = v1 -> {
-                int index = (int) v1.getTag();
-                changeUrl(index, getCurrentPositionWhenPlaying());
-                clarity.setText(jzDataSource.getCurrentKey().toString());
-                for (int j = 0; j < layout.getChildCount(); j++) {//设置点击之后的颜色
-                    if (j == jzDataSource.currentUrlIndex) {
-                        ((TextView) layout.getChildAt(j)).setTextColor(Color.parseColor("#fff85959"));
-                    } else {
-                        ((TextView) layout.getChildAt(j)).setTextColor(Color.parseColor("#ffffff"));
-                    }
-                }
-                if (clarityPopWindow != null) {
-                    clarityPopWindow.dismiss();
-                }
-            };
-
-            for (int j = 0; j < jzDataSource.urlsMap.size(); j++) {
-                String key = jzDataSource.getKeyFromDataSource(j);
-                TextView clarityItem = (TextView) View.inflate(getContext(), R.layout.jz_layout_clarity_item, null);
-                clarityItem.setText(key);
-                clarityItem.setTag(j);
-                layout.addView(clarityItem, j);
-                clarityItem.setOnClickListener(mQualityListener);
-                if (j == jzDataSource.currentUrlIndex) {
-                    clarityItem.setTextColor(Color.parseColor("#fff85959"));
-                }
-            }
-
-            clarityPopWindow = new PopupWindow(layout, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
-            clarityPopWindow.setContentView(layout);
-            clarityPopWindow.showAsDropDown(clarity);
-            layout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            int offsetX = clarity.getMeasuredWidth() / 3;
-            int offsetY = clarity.getMeasuredHeight() / 3;
-            clarityPopWindow.update(clarity, -offsetX, -offsetY, Math.round(layout.getMeasuredWidth() * 2), layout.getMeasuredHeight());
-        } else if (i == R.id.retry_btn) {
-            if (jzDataSource.urlsMap.isEmpty() || jzDataSource.getCurrentUrl() == null) {
-                Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (!jzDataSource.getCurrentUrl().toString().startsWith("file") && !
-                    jzDataSource.getCurrentUrl().toString().startsWith("/") &&
-                    !JZUtils.isWifiConnected(getContext()) && !WIFI_TIP_DIALOG_SHOWED) {
-                showWifiDialog();
-                return;
-            }
-            addTextureView();
-            onStatePreparing();
         }
     }
 
     @Override
     public void setScreenNormal() {
         super.setScreenNormal();
-        fullscreenButton.setImageResource(R.drawable.jz_enlarge);
-        backButton.setVisibility(View.GONE);
-        tinyBackImageView.setVisibility(View.INVISIBLE);
-        changeStartButtonSize((int) getResources().getDimension(R.dimen.jz_start_button_w_h_normal));
-        batteryTimeLayout.setVisibility(View.GONE);
-        clarity.setVisibility(View.GONE);
+
     }
 
     @Override
     public void setScreenFullscreen() {
         super.setScreenFullscreen();
         //进入全屏之后要保证原来的播放状态和ui状态不变，改变个别的ui
-        fullscreenButton.setImageResource(R.drawable.jz_shrink);
-        backButton.setVisibility(View.VISIBLE);
-        tinyBackImageView.setVisibility(View.INVISIBLE);
-        batteryTimeLayout.setVisibility(View.VISIBLE);
-        if (jzDataSource.urlsMap.size() == 1) {
-            clarity.setVisibility(GONE);
-        } else {
-            clarity.setText(jzDataSource.getCurrentKey().toString());
-            clarity.setVisibility(View.VISIBLE);
-        }
-        changeStartButtonSize((int) getResources().getDimension(R.dimen.jz_start_button_w_h_fullscreen));
         setSystemTimeAndBattery();
     }
 
     @Override
     public void setScreenTiny() {
         super.setScreenTiny();
-        tinyBackImageView.setVisibility(View.VISIBLE);
         setAllControlsVisiblity(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
                 View.INVISIBLE, View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
-        batteryTimeLayout.setVisibility(View.GONE);
-        clarity.setVisibility(View.GONE);
     }
 
     @Override
     public void showWifiDialog() {
         super.showWifiDialog();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(getResources().getString(R.string.tips_not_wifi));
-        builder.setPositiveButton(getResources().getString(R.string.tips_not_wifi_confirm), (dialog, which) -> {
-            dialog.dismiss();
-            startVideo();
-            WIFI_TIP_DIALOG_SHOWED = true;
-        });
-        builder.setNegativeButton(getResources().getString(R.string.tips_not_wifi_cancel), (dialog, which) -> {
-            dialog.dismiss();
-            clearFloatScreen();
-        });
-        builder.setOnCancelListener(DialogInterface::dismiss);
-        builder.create().show();
     }
 
     @Override
@@ -390,35 +234,11 @@ public class JzvdStd extends Jzvd {
     }
 
     public void onClickUiToggle() {//这是事件
-        if (bottomContainer.getVisibility() != View.VISIBLE) {
-            setSystemTimeAndBattery();
-            clarity.setText(jzDataSource.getCurrentKey().toString());
-        }
-        if (state == STATE_PREPARING) {
-            changeUiToPreparing();
-            if (bottomContainer.getVisibility() == View.VISIBLE) {
-            } else {
-                setSystemTimeAndBattery();
-            }
-        } else if (state == STATE_PLAYING) {
-            if (bottomContainer.getVisibility() == View.VISIBLE) {
-                changeUiToPlayingClear();
-            } else {
-                changeUiToPlayingShow();
-            }
-        } else if (state == STATE_PAUSE) {
-            if (bottomContainer.getVisibility() == View.VISIBLE) {
-                changeUiToPauseClear();
-            } else {
-                changeUiToPauseShow();
-            }
-        }
     }
 
     public void setSystemTimeAndBattery() {
         SimpleDateFormat dateFormater = new SimpleDateFormat("HH:mm");
         Date date = new Date();
-        videoCurrentTime.setText(dateFormater.format(date));
         if ((System.currentTimeMillis() - LAST_GET_BATTERYLEVEL_TIME) > 30000) {
             LAST_GET_BATTERYLEVEL_TIME = System.currentTimeMillis();
             getContext().registerReceiver(
@@ -432,63 +252,15 @@ public class JzvdStd extends Jzvd {
 
     public void setBatteryLevel() {
         int percent = LAST_GET_BATTERYLEVEL_PERCENT;
-        if (percent < 15) {
-            batteryLevel.setBackgroundResource(R.drawable.jz_battery_level_10);
-        } else if (percent >= 15 && percent < 40) {
-            batteryLevel.setBackgroundResource(R.drawable.jz_battery_level_30);
-        } else if (percent >= 40 && percent < 60) {
-            batteryLevel.setBackgroundResource(R.drawable.jz_battery_level_50);
-        } else if (percent >= 60 && percent < 80) {
-            batteryLevel.setBackgroundResource(R.drawable.jz_battery_level_70);
-        } else if (percent >= 80 && percent < 95) {
-            batteryLevel.setBackgroundResource(R.drawable.jz_battery_level_90);
-        } else if (percent >= 95 && percent <= 100) {
-            batteryLevel.setBackgroundResource(R.drawable.jz_battery_level_100);
-        }
     }
 
     public void onCLickUiToggleToClear() {
-        if (state == STATE_PREPARING) {
-            if (bottomContainer.getVisibility() == View.VISIBLE) {
-                changeUiToPreparing();
-            } else {
-            }
-        } else if (state == STATE_PLAYING) {
-            if (bottomContainer.getVisibility() == View.VISIBLE) {
-                changeUiToPlayingClear();
-            } else {
-            }
-        } else if (state == STATE_PAUSE) {
-            if (bottomContainer.getVisibility() == View.VISIBLE) {
-                changeUiToPauseClear();
-            } else {
-            }
-        } else if (state == STATE_AUTO_COMPLETE) {
-            if (bottomContainer.getVisibility() == View.VISIBLE) {
-                changeUiToComplete();
-            } else {
-            }
-        }
     }
 
 
     @Override
     public void onProgress(int progress, long position, long duration) {
         super.onProgress(progress, position, duration);
-        if (progress != 0) bottomProgressBar.setProgress(progress);
-    }
-
-    @Override
-    public void setBufferProgress(int bufferProgress) {
-        super.setBufferProgress(bufferProgress);
-        if (bufferProgress != 0) bottomProgressBar.setSecondaryProgress(bufferProgress);
-    }
-
-    @Override
-    public void resetProgressAndTime() {
-        super.resetProgressAndTime();
-        bottomProgressBar.setProgress(0);
-        bottomProgressBar.setSecondaryProgress(0);
     }
 
     public void changeUiToNormal() {
@@ -627,160 +399,51 @@ public class JzvdStd extends Jzvd {
 
     public void setAllControlsVisiblity(int topCon, int bottomCon, int startBtn, int loadingPro,
                                         int thumbImg, int bottomPro, int retryLayout) {
-        topContainer.setVisibility(topCon);
-        bottomContainer.setVisibility(bottomCon);
-        startButton.setVisibility(startBtn);
-        loadingProgressBar.setVisibility(loadingPro);
-        thumbImageView.setVisibility(thumbImg);
-        bottomProgressBar.setVisibility(bottomPro);
-        mRetryLayout.setVisibility(retryLayout);
     }
 
     public void updateStartImage() {
-        if (state == STATE_PLAYING) {
-            startButton.setVisibility(VISIBLE);
-            startButton.setImageResource(R.drawable.jz_click_pause_selector);
-            replayTextView.setVisibility(GONE);
-        } else if (state == STATE_ERROR) {
-            startButton.setVisibility(INVISIBLE);
-            replayTextView.setVisibility(GONE);
-        } else if (state == STATE_AUTO_COMPLETE) {
-            startButton.setVisibility(VISIBLE);
-            startButton.setImageResource(R.drawable.jz_click_replay_selector);
-            replayTextView.setVisibility(VISIBLE);
-        } else {
-            startButton.setImageResource(R.drawable.jz_click_play_selector);
-            replayTextView.setVisibility(GONE);
-        }
     }
 
     @Override
     public void showProgressDialog(float deltaX, String seekTime, long seekTimePosition, String totalTime, long totalTimeDuration) {
         super.showProgressDialog(deltaX, seekTime, seekTimePosition, totalTime, totalTimeDuration);
-        if (mProgressDialog == null) {
-            View localView = LayoutInflater.from(getContext()).inflate(R.layout.jz_dialog_progress, null);
-            mDialogProgressBar = localView.findViewById(R.id.duration_progressbar);
-            mDialogSeekTime = localView.findViewById(R.id.tv_current);
-            mDialogTotalTime = localView.findViewById(R.id.tv_duration);
-            mDialogIcon = localView.findViewById(R.id.duration_image_tip);
-            mProgressDialog = createDialogWithView(localView);
-        }
-        if (!mProgressDialog.isShowing()) {
-            mProgressDialog.show();
-        }
-
-        mDialogSeekTime.setText(seekTime);
-        mDialogTotalTime.setText(" / " + totalTime);
-        mDialogProgressBar.setProgress(totalTimeDuration <= 0 ? 0 : (int) (seekTimePosition * 100 / totalTimeDuration));
-        if (deltaX > 0) {
-            mDialogIcon.setBackgroundResource(R.drawable.jz_forward_icon);
-        } else {
-            mDialogIcon.setBackgroundResource(R.drawable.jz_backward_icon);
-        }
         onCLickUiToggleToClear();
     }
 
     @Override
     public void dismissProgressDialog() {
         super.dismissProgressDialog();
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
     }
 
     @Override
     public void showVolumeDialog(float deltaY, int volumePercent) {
         super.showVolumeDialog(deltaY, volumePercent);
-        if (mVolumeDialog == null) {
-            View localView = LayoutInflater.from(getContext()).inflate(R.layout.jz_dialog_volume, null);
-            mDialogVolumeImageView = localView.findViewById(R.id.volume_image_tip);
-            mDialogVolumeTextView = localView.findViewById(R.id.tv_volume);
-            mDialogVolumeProgressBar = localView.findViewById(R.id.volume_progressbar);
-            mVolumeDialog = createDialogWithView(localView);
-        }
-        if (!mVolumeDialog.isShowing()) {
-            mVolumeDialog.show();
-        }
-        if (volumePercent <= 0) {
-            mDialogVolumeImageView.setBackgroundResource(R.drawable.jz_close_volume);
-        } else {
-            mDialogVolumeImageView.setBackgroundResource(R.drawable.jz_add_volume);
-        }
-        if (volumePercent > 100) {
-            volumePercent = 100;
-        } else if (volumePercent < 0) {
-            volumePercent = 0;
-        }
-        mDialogVolumeTextView.setText(volumePercent + "%");
-        mDialogVolumeProgressBar.setProgress(volumePercent);
-        onCLickUiToggleToClear();
     }
 
     @Override
     public void dismissVolumeDialog() {
         super.dismissVolumeDialog();
-        if (mVolumeDialog != null) {
-            mVolumeDialog.dismiss();
-        }
     }
 
     @Override
     public void showBrightnessDialog(int brightnessPercent) {
         super.showBrightnessDialog(brightnessPercent);
-        if (mBrightnessDialog == null) {
-            View localView = LayoutInflater.from(getContext()).inflate(R.layout.jz_dialog_brightness, null);
-            mDialogBrightnessTextView = localView.findViewById(R.id.tv_brightness);
-            mDialogBrightnessProgressBar = localView.findViewById(R.id.brightness_progressbar);
-            mBrightnessDialog = createDialogWithView(localView);
-        }
-        if (!mBrightnessDialog.isShowing()) {
-            mBrightnessDialog.show();
-        }
-        if (brightnessPercent > 100) {
-            brightnessPercent = 100;
-        } else if (brightnessPercent < 0) {
-            brightnessPercent = 0;
-        }
-        mDialogBrightnessTextView.setText(brightnessPercent + "%");
-        mDialogBrightnessProgressBar.setProgress(brightnessPercent);
         onCLickUiToggleToClear();
     }
 
     @Override
     public void dismissBrightnessDialog() {
         super.dismissBrightnessDialog();
-        if (mBrightnessDialog != null) {
-            mBrightnessDialog.dismiss();
-        }
-    }
-
-    public Dialog createDialogWithView(View localView) {
-        Dialog dialog = new Dialog(getContext(), R.style.jz_style_dialog_progress);
-        dialog.setContentView(localView);
-        Window window = dialog.getWindow();
-        window.addFlags(Window.FEATURE_ACTION_BAR);
-        window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-        window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        window.setLayout(-2, -2);
-        WindowManager.LayoutParams localLayoutParams = window.getAttributes();
-        localLayoutParams.gravity = Gravity.CENTER;
-        window.setAttributes(localLayoutParams);
-        return dialog;
     }
 
     public void startDismissControlViewTimer() {
         cancelDismissControlViewTimer();
         DISMISS_CONTROL_VIEW_TIMER = new Timer();
-        mDismissControlViewTimerTask = new DismissControlViewTimerTask();
-        DISMISS_CONTROL_VIEW_TIMER.schedule(mDismissControlViewTimerTask, 2500);
     }
 
     public void cancelDismissControlViewTimer() {
         if (DISMISS_CONTROL_VIEW_TIMER != null) {
             DISMISS_CONTROL_VIEW_TIMER.cancel();
-        }
-        if (mDismissControlViewTimerTask != null) {
-            mDismissControlViewTimerTask.cancel();
         }
 
     }
@@ -795,26 +458,12 @@ public class JzvdStd extends Jzvd {
     public void reset() {
         super.reset();
         cancelDismissControlViewTimer();
-        if (clarityPopWindow != null) {
-            clarityPopWindow.dismiss();
-        }
     }
 
     public void dissmissControlView() {
         if (state != STATE_NORMAL
                 && state != STATE_ERROR
                 && state != STATE_AUTO_COMPLETE) {
-            post(() -> {
-                bottomContainer.setVisibility(View.INVISIBLE);
-                topContainer.setVisibility(View.INVISIBLE);
-                startButton.setVisibility(View.INVISIBLE);
-                if (clarityPopWindow != null) {
-                    clarityPopWindow.dismiss();
-                }
-                if (screen != SCREEN_TINY) {
-                    bottomProgressBar.setVisibility(View.VISIBLE);
-                }
-            });
         }
     }
 

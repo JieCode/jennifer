@@ -44,5 +44,7 @@
         <item>通知栏</item>
         <item>SLPLoginActivity</item>
         <item>绘制矩形+倒三角+阴影</item>
+        <item>TabLayout+ViewPager</item>
+        <item>吸顶+字母定位效果</item>
     </string-array>
 </resources>

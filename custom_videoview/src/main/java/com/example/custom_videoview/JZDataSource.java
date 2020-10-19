@@ -1,4 +1,4 @@
-package cn.jzvd;
+package com.example.custom_videoview;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

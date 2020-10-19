@@ -1,4 +1,4 @@
-package cn.jzvd;
+package com.example.custom_videoview;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -8,7 +8,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -19,9 +18,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Constructor;
@@ -81,12 +78,7 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
     public int seekToManulPosition = -1;
     public long seekToInAdvance = 0;
 
-    public ImageView startButton;
-    public SeekBar progressBar;
-    public ImageView fullscreenButton;
-    public TextView currentTimeTextView, totalTimeTextView;
     public ViewGroup textureViewContainer;
-    public ViewGroup topContainer, bottomContainer;
     public JZTextureView textureView;
 
 
@@ -120,19 +112,7 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
 
     public void init(Context context) {
         View.inflate(context, getLayoutId(), this);
-        startButton = findViewById(R.id.start);
-        fullscreenButton = findViewById(R.id.fullscreen);
-        progressBar = findViewById(R.id.bottom_seek_progress);
-        currentTimeTextView = findViewById(R.id.current);
-        totalTimeTextView = findViewById(R.id.total);
-        bottomContainer = findViewById(R.id.layout_bottom);
         textureViewContainer = findViewById(R.id.surface_container);
-        topContainer = findViewById(R.id.layout_top);
-
-        startButton.setOnClickListener(this);
-        fullscreenButton.setOnClickListener(this);
-        progressBar.setOnSeekBarChangeListener(this);
-        bottomContainer.setOnClickListener(this);
         textureViewContainer.setOnClickListener(this);
         textureViewContainer.setOnTouchListener(this);
 
@@ -198,16 +178,6 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
                 onStatePlaying();
             } else if (state == STATE_AUTO_COMPLETE) {
                 startVideo();
-            }
-        } else if (i == R.id.fullscreen) {
-            Log.i(TAG, "onClick fullscreen [" + this.hashCode() + "] ");
-            if (state == STATE_AUTO_COMPLETE) return;
-            if (screen == SCREEN_FULLSCREEN) {
-                //quit fullscreen
-                backPress();
-            } else {
-                Log.d(TAG, "toFullscreenActivity [" + this.hashCode() + "] ");
-                gotoScreenFullscreen();
             }
         }
     }
@@ -319,7 +289,6 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
                         mediaInterface.seekTo(mSeekTimePosition);
                         long duration = getDuration();
                         int progress = (int) (mSeekTimePosition * 100 / (duration == 0 ? 1 : duration));
-                        progressBar.setProgress(progress);
                     }
                     if (mChangeVolume) {
                         //change volume event
@@ -341,7 +310,6 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
     public void onStatePreparing() {
         Log.i(TAG, "onStatePreparing " + " [" + this.hashCode() + "] ");
         state = STATE_PREPARING;
-        resetProgressAndTime();
     }
 
     public void onPrepared() {
@@ -412,8 +380,6 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
         Log.i(TAG, "onStateAutoComplete " + " [" + this.hashCode() + "] ");
         state = STATE_AUTO_COMPLETE;
         cancelProgressTimer();
-        progressBar.setProgress(100);
-        currentTimeTextView.setText(totalTimeTextView.getText());
     }
 
     public void onInfo(int what, int extra) {
@@ -590,8 +556,8 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
         textureView = new JZTextureView(getContext().getApplicationContext());
         textureView.setSurfaceTextureListener(mediaInterface);
 
-        FrameLayout.LayoutParams layoutParams =
-                new FrameLayout.LayoutParams(
+        LayoutParams layoutParams =
+                new LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         Gravity.CENTER);
@@ -645,23 +611,8 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
                 } else {
                     seekToManulPosition = -1;//这个关键帧有没有必要做
                 }
-            } else {
-                if (progress != 0) progressBar.setProgress(progress);
             }
         }
-        if (position != 0) currentTimeTextView.setText(JZUtils.stringForTime(position));
-        totalTimeTextView.setText(JZUtils.stringForTime(duration));
-    }
-
-    public void setBufferProgress(int bufferProgress) {
-        if (bufferProgress != 0) progressBar.setSecondaryProgress(bufferProgress);
-    }
-
-    public void resetProgressAndTime() {
-        progressBar.setProgress(0);
-        progressBar.setSecondaryProgress(0);
-        currentTimeTextView.setText(JZUtils.stringForTime(0));
-        totalTimeTextView.setText(JZUtils.stringForTime(0));
     }
 
     public long getCurrentPositionWhenPlaying() {
@@ -722,7 +673,6 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
         if (fromUser) {
             //设置这个progres对应的时间，给textview
             long duration = getDuration();
-            currentTimeTextView.setText(JZUtils.stringForTime(progress * duration / 100));
         }
     }
 
@@ -750,7 +700,7 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
         cloneAJzvd(vg);
         CONTAINER_LIST.add(vg);
         vg = (ViewGroup) (JZUtils.scanForActivity(getContext())).getWindow().getDecorView();//和他也没有关系
-        vg.addView(this, new FrameLayout.LayoutParams(
+        vg.addView(this, new LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         setScreenFullscreen();
@@ -765,7 +715,7 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
         ViewGroup vg = (ViewGroup) (JZUtils.scanForActivity(getContext())).getWindow().getDecorView();
         vg.removeView(this);
         CONTAINER_LIST.getLast().removeAllViews();
-        CONTAINER_LIST.getLast().addView(this, new FrameLayout.LayoutParams(
+        CONTAINER_LIST.getLast().addView(this, new LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         CONTAINER_LIST.pop();
 
@@ -881,11 +831,14 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
         public void run() {
             if (state == STATE_PLAYING || state == STATE_PAUSE) {
 //                Log.v(TAG, "onProgressUpdate " + "[" + this.hashCode() + "] ");
-                post(() -> {
-                    long position = getCurrentPositionWhenPlaying();
-                    long duration = getDuration();
-                    int progress = (int) (position * 100 / (duration == 0 ? 1 : duration));
-                    onProgress(progress, position, duration);
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        long position = getCurrentPositionWhenPlaying();
+                        long duration = getDuration();
+                        int progress = (int) (position * 100 / (duration == 0 ? 1 : duration));
+                        onProgress(progress, position, duration);
+                    }
                 });
             }
         }
@@ -904,9 +857,6 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     try {
                         Jzvd player = CURRENT_JZVD;
-                        if (player != null && player.state == Jzvd.STATE_PLAYING) {
-                            player.startButton.performClick();
-                        }
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }
@@ -961,7 +911,7 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
         try {
             Constructor<Jzvd> constructor = _class.getConstructor(Context.class);
             final Jzvd jzvd = constructor.newInstance(context);
-            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+            LayoutParams lp = new LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             vp.addView(jzvd, lp);
             jzvd.setUp(jzDataSource, JzvdStd.SCREEN_FULLSCREEN);

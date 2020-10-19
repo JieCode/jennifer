@@ -1,4 +1,4 @@
-package cn.jzvd;
+package com.example.custom_videoview;
 
 import android.content.Context;
 import android.util.AttributeSet;

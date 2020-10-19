@@ -1,13 +1,12 @@
-package com.laj.wxaddperson.hover_item;
+package com.jennifer.jennifer.ui.ceiling;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 
 public class HoverItemDecoration extends RecyclerView.ItemDecoration {
@@ -36,11 +35,11 @@ public class HoverItemDecoration extends RecyclerView.ItemDecoration {
     /**
      * 分组item的颜色
      */
-    private int itemHoverPaintColor=0xFFf4f4f4;
+    private int itemHoverPaintColor = 0xFFf3f5f7;
     /**
      * 分组文字的颜色
      */
-    private int textPaintColor=0xFF999999;
+    private int textPaintColor = 0xFF999999;
 
     /**
      * 悬停item的画笔
@@ -144,7 +143,7 @@ public class HoverItemDecoration extends RecyclerView.ItemDecoration {
         //如果是分组第一个就留出绘制item的高度
         if (isFirstInGroup(position)) {
             outRect.top = itemHeight;
-        }else {
+        } else {
             outRect.top = itemDivideHeight;
         }
 

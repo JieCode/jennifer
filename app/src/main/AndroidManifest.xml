@@ -27,7 +27,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.canvas.CanvasActivity"/>
+        <activity android:name=".ui.ceiling.CeilingActivity" />
+        <activity android:name=".ui.tab.TabActivity" />
+        <activity android:name=".ui.canvas.CanvasActivity" />
         <activity
             android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait">
@@ -59,7 +61,7 @@
         <activity android:name=".ui.tax.TaxCalculatorActivity" />
         <activity android:name=".ui.speech.SpeechRecognizerActivity" />
         <activity
-            android:name=".ui.VideoViewActivity"
+            android:name=".ui.video.VideoViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.notification.NotificationActivity" />

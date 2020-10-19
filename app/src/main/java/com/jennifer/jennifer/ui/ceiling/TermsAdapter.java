@@ -1,5 +1,6 @@
 package com.jennifer.jennifer.ui.ceiling;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jennifer.jennifer.R;
-import com.jennifer.jennifer.entity.TermEntity;
+import com.jennifer.jennifer.entity.TermsEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,15 @@ import butterknife.ButterKnife;
  * @date :2020/10/19 15:54
  * TODO:
  */
-public class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
+public class TermsAdapter extends RecyclerView.Adapter<TermsAdapter.ViewHolder> {
     private Context context;
-    private List<TermEntity> dataList = new ArrayList<>();
+    private List<TermsEntity> dataList = new ArrayList<>();
+    private OnItemClickListener listener;
+
+    public TermsAdapter(Context context, List<TermsEntity> dataList) {
+        this.context = context;
+        this.dataList = dataList;
+    }
 
     @NonNull
     @Override
@@ -33,8 +40,19 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        if ()
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
+        if (position < dataList.size()) {
+            TermsEntity termEntity = dataList.get(position);
+            viewHolder.tvTitleName.setText(termEntity.getTerms());
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onItemClick(position);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -42,14 +60,21 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
         return dataList == null ? 0 : dataList.size();
     }
 
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     static
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_title_name)
         TextView tvTitleName;
 
         ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            tvTitleName = itemView.findViewById(R.id.tv_title_name);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 }

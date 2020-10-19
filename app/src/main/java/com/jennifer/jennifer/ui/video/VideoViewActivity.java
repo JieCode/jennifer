@@ -1,4 +1,4 @@
-package com.jennifer.jennifer.ui;
+package com.jennifer.jennifer.ui.video;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
@@ -117,7 +117,7 @@ public class VideoViewActivity extends AppCompatActivity implements View.OnClick
 
     private void initData() {
 //        String uri = "android.resource://" + getPackageName() + "/" + R.raw.video_butterfly;
-        String uri = "90b336cee59749919b00306b04d58df5/5f4fa5cd304f4dd18121dc2e13b308e3.v.640.360.mp4";
+        String uri = "https://r-v1.e.99.com/b/p/842/90b336cee59749919b00306b04d58df5/5f4fa5cd304f4dd18121dc2e13b308e3.v.640.360.mp4";
         videoView.setVideoURI(Uri.parse(uri));
     }
 

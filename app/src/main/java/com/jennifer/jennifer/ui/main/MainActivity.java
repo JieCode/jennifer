@@ -5,15 +5,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import com.jennifer.jennifer.R;
 import com.jennifer.jennifer.ui.SLPLoginActivity;
-import com.jennifer.jennifer.ui.VideoViewActivity;
 import com.jennifer.jennifer.ui.canvas.CanvasActivity;
+import com.jennifer.jennifer.ui.ceiling.CeilingActivity;
 import com.jennifer.jennifer.ui.environment.EnvironmentTestActivity;
 import com.jennifer.jennifer.ui.life.LifeCycleActivity;
 import com.jennifer.jennifer.ui.main.adapter.MainAdapter;
@@ -22,12 +21,11 @@ import com.jennifer.jennifer.ui.palette.PaletteActivity;
 import com.jennifer.jennifer.ui.parallax.GuideActivity;
 import com.jennifer.jennifer.ui.radio.RecycleViewRadioButtonActivity;
 import com.jennifer.jennifer.ui.speech.SpeechRecognizerActivity;
+import com.jennifer.jennifer.ui.tab.TabActivity;
 import com.jennifer.jennifer.ui.trtc.TRTCVideoTestActivity;
+import com.jennifer.jennifer.ui.video.VideoViewActivity;
 import com.jennifer.jennifer.ui.web.WebViewActivity;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,17 +47,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initData() {
         lstData = new ArrayList<>();
-        String[] strings = getResources().getStringArray(R.array.main_guide);
-        for (String str : strings)
-            lstData.add(str);
+        lstData.addAll(Arrays.asList(getResources().getStringArray(R.array.main_guide)));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initView() {
         rvMain = findViewById(R.id.rv_main);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rvMain.setLayoutManager(layoutManager);
+        rvMain.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         adapter = new MainAdapter(lstData, this);
         rvMain.setAdapter(adapter);
         adapter.setItemClickListener(this);
@@ -108,6 +102,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 11:
                 intentClass(CanvasActivity.class);
+                break;
+            case 12:
+                intentClass(TabActivity.class);
+                break;
+            case 13:
+                intentClass(CeilingActivity.class);
                 break;
         }
     }

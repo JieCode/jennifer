@@ -1,4 +1,4 @@
-package com.laj.wxaddperson.hover_item;
+package com.jennifer.jennifer.ui.ceiling;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -66,7 +66,7 @@ public class IndexView extends View {
 
     private void initPaint() {
         mPaint = new Paint();
-        mPaint.setColor(Color.parseColor("#2D8FF4"));
+        mPaint.setColor(Color.parseColor("#333333"));
         mPaint.setAntiAlias(true);
         mPaint.setTextSize(mWordSize);
 
@@ -92,10 +92,10 @@ public class IndexView extends View {
 
             if (i == mChoose) {
                 mPaint.setColor(Color.parseColor("#FFFFFF"));
-                mPaint2.setColor(Color.parseColor("#41D282"));
+                mPaint2.setColor(Color.parseColor("#59d1d6"));
                 canvas.drawCircle(mWidth / 2, yPos - mPaint.measureText(WORDS[i]) / 2, mWidth / 3, mPaint2);
             } else {
-                mPaint.setColor(Color.parseColor("#2D8FF4"));
+                mPaint.setColor(Color.parseColor("#333333"));
             }
             canvas.drawText(WORDS[i], xPos, yPos, mPaint);
         }

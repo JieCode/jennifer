@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @date :2020/10/19 15:48
  * TODO:
  */
-public class TermEntity implements Serializable {
+public class TermsEntity implements Serializable {
 
     /**
      * gradeId : 2106
@@ -20,6 +20,7 @@ public class TermEntity implements Serializable {
     private int id;
     private double score;
     private String terms;
+    private String firstSpell;
 
     public int getGradeId() {
         return gradeId;
@@ -51,5 +52,13 @@ public class TermEntity implements Serializable {
 
     public void setTerms(String terms) {
         this.terms = terms;
+    }
+
+    public String getFirstSpell() {
+        return firstSpell;
+    }
+
+    public void setFirstSpell(String firstSpell) {
+        this.firstSpell = firstSpell;
     }
 }
