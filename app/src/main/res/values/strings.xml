@@ -46,5 +46,8 @@
         <item>绘制矩形+倒三角+阴影</item>
         <item>TabLayout+ViewPager</item>
         <item>吸顶+字母定位效果</item>
+        <item>识别二维码</item>
+        <item>跳转功能界面</item>
+        <item>测试对象指向</item>
     </string-array>
 </resources>

@@ -1,1 +1,2 @@
+include ':libzxing'
 include ':app', ':custom_videoview'

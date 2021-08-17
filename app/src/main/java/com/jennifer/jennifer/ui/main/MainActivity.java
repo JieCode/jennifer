@@ -14,17 +14,21 @@ import com.jennifer.jennifer.ui.SLPLoginActivity;
 import com.jennifer.jennifer.ui.canvas.CanvasActivity;
 import com.jennifer.jennifer.ui.ceiling.CeilingActivity;
 import com.jennifer.jennifer.ui.environment.EnvironmentTestActivity;
+import com.jennifer.jennifer.ui.intent.IntentActivity;
 import com.jennifer.jennifer.ui.life.LifeCycleActivity;
 import com.jennifer.jennifer.ui.main.adapter.MainAdapter;
 import com.jennifer.jennifer.ui.notification.NotificationActivity;
+import com.jennifer.jennifer.ui.object.ObjectActivity;
 import com.jennifer.jennifer.ui.palette.PaletteActivity;
 import com.jennifer.jennifer.ui.parallax.GuideActivity;
 import com.jennifer.jennifer.ui.radio.RecycleViewRadioButtonActivity;
+import com.jennifer.jennifer.ui.scan.ScanActivity;
 import com.jennifer.jennifer.ui.speech.SpeechRecognizerActivity;
 import com.jennifer.jennifer.ui.tab.TabActivity;
 import com.jennifer.jennifer.ui.trtc.TRTCVideoTestActivity;
 import com.jennifer.jennifer.ui.video.VideoViewActivity;
 import com.jennifer.jennifer.ui.web.WebViewActivity;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -109,6 +113,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 13:
                 intentClass(CeilingActivity.class);
                 break;
+            case 14:
+                intentClass(CaptureActivity.class);
+                break;
+            case 15:
+                intentClass(IntentActivity.class);
+                break;
+            case 16:
+                intentClass(ObjectActivity.class);
+                break;
+            default:break;
         }
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.jennifer.jennifer">
+    package="com.jennifer.jennifer" >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,14 +25,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:theme="@style/TranslucentTheme"
+        tools:ignore="GoogleAppIndexingWarning" >
+        <activity android:name=".ui.object.ObjectActivity" >
+        </activity>
+        <activity android:name=".ui.intent.IntentActivity" />
+        <activity android:name=".ui.scan.ScanActivity" />
         <activity android:name=".ui.ceiling.CeilingActivity" />
         <activity android:name=".ui.tab.TabActivity" />
         <activity android:name=".ui.canvas.CanvasActivity" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
