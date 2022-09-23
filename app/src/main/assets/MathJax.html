@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+                messageStyle: "none",tex2jax:
+                    {inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]},
+                });
+    </script>
+
+    <script>
+        function changeData(data) {
+            document.getElementById('mainDiv').innerHTML = data;
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        }
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+    <style type="text/css">
+            body{
+                background-color: #ffffff;
+                -webkit-text-size-adjust: 100%!important;
+                -webkit-overflow-scrolling : touch;
+            }
+            #mainDiv{
+                position: absolute;
+                margin: auto;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                font-size: 15px;
+                word-wrap:
+                break-word;
+            }
+        </style>
+</head>
+
+<body>
+<div id="mainDiv">
+</div>
+</body>
+</html>

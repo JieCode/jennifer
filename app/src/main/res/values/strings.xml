@@ -49,5 +49,7 @@
         <item>识别二维码</item>
         <item>跳转功能界面</item>
         <item>测试对象指向</item>
+        <item>TextView加载H5带公式</item>
+        <item>TouchEvent TextView冲突事件</item>
     </string-array>
 </resources>

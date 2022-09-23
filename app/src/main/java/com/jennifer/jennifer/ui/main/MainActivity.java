@@ -22,9 +22,10 @@ import com.jennifer.jennifer.ui.object.ObjectActivity;
 import com.jennifer.jennifer.ui.palette.PaletteActivity;
 import com.jennifer.jennifer.ui.parallax.GuideActivity;
 import com.jennifer.jennifer.ui.radio.RecycleViewRadioButtonActivity;
-import com.jennifer.jennifer.ui.scan.ScanActivity;
 import com.jennifer.jennifer.ui.speech.SpeechRecognizerActivity;
 import com.jennifer.jennifer.ui.tab.TabActivity;
+import com.jennifer.jennifer.ui.text.TextActivity;
+import com.jennifer.jennifer.ui.touch.TouchEventConflictActivity;
 import com.jennifer.jennifer.ui.trtc.TRTCVideoTestActivity;
 import com.jennifer.jennifer.ui.video.VideoViewActivity;
 import com.jennifer.jennifer.ui.web.WebViewActivity;
@@ -121,6 +122,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 16:
                 intentClass(ObjectActivity.class);
+                break;
+            case 17:
+                intentClass(TextActivity.class);
+            case 18:
+                intentClass(TouchEventConflictActivity.class);
                 break;
             default:break;
         }

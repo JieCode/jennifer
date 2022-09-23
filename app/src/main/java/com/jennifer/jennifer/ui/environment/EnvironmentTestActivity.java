@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +45,7 @@ public class EnvironmentTestActivity extends AppCompatActivity implements View.O
         log();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void log() {
         Log.e("build", "CPU_ABI:" + Build.CPU_ABI);
         Log.e("build", "CPU_ABI2:" + Build.CPU_ABI2);
