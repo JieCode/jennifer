@@ -1,592 +1,1042 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>弗兰德斯</title>
-	<link rel="stylesheet" href="css/bootstrap.min.css" />
-</head>
-<body>
-	<div class="flds">
-		<div id="fldsPart" class="hide">
-			<div class="col-sm-12">
-				<h4 style="font-weight:bold;"><span class="yet" style="margin-bottom: 0; background: #4FCB4B;padding-left:0px;"></span><span style="font-size: 16px;color: #333333;letter-spacing: 0;line-height: 16px;">弗兰德斯课堂互动分析系统</span></h4>
-				<hr style="height: 1px; background-color: #333;"/>
-				<div class="col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;font-size: 16px;">结果反馈</div>
-				<div class="col-sm-3"></div>
-				<div class="col-sm-6">
-					<table class="table table-bordered">
-						<thead>
-							<tr style="background-color: #ffe6d9">
-								<th colspan="2" class="text-center">课堂结构</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td  class="col-sm-9 text-center">教师语言比率</td>
-								<td id="teacherWord" class="col-sm-3 text-center"></td>
-							</tr>
-							<tr>
-								<td  class="col-sm-9 text-center">学生语言比率</td>
-								<td id="studentWord" class="text-center"></td>
-							</tr>
-							<tr>
-								<td  class="col-sm-9 text-center">课堂沉寂比率</td>
-								<td id="slienceWord" class="text-center"> </td>
-							</tr>
-						</tbody>
-						<thead>
-							<tr style="background-color: #ffe6d9">
-								<th colspan="2" class="text-center">教师倾向</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td  class="col-sm-9 text-center">教师间接影响/教师语言</td>
-								<td id="directImpact" class="col-sm-3 text-center"></td>
-							</tr>
-							<tr>
-								<td  class="col-sm-9 text-center">教师直接影响/教师语言</td>
-								<td id="indirectEffects" class="text-center"></td>
-							</tr>	
-						</tbody>
-						<thead>
-							<tr style="background-color: #ffe6d9">
-								<th colspan="2" class="text-center">其他</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td  class="col-sm-9 text-center">学生主动发起语言/学生语言</td>
-								<td id="coordinate1" class="col-sm-3 text-center"></td>
-							</tr>
-							<tr>
-								<td  class="col-sm-9 text-center">学生连续语言/学生语言</td>
-								<td id="coordinate2" class="text-center"></td>
-							</tr>	
-							<tr>
-								<td  class="col-sm-9 text-center">连续内容讲解/教师语言</td>
-								<td id="coordinate3" class="text-center"></td>
-							</tr>	
-						</tbody>
-					</table>
-				</div>
-				<div class="col-sm-3"></div>
-				<div class="col-sm-12" style="margin-bottom: 30px;">
-					<span id="fldsSuggest">
-					</span>
-				</div>
-			</div>
-			<div class="col-sm-12" style="margin-top: 30px; ">
-				<div class="col-sm-12 text-center" style="margin-top: 20px; margin-bottom: 10px;">课堂互动分析矩阵</div>
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th colspan="2" style="border: 0px solid #ddd;"></th>
-							<th class="text-center" colspan="7">教师</th>
-							<th class="text-center" colspan="3">学生</th>
-							<th class="text-center" colspan="3">沉寂</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody id="fldsTable" class="text-center">
-						<tr >
-							<td colspan="2" style="border-top: 0px solid #ddd;"></td>
-							<td>(1)</td>
-							<td>(2)</td>
-							<td>(3)</td>
-							<td>(4)</td>
-							<td>(5)</td>
-							<td>(6)</td>
-							<td>(7)</td>
-							<td>(8)</td>
-							<td>(9)</td>
-							<td>(10)</td>
-							<td>(11)</td>
-							<td>(12)</td>
-							<td>(13)</td>
-							<td>总计</td>
-						</tr>
-						<tr>
-							<td rowspan="7" style="padding-top:115px;font-weight: 700">教<br/>师</td>
-							<td>(1)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(2)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(3)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(4)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(5)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(6)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(7)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td rowspan="3" style="padding-top:35px;font-weight: 700">学<br/>生</td>
-							<td>(8)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(9)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(10)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td rowspan="3" style="padding-top:35px;font-weight: 700">沉<br/>寂</td>
-							<td>(11)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(12)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>(13)</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td>总计</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<script type="text/javascript" src="js/mustache.min.js"></script>
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/echarts.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-		var debug = 0;
-		$(function() {
-			$('[data-toggle="popover"]').popover();
-			debug && render($('#data').text());
-		});
-		function durationToString(duration) {
-			var min = Math.floor(duration / 60), sec = duration % 60;
-			return min + "'" + sec + '"';
-		}
-		
-		function jsonEscape(str) {
-			//if (debug)
-				return str;
-			//else
-			//	return str.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
-		}
-	
-		function replaceLineBreak(str) {
-			return str && str.replace(/\n/g, '<br/>');
-		}
-// 		var template = $('le-st').html();
-// 		Mustache.parse(template);
-// 		$('.le-st').empty().removeClass('hide').show();
-		var fldstotalsum = 0;
-		function render(data) {
-			if (console.log) console.log("data: " + data);
-// 			try {
-				if (typeof data === 'string') data = $.parseJSON(jsonEscape(data));
-				(function(fldsData) {
-					//fldsData.push([1,2,2,2,2,2,3,1,1,1],[2,2,2,2,2,2,2,3,8,9,9,4,6,7,1,2,5,10,10,10,11,11,11,2,1,1,1,1]);
-				    //fldsData.push([6,7,1,3,4,10,5,9,6,4,9,2,13,13,13,13,13,13,1,1,1,1]);
-					$.each(fldsData, function(index, item) {
-						$.each(item, function(fldsIndex, fldsItem) {
-							fldstotalsum += fldsItem;
-						})
-					}) 
-					if (fldstotalsum != 0 && !isNaN(fldstotalsum)) {
-						$('#fldsPart').removeClass('hide');			
-						//处理弗兰德斯数据
-						var fldsMap = {};
-						$.each(fldsData, function(index, item) {
-							var fldsList = [];
-							$.each(item, function(fldsIndex, fldsItem) {
-								//装载每次的坐标，避免重复
-								if (fldsIndex != item.length - 1) {
-									//坐标
-									var coordinate = fldsItem + ',' + item[fldsIndex + 1];
-									//判断是够有这个map 没有就建一个
-									if(typeof(fldsMap[coordinate])==="undefined"){
-										fldsMap[coordinate] = '1,1';
-										fldsList.push(coordinate);
-									} else {
-										var fldesValue = fldsMap[coordinate].split(',');
-										//判断此次循环时候已经有此坐标
-										var fldsFlag = true;
-										$.each(fldsList, function(listIndex, listItem) {
-											if (listItem == coordinate) {
-												fldsFlag = false
-											}
-										})
-										if (fldsFlag) {
-											fldsMap[coordinate] = (parseInt(fldesValue[0]) + 1) + ',' + (parseInt(fldesValue[1]) + 1);
-											fldsList.push(coordinate);
-										} else {
-											fldsMap[coordinate] = (parseInt(fldesValue[0]) + 1) + ',' + fldesValue[1];
-										}
-									}
-									
-								}
-							})
-						})
-						//$('#fldsTable').children().eq(14).children().eq(3).html();
-						for(var key in fldsMap){
-							var cyu = key.split(",");
-							var fldesValue = fldsMap[key].split(',');
-							var s = parseInt(cyu[0]);
-							if (s == 8 || s == 1 || s == 11) {
-								s = parseInt(cyu[1]) + 1;
-							} else {
-								s = parseInt(cyu[1]);
-							}
-							$('#fldsTable').children().eq(cyu[0]).children().eq(s).html((fldesValue[0]/fldesValue[1]).toFixed(0));
-						}
-						
-						var teacherWord = 0; //1~7列次数
-						var studentWord = 0; //8~10列次数
-						var slienceWord = 0; //11~13沉寂次数
-						var allTimes = 0; //总次数
-						var directImpact = 0; //1~4列次数
-						var indirectEffects = 0; //5~7列次数
-						var coordinate1 = 0; //9~10列次数
-						var coordinate2 = 0; //(9,9)+(10,10)次数
-						var coordinate3 = 0; //(5,5)次数
-						var eighthData = 0; //第八列的数量
-						
-						for (var i = 0; i < 13; i++) {
-							var fldsSum = 0;
-							var platoon = 0;
-							for (var j = 0; j < 13; j++) {
-								//列总计
-								var value = 0;
-								if (j == 0 || j == 7 || j == 10) {
-									value = parseInt($('#fldsTable').children().eq(j + 1).children().eq(i + 2).html());
-								} else {
-									value = parseInt($('#fldsTable').children().eq(j + 1).children().eq(i + 1).html());
-								}
-								if (i == 4 && j == 4) {
-									coordinate3 = value;
-								}
-								if ((i == 8 && j == 8) || (i == 9 && j == 9)) {
-									coordinate2 += value;
-								}
-								fldsSum += value;
-								//排总计
-								var value = 0;
-								if (i == 0 || i == 7 || i == 10) {
-									value = parseInt($('#fldsTable').children().eq(i + 1).children().eq(j + 2).html());
-								} else {
-									value = parseInt($('#fldsTable').children().eq(i + 1).children().eq(j + 1).html());
-								}
-								platoon += value;
-							}
-							if (i < 7) {
-								teacherWord += fldsSum;
-							}
-							if (i >= 7 && i <= 9) {
-								studentWord += fldsSum;
-							}
-							if (i >= 10 && i <= 12) {
-								slienceWord += fldsSum;
-							}
-							if (i < 4) {
-								directImpact += fldsSum;
-							}
-							if (i >= 4 && i <= 6) {
-								indirectEffects += fldsSum;
-							}
-							if (i == 8 || i == 9) {
-								coordinate1 += fldsSum;
-							}
-							if (i == 7) {
-								eighthData += fldsSum;
-							}
-							allTimes += fldsSum;
-							$('#fldsTable').children().eq(14).children().eq(i + 2).html(fldsSum);
-							$('#fldsTable').children().eq(i + 1).children().last().html(platoon);
-						}
-						//总计
-						$('#fldsTable').children().eq(14).children().last().html(allTimes);
-						if (allTimes == 0) {
-							allTimes = 1;
-							//$('#fldsSuggest').html('分析结论与改进建议：<br/>暂无数据');
-						} else {
-							var fldsSuggest = '分析结论与改进建议：<br/>'+
-							'您这节课的课堂结构方面：教师语言比率为'+ (teacherWord*100/allTimes).toFixed(1) +'%和学生语言比率为'+ (studentWord*100/allTimes).toFixed(1) +'%，课堂沉寂比率为'+ (100 - (teacherWord*100/allTimes).toFixed(1) - (studentWord*100/allTimes).toFixed(1)).toFixed(1) +'%;<br/>'+
-						    '教师的影响方面：教师间接影响的比率为'+ (directImpact*100/teacherWord).toFixed(1) +'%，教师直接影响的比率为'+ (indirectEffects*100/teacherWord).toFixed(1) +'%，间接影响行为与直接影响行为分配';
-							if (indirectEffects*100/teacherWord >= directImpact*100/teacherWord) {
-								fldsSuggest += '不合理';
-							} else {
-								fldsSuggest += '合理';
-							}
-							fldsSuggest += '。<br/>学生的学习主动性方面：学生主动发起语言的比占有率为'+ (coordinate1*100/studentWord).toFixed(1) +'%，';
-							if (eighthData > (studentWord - eighthData)) {
-								fldsSuggest += '被动的，建议教师鼓励学生表达自己的观点，勇于提出问题。';
-							} else {
-								fldsSuggest += '主动的，您较注重培养学生质疑能力，特别棒。';
-							}
-							$('#fldsSuggest').html(fldsSuggest);
-						}
-						
-						$('#teacherWord').html((teacherWord*100/allTimes).toFixed(1) + '%');
-						$('#studentWord').html((studentWord*100/allTimes).toFixed(1) + '%');
-						$('#slienceWord').html((100 - (teacherWord*100/allTimes).toFixed(1) - (studentWord*100/allTimes).toFixed(1)).toFixed(1) + '%');
-						$('#directImpact').html((directImpact*100/(teacherWord == 0 ? 1 : teacherWord)).toFixed(1) + '%');
-						$('#indirectEffects').html((indirectEffects*100/(teacherWord == 0 ? 1 : teacherWord)).toFixed(1) + '%');
-						$('#coordinate1').html((coordinate1*100/(studentWord == 0 ? 1 : studentWord)).toFixed(1) + '%');
-						$('#coordinate2').html((coordinate2*100/(studentWord == 0 ? 1 : studentWord)).toFixed(1) + '%');
-						$('#coordinate3').html((coordinate3*100/(teacherWord == 0 ? 1 : teacherWord)).toFixed(1) + '%');
-					} else {
-						$('#fldsPart').html(' ');
-					}
-					
-				})(data);
-// 			} catch (e) {
-// 				$('.flds').html(e);
-// 			}
-		}
-		if (window.AndroidWebView) {
-			window.goEdit = window.AndroidWebView.edit;
-			window.goMedia = window.AndroidWebView.media;
-		} else {
-			function setupWebViewJavascriptBridge(callback) {
-				if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
-				if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
-				window.WVJBCallbacks = [callback];
-				var WVJBIframe = document.createElement('iframe');
-				WVJBIframe.style.display = 'none';
-				WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
-				document.documentElement.appendChild(WVJBIframe);
-				setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
-			}
-			
-			setupWebViewJavascriptBridge(function(bridge) {
-				bridge.registerHandler('render', function(data, responseCallback) {
-					render(data);
-				});
-				
-				window.goEdit = function(sectionId, recordId) {
-					bridge.callHandler('edit', { 'section':sectionId, 'record': recordId }, function responseCallback(responseData) {
-						console.log("JS received response:", responseData)
-					});
-				};
-				
-				window.goMedia = function(sectionId, recordId, mediaIndex, type, mediaId) {
-					bridge.callHandler('media', { 'section':sectionId, 'record': recordId, 'media': mediaIndex, 'type':type, 'mediaId': mediaId },
-					function responseCallback(responseData) {
-						console.log("JS received response:", responseData)
-					});
-				};
-			});
-		}
-	</script>
-	<script id="data" type="text/json">
-		[
-			[1,2,2,2,2,2,3,1,1,1],[2,2,2,2,2,2,2,3,8,9,9,4,6,7,1,2,5,10,10,10,11,11,11,2,1,1,1,1]
-		]
-	</script>
-</body>
+  <head xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>弗兰德斯</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #333;
+      }
+      .hide {
+        display: none !important;
+      }
+      .padding-0-15 {
+        padding: 0 15px;
+      }
+      .text-center {
+        text-align: center;
+      }
+      #stActionRateEchart {
+        width: 90vw;
+        height: 50vw;
+        box-sizing: border-box;
+        background-color: lightblue;
+      }
+      .table {
+        border-collapse: collapse !important;
+      }
+      .table-bordered td,
+      .table-bordered th {
+        border: 1px solid #ddd !important;
+      }
+      table {
+        background-color: transparent;
+      }
+      caption {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        color: #777;
+        text-align: left;
+      }
+      th {
+        text-align: left;
+      }
+      .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+      }
+      .table > tbody > tr > td,
+      .table > tbody > tr > th,
+      .table > tfoot > tr > td,
+      .table > tfoot > tr > th,
+      .table > thead > tr > td,
+      .table > thead > tr > th {
+        padding: 8px;
+        line-height: 1.42857143;
+        vertical-align: top;
+        border-top: 1px solid #ddd;
+      }
+      .table > thead > tr > th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #ddd;
+      }
+      .table > caption + thead > tr:first-child > td,
+      .table > caption + thead > tr:first-child > th,
+      .table > colgroup + thead > tr:first-child > td,
+      .table > colgroup + thead > tr:first-child > th,
+      .table > thead:first-child > tr:first-child > td,
+      .table > thead:first-child > tr:first-child > th {
+        border-top: 0;
+      }
+      .table > tbody + tbody {
+        border-top: 2px solid #ddd;
+      }
+      .table .table {
+        background-color: #fff;
+      }
+
+      .table-bordered {
+        border: 1px solid #ddd;
+      }
+      .table-bordered > tbody > tr > td,
+      .table-bordered > tbody > tr > th,
+      .table-bordered > tfoot > tr > td,
+      .table-bordered > tfoot > tr > th,
+      .table-bordered > thead > tr > td,
+      .table-bordered > thead > tr > th {
+        border: 1px solid #ddd;
+      }
+      .table-bordered > thead > tr > td,
+      .table-bordered > thead > tr > th {
+        border-bottom-width: 2px;
+      }
+      table col[class*="col-"] {
+        position: static;
+        display: table-column;
+        float: none;
+      }
+      table td[class*="col-"],
+      table th[class*="col-"] {
+        position: static;
+        display: table-cell;
+        float: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="flds">
+      <div id="fldsPart" class="hide">
+        <div class="padding-0-15">
+          <h4 style="font-weight: bold">
+            <span
+              class="yet"
+              style="margin-bottom: 0; background: #4fcb4b; padding-left: 0px"
+            ></span
+            ><span
+              style="
+                font-size: 16px;
+                color: #333333;
+                letter-spacing: 0;
+                line-height: 16px;
+              "
+              >弗兰德斯课堂互动分析系统</span
+            >
+          </h4>
+          <hr style="height: 1px; background-color: #333" />
+          <div class="padding-0-15-12">
+            <div id="stActionRateEchart"></div>
+            <article class="echart-explain">
+              <h5 style="color: #6386ff">图像解读：</h5>
+              <ol>
+                <li>
+                  教师曲线持续在上：表明教学过程中教师语言占有优势，教师主导课堂教学活动的进行，建议增加师生互动，及学生自主学习的时间和空间；
+                </li>
+                <li>
+                  学生曲线持续在上：表明教学过程中学生语言占有优势，教学充分围绕学生进行，建议发挥教师角色作用，保证课堂教学效率；
+                </li>
+                <li>两条曲线有多次相交：表明师生互动状况较好。</li>
+              </ol>
+            </article>
+          </div>
+
+          <div
+            class="padding-0-15 text-center"
+            style="margin-top: 30px; margin-bottom: 10px; font-size: 16px"
+          >
+            结果反馈
+          </div>
+          <div class="col-sm-3"></div>
+          <div class="col-sm-6">
+            <table class="table table-bordered">
+              <thead>
+                <tr style="background-color: #ffe6d9">
+                  <th colspan="2" class="text-center">课堂结构</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="col-sm-9 text-center">教师语言比率</td>
+                  <td id="teacherWord" class="col-sm-3 text-center"></td>
+                </tr>
+                <tr>
+                  <td class="col-sm-9 text-center">学生语言比率</td>
+                  <td id="studentWord" class="text-center"></td>
+                </tr>
+                <tr>
+                  <td class="col-sm-9 text-center">课堂沉寂比率</td>
+                  <td id="slienceWord" class="text-center"></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr style="background-color: #ffe6d9">
+                  <th colspan="2" class="text-center">教师倾向</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="col-sm-9 text-center">教师间接影响/教师语言</td>
+                  <td id="directImpact" class="col-sm-3 text-center"></td>
+                </tr>
+                <tr>
+                  <td class="col-sm-9 text-center">教师直接影响/教师语言</td>
+                  <td id="indirectEffects" class="text-center"></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr style="background-color: #ffe6d9">
+                  <th colspan="2" class="text-center">其他</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="col-sm-9 text-center">
+                    学生主动发起语言/学生语言
+                  </td>
+                  <td id="coordinate1" class="col-sm-3 text-center"></td>
+                </tr>
+                <tr>
+                  <td class="col-sm-9 text-center">学生连续语言/学生语言</td>
+                  <td id="coordinate2" class="text-center"></td>
+                </tr>
+                <tr>
+                  <td class="col-sm-9 text-center">连续内容讲解/教师语言</td>
+                  <td id="coordinate3" class="text-center"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-sm-3"></div>
+          <div class="" style="margin-bottom: 30px">
+            <span id="fldsSuggest"> </span>
+          </div>
+        </div>
+        <div class="padding-0-15" style="margin-top: 30px">
+          <div
+            class="padding-0-15 text-center"
+            style="margin-top: 20px; margin-bottom: 10px"
+          >
+            课堂互动分析矩阵
+          </div>
+          <div style="overflow-y: scroll !important;-webkit-overflow-scrolling:touch;">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th colspan="2" style="border: 0px solid #ddd"></th>
+                  <th class="text-center" colspan="7">教师</th>
+                  <th class="text-center" colspan="3">学生</th>
+                  <th class="text-center" colspan="3">沉寂</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="fldsTable" class="text-center">
+                <tr>
+                  <td colspan="2" style="border-top: 0px solid #ddd"></td>
+                  <td>(1)</td>
+                  <td>(2)</td>
+                  <td>(3)</td>
+                  <td>(4)</td>
+                  <td>(5)</td>
+                  <td>(6)</td>
+                  <td>(7)</td>
+                  <td>(8)</td>
+                  <td>(9)</td>
+                  <td>(10)</td>
+                  <td>(11)</td>
+                  <td>(12)</td>
+                  <td>(13)</td>
+                  <td>总计</td>
+                </tr>
+                <tr>
+                  <td rowspan="7" style="padding-top: 115px; font-weight: 700">
+                    教<br />师
+                  </td>
+                  <td>(1)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(2)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(3)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(4)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(5)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(6)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(7)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td rowspan="3" style="padding-top: 35px; font-weight: 700">
+                    学<br />生
+                  </td>
+                  <td>(8)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(9)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(10)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td rowspan="3" style="padding-top: 35px; font-weight: 700">
+                    沉<br />寂
+                  </td>
+                  <td>(11)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(12)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>(13)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>总计</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.0/echarts.common.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/mustache.js/4.1.0/mustache.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script type="text/javascript">
+      var debug = 1;
+      $(function () {
+        debug && render($("#data1").text());
+      });
+
+      function durationToString(duration) {
+        var min = Math.floor(duration / 60),
+          sec = duration % 60;
+        return min + "'" + sec + '"';
+      }
+
+      function jsonEscape(str) {
+        return str;
+      }
+
+      function replaceLineBreak(str) {
+        return str && str.replace(/\n/g, "<br/>");
+      }
+      var fldstotalsum = 0;
+
+      function render(data) {
+        if (console.log) console.log("data: " + data);
+        if (typeof data === "string") data = $.parseJSON(jsonEscape(data));
+        fldsEchartsAndSuggest(data.fldsLinechart);
+        data = data.fldsRatio;
+        (function (fldsData) {
+          //fldsData.push([1,2,2,2,2,2,3,1,1,1],[2,2,2,2,2,2,2,3,8,9,9,4,6,7,1,2,5,10,10,10,11,11,11,2,1,1,1,1]);
+          //fldsData.push([6,7,1,3,4,10,5,9,6,4,9,2,13,13,13,13,13,13,1,1,1,1]);
+          $.each(fldsData, function (index, item) {
+            $.each(item, function (fldsIndex, fldsItem) {
+              fldstotalsum += fldsItem;
+            });
+          });
+          if (fldstotalsum != 0 && !isNaN(fldstotalsum)) {
+            $("#fldsPart").removeClass("hide");
+            //处理弗兰德斯数据
+            var fldsMap = {};
+            $.each(fldsData, function (index, item) {
+              var fldsList = [];
+              $.each(item, function (fldsIndex, fldsItem) {
+                //装载每次的坐标，避免重复
+                if (fldsIndex != item.length - 1) {
+                  //坐标
+                  var coordinate = fldsItem + "," + item[fldsIndex + 1];
+                  //判断是够有这个map 没有就建一个
+                  if (typeof fldsMap[coordinate] === "undefined") {
+                    fldsMap[coordinate] = "1,1";
+                    fldsList.push(coordinate);
+                  } else {
+                    var fldesValue = fldsMap[coordinate].split(",");
+                    //判断此次循环时候已经有此坐标
+                    var fldsFlag = true;
+                    $.each(fldsList, function (listIndex, listItem) {
+                      if (listItem == coordinate) {
+                        fldsFlag = false;
+                      }
+                    });
+                    if (fldsFlag) {
+                      fldsMap[coordinate] =
+                        parseInt(fldesValue[0]) +
+                        1 +
+                        "," +
+                        (parseInt(fldesValue[1]) + 1);
+                      fldsList.push(coordinate);
+                    } else {
+                      fldsMap[coordinate] =
+                        parseInt(fldesValue[0]) + 1 + "," + fldesValue[1];
+                    }
+                  }
+                }
+              });
+            });
+            //$('#fldsTable').children().eq(14).children().eq(3).html();
+            for (var key in fldsMap) {
+              var cyu = key.split(",");
+              var fldesValue = fldsMap[key].split(",");
+              var s = parseInt(cyu[0]);
+              if (s == 8 || s == 1 || s == 11) {
+                s = parseInt(cyu[1]) + 1;
+              } else {
+                s = parseInt(cyu[1]);
+              }
+              $("#fldsTable")
+                .children()
+                .eq(cyu[0])
+                .children()
+                .eq(s)
+                .html((fldesValue[0] / fldesValue[1]).toFixed(0));
+            }
+
+            var teacherWord = 0; //1~7列次数
+            var studentWord = 0; //8~10列次数
+            var slienceWord = 0; //11~13沉寂次数
+            var allTimes = 0; //总次数
+            var directImpact = 0; //1~4列次数
+            var indirectEffects = 0; //5~7列次数
+            var coordinate1 = 0; //9~10列次数
+            var coordinate2 = 0; //(9,9)+(10,10)次数
+            var coordinate3 = 0; //(5,5)次数
+            var eighthData = 0; //第八列的数量
+
+            for (var i = 0; i < 13; i++) {
+              var fldsSum = 0;
+              var platoon = 0;
+              for (var j = 0; j < 13; j++) {
+                //列总计
+                var value = 0;
+                if (j == 0 || j == 7 || j == 10) {
+                  value = parseInt(
+                    $("#fldsTable")
+                      .children()
+                      .eq(j + 1)
+                      .children()
+                      .eq(i + 2)
+                      .html()
+                  );
+                } else {
+                  value = parseInt(
+                    $("#fldsTable")
+                      .children()
+                      .eq(j + 1)
+                      .children()
+                      .eq(i + 1)
+                      .html()
+                  );
+                }
+                if (i == 4 && j == 4) {
+                  coordinate3 = value;
+                }
+                if ((i == 8 && j == 8) || (i == 9 && j == 9)) {
+                  coordinate2 += value;
+                }
+                fldsSum += value;
+                //排总计
+                var value = 0;
+                if (i == 0 || i == 7 || i == 10) {
+                  value = parseInt(
+                    $("#fldsTable")
+                      .children()
+                      .eq(i + 1)
+                      .children()
+                      .eq(j + 2)
+                      .html()
+                  );
+                } else {
+                  value = parseInt(
+                    $("#fldsTable")
+                      .children()
+                      .eq(i + 1)
+                      .children()
+                      .eq(j + 1)
+                      .html()
+                  );
+                }
+                platoon += value;
+              }
+              if (i < 7) {
+                teacherWord += fldsSum;
+              }
+              if (i >= 7 && i <= 9) {
+                studentWord += fldsSum;
+              }
+              if (i >= 10 && i <= 12) {
+                slienceWord += fldsSum;
+              }
+              if (i < 4) {
+                directImpact += fldsSum;
+              }
+              if (i >= 4 && i <= 6) {
+                indirectEffects += fldsSum;
+              }
+              if (i == 8 || i == 9) {
+                coordinate1 += fldsSum;
+              }
+              if (i == 7) {
+                eighthData += fldsSum;
+              }
+              allTimes += fldsSum;
+              $("#fldsTable")
+                .children()
+                .eq(14)
+                .children()
+                .eq(i + 2)
+                .html(fldsSum);
+              $("#fldsTable")
+                .children()
+                .eq(i + 1)
+                .children()
+                .last()
+                .html(platoon);
+            }
+            //总计
+            $("#fldsTable").children().eq(14).children().last().html(allTimes);
+            if (allTimes == 0) {
+              allTimes = 1;
+              //$('#fldsSuggest').html('分析结论与改进建议：<br/>暂无数据');
+            } else {
+              var fldsSuggest =
+                "分析结论与改进建议：<br/>" +
+                "您这节课的课堂结构方面：教师语言比率为" +
+                ((teacherWord * 100) / allTimes).toFixed(1) +
+                "%和学生语言比率为" +
+                ((studentWord * 100) / allTimes).toFixed(1) +
+                "%，课堂沉寂比率为" +
+                (
+                  100 -
+                  ((teacherWord * 100) / allTimes).toFixed(1) -
+                  ((studentWord * 100) / allTimes).toFixed(1)
+                ).toFixed(1) +
+                "%;<br/>" +
+                "教师的影响方面：教师间接影响的比率为" +
+                ((directImpact * 100) / teacherWord).toFixed(1) +
+                "%，教师直接影响的比率为" +
+                ((indirectEffects * 100) / teacherWord).toFixed(1) +
+                "%，间接影响行为与直接影响行为分配";
+              if (
+                (indirectEffects * 100) / teacherWord >=
+                (directImpact * 100) / teacherWord
+              ) {
+                fldsSuggest += "不合理";
+              } else {
+                fldsSuggest += "合理";
+              }
+              fldsSuggest +=
+                "。<br/>学生的学习主动性方面：学生主动发起语言的比占有率为" +
+                ((coordinate1 * 100) / studentWord).toFixed(1) +
+                "%，";
+              if (eighthData > studentWord - eighthData) {
+                fldsSuggest +=
+                  "被动的，建议教师鼓励学生表达自己的观点，勇于提出问题。";
+              } else {
+                fldsSuggest += "主动的，您较注重培养学生质疑能力，特别棒。";
+              }
+              $("#fldsSuggest").html(fldsSuggest);
+            }
+
+            $("#teacherWord").html(
+              ((teacherWord * 100) / allTimes).toFixed(1) + "%"
+            );
+            $("#studentWord").html(
+              ((studentWord * 100) / allTimes).toFixed(1) + "%"
+            );
+            $("#slienceWord").html(
+              (
+                100 -
+                ((teacherWord * 100) / allTimes).toFixed(1) -
+                ((studentWord * 100) / allTimes).toFixed(1)
+              ).toFixed(1) + "%"
+            );
+            $("#directImpact").html(
+              (
+                (directImpact * 100) /
+                (teacherWord == 0 ? 1 : teacherWord)
+              ).toFixed(1) + "%"
+            );
+            $("#indirectEffects").html(
+              (
+                (indirectEffects * 100) /
+                (teacherWord == 0 ? 1 : teacherWord)
+              ).toFixed(1) + "%"
+            );
+            $("#coordinate1").html(
+              (
+                (coordinate1 * 100) /
+                (studentWord == 0 ? 1 : studentWord)
+              ).toFixed(1) + "%"
+            );
+            $("#coordinate2").html(
+              (
+                (coordinate2 * 100) /
+                (studentWord == 0 ? 1 : studentWord)
+              ).toFixed(1) + "%"
+            );
+            $("#coordinate3").html(
+              (
+                (coordinate3 * 100) /
+                (teacherWord == 0 ? 1 : teacherWord)
+              ).toFixed(1) + "%"
+            );
+          } else {
+            $("#fldsPart").html(" ");
+          }
+        })(data);
+        // 			} catch (e) {
+        // 				$('.flds').html(e);
+        // 			}
+      }
+
+      function fldsEchartsAndSuggest(data) {
+        // console.log('弗兰德斯课堂互动分析图',data);
+        let myChart = echarts.init(
+          document.getElementById("stActionRateEchart")
+        );
+        let data_S = [];
+        let data_T = [];
+        let classTime = data.length;
+        data.forEach((item, index) => {
+          data_S.push([index + 1, item[0]]);
+          data_T.push([index + 1, item[1]]);
+        });
+        myChart.setOption({
+          color: ["#4472c3", "#70ad47"],
+          tooltip: {
+            show: true,
+            trigger: "axis",
+            formatter: function (params) {
+              if (params.length == 1) {
+                if (params[0].seriesName == "学生语言") {
+                  return "学生言语行为占比：" + params[0].data[1] * 100 + "%";
+                } else {
+                  return "教师言语行为占比：" + params[0].data[1] * 100 + "%";
+                }
+              }
+              return (
+                "教师言语行为占比：" +
+                Math.round(params[1].data[1] * 100) +
+                "%" +
+                "<br>" +
+                "学生言语行为占比：" +
+                Math.round(params[0].data[1] * 100) +
+                "%"
+              );
+            },
+          },
+          legend: {
+            data: ["教师语言", "学生语言"],
+            width: 400,
+          },
+          grid: {
+            show: false,
+          },
+          title: {
+            text: "师生言语行为比率动态分布图",
+            left: "center",
+            bottom: 0,
+          },
+          xAxis: {
+            name: "课时\n(min)",
+            nameGap: 5,
+            type: "value",
+            min: 1,
+            max: classTime < 15 ? 15.0001 : classTime < 30 ? 30.0001 : 45.0001,
+            interval: 1,
+            axisTick: {
+              show: false,
+            },
+            axisLabel: {
+              show: true,
+              interval: 4,
+              formatter: function (value, index) {
+                if (classTime <= 15) {
+                  return value;
+                }
+                if (classTime <= 30) {
+                  if (value % 2 === 0) {
+                    return value;
+                  }
+                  return;
+                }
+                if (classTime <= 45) {
+                  if (value % 3 === 0) {
+                    return value;
+                  }
+                }
+              },
+            },
+            splitLine: {
+              show: false,
+            },
+          },
+          yAxis: {
+            name: "占比（％）",
+            type: "value",
+            axisLabel: {
+              formatter: function (value, index) {
+                return value * 100;
+              },
+            },
+            axisTick: {
+              show: false,
+            },
+            splitLine: {
+              show: false,
+            },
+          },
+          series: [
+            {
+              name: "学生语言",
+              type: "line",
+              showSymbol: true,
+              data: data_S,
+              lineStyle: {
+                color: "#4472c3",
+              },
+            },
+            {
+              name: "教师语言",
+              type: "line",
+              showSymbol: true,
+              data: data_T,
+              lineStyle: {
+                color: "#70ad47",
+              },
+            },
+          ],
+        });
+        // console.log(myChart.getOption())
+      }
+      if (window.AndroidWebView) {
+        window.goEdit = window.AndroidWebView.edit;
+        window.goMedia = window.AndroidWebView.media;
+      } else {
+        function setupWebViewJavascriptBridge(callback) {
+          if (window.WebViewJavascriptBridge) {
+            return callback(WebViewJavascriptBridge);
+          }
+          if (window.WVJBCallbacks) {
+            return window.WVJBCallbacks.push(callback);
+          }
+          window.WVJBCallbacks = [callback];
+          var WVJBIframe = document.createElement("iframe");
+          WVJBIframe.style.display = "none";
+          WVJBIframe.src = "wvjbscheme://__BRIDGE_LOADED__";
+          document.documentElement.appendChild(WVJBIframe);
+          setTimeout(function () {
+            document.documentElement.removeChild(WVJBIframe);
+          }, 0);
+        }
+
+        setupWebViewJavascriptBridge(function (bridge) {
+          bridge.registerHandler("render", function (data, responseCallback) {
+            render(data);
+          });
+
+          window.goEdit = function (sectionId, recordId) {
+            bridge.callHandler(
+              "edit",
+              {
+                section: sectionId,
+                record: recordId,
+              },
+              function responseCallback(responseData) {
+                console.log("JS received response:", responseData);
+              }
+            );
+          };
+
+          window.goMedia = function (
+            sectionId,
+            recordId,
+            mediaIndex,
+            type,
+            mediaId
+          ) {
+            bridge.callHandler(
+              "media",
+              {
+                section: sectionId,
+                record: recordId,
+                media: mediaIndex,
+                type: type,
+                mediaId: mediaId,
+              },
+              function responseCallback(responseData) {
+                console.log("JS received response:", responseData);
+              }
+            );
+          };
+        });
+      }
+    </script>
+
+    <script id="data" type="text/json">
+      [
+        [1, 2, 2, 2, 2, 2, 3, 1, 1, 1],
+        [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          8,
+          9,
+          9,
+          4,
+          6,
+          7,
+          1,
+          2,
+          5,
+          10,
+          10,
+          10,
+          11,
+          11,
+          11,
+          2,
+          1,
+          1,
+          1,
+          1
+        ]
+      ]
+    </script>
+    <script id="data1" type="text/json">
+      {
+        "fldsLinechart": [
+          [0.37, 0.63],
+          [0.32, 0.68],
+          [0.18, 0.82],
+          [0.37, 0.63],
+          [0.32, 0.68],
+          [0.18, 0.82],
+          [0.37, 0.63],
+          [0.32, 0.68]
+        ],
+        "fldsRatio": [[11, 13, 1, 7, 3, 7, 1, 10, 12, 1, 13, 5, 2, 6]]
+      }
+    </script>
+  </body>
 </html>

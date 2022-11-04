@@ -24,7 +24,7 @@ import com.jennifer.jennifer.util.AppFileUtils;
 
 public class WebViewActivity extends AppCompatActivity {
     private static final String LOADING_URL = "loading_url";
-    private static final String LOCAL_URL = "file:///android_asset/index.html";
+    private static final String LOCAL_URL = "file:///android_asset/flds.html";
     private LinearLayout llCommonProblem;
     private ProgressBar pbLoading;
     private RelativeLayout rlLoading;
@@ -92,6 +92,7 @@ public class WebViewActivity extends AppCompatActivity {
         webView.loadUrl(loadingUrl);
         webView.setWebViewClient(webViewClient);
         webView.setWebChromeClient(webChromeClient);
+        webView.setHorizontalScrollBarEnabled(false);
         initWebSetting();
     }
 

@@ -13,6 +13,7 @@ import com.jennifer.jennifer.R;
 import com.jennifer.jennifer.ui.SLPLoginActivity;
 import com.jennifer.jennifer.ui.canvas.CanvasActivity;
 import com.jennifer.jennifer.ui.ceiling.CeilingActivity;
+import com.jennifer.jennifer.ui.edit.EditTextActivity;
 import com.jennifer.jennifer.ui.environment.EnvironmentTestActivity;
 import com.jennifer.jennifer.ui.intent.IntentActivity;
 import com.jennifer.jennifer.ui.life.LifeCycleActivity;
@@ -127,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intentClass(TextActivity.class);
             case 18:
                 intentClass(TouchEventConflictActivity.class);
+                break;
+            case 19:
+                intentClass(EditTextActivity.class);
                 break;
             default:break;
         }

@@ -28,6 +28,9 @@
         android:theme="@style/TranslucentTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".ui.edit.EditTextActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.touch.TouchEventConflictActivity"
             android:exported="false" />
         <activity
