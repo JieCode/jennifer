@@ -1,6 +1,7 @@
 package com.jennifer.jennifer.application;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.aitangba.swipeback.ActivityLifecycleHelper;
 import com.iflytek.cloud.SpeechUtility;
@@ -11,8 +12,10 @@ import com.jennifer.jennifer.R;
  * @date 2019/1/2
  */
 public class JenniferApplication extends Application {
+    private static Context mContext;
     @Override
     public void onCreate() {
+        mContext = this;
         // 应用程序入口处调用，避免手机内存过小，杀死后台进程后通过历史intent进入Activity造成SpeechUtility对象为null
         // 如在Application中调用初始化，需要在Mainifest中注册该Applicaiton
         // 注意：此接口在非主进程调用会返回null对象，如需在非主进程使用语音功能，请增加参数：SpeechConstant.FORCE_LOGIN+"=true"
@@ -27,5 +30,9 @@ public class JenniferApplication extends Application {
         // 以下语句用于设置日志开关（默认开启），设置成false时关闭语音云SDK日志打印
         // Setting.setShowLog(false);
         super.onCreate();
+    }
+
+    public static Context getContext() {
+        return mContext;
     }
 }
